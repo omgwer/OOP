@@ -236,3 +236,6 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 samples/01-basics/string-joiner/out.txt
+Lab1/.idea/.idea.Lab1/.idea/.gitignore
+Lab1/.idea/.idea.Lab1/.idea/indexLayout.xml
+Lab1/.idea/.idea.Lab1/.idea/vcs.xml
