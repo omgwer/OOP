@@ -12,25 +12,29 @@ findtext.exe “Евгений Онегин.txt” “Я к Вам пишу”
 В комплекте с программой должны обязательно поставляться файлы, позволяющие проверить корректность её работы в автоматическом режиме.
 */
 
+namespace Lab1;
 
-
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.ConstrainedExecution;
-
-namespace ReplaceProgram;
 class Program
 {
     private const int VALID_PARAMETERS_COUNT = 2;
     private const int MINIMAL_FILE_NAME_SIZE = 3;
+
     public static int Main(string[] args)
     {
-        if (!IsValidParametersList(ref args)) {
+        if (!IsValidParametersList(ref args))
+        {
             Console.WriteLine("Arguments list is not valid");
             return 1;
         }
+        
+        
 
+        uint test = 0;
+        
         return 0;
     }
+
+
 
     private static bool IsValidParametersList(ref string[] args)
     {
@@ -42,6 +46,6 @@ class Program
             return false;
         if (args.Last().Length == 0)
             return false;
+        return true;
     }
 }
-
