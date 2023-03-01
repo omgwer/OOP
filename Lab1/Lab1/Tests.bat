@@ -1,0 +1,1 @@
+@call .\Lab1.exe test.txt Lorem
