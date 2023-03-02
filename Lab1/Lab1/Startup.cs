@@ -11,65 +11,74 @@ findtext.exe “Евгений Онегин.txt” “Я к Вам пишу”
 Программа должна корректно обрабатывать ошибки, связанные с файловыми операциями.
 В комплекте с программой должны обязательно поставляться файлы, позволяющие проверить корректность её работы в автоматическом режиме.
 */
+
+using System.Data;
+
 namespace Lab1;
 
 class Startup
 {
-    private const int VALID_PARAMETERS_COUNT = 2;
-    private const int MINIMAL_FILE_NAME_SIZE = 3;
+    private struct Command
+    {
+        public string FileName;
+        public string StringToSeacrch;
+    }
 
     public static int Main(string[] args)
     {
-        
-        if (!IsValidParametersList(ref args))
-        {
-            Console.WriteLine("Error! Arguments list is not valid");
-            return 1;
-        }
-
-        if (!File.Exists(args[0]))
-        {
-            Console.WriteLine("Error! File with name '" + args[0] + "' not found ");
-            return 1;
-        }
-
-        FileStream inputFileStream;
         try
         {
-            inputFileStream = File.OpenRead(args[0]);
+            var command = ParseCommandLine(args);
+            var substringsIndexesInFile = FindSubstringsIndexesInFile(command); // лучше возвращать результат
+            if (substringsIndexesInFile.Count == 0)
+            {
+                Console.WriteLine("Error"); // 
+                return 1;
+            }
+            substringsIndexesInFile.ForEach(Console.WriteLine);
         }
-        catch (Exception ex)
+        catch
+            (Exception ex)
         {
-            Console.WriteLine("Error! Cant open file stream with file " + args[0]);
+            Console.WriteLine(ex.Message);
             return 1;
         }
-       
-        
-        var searchResultIndexes = new FilesHandler().FindSubstringsIndexesInStream(ref inputFileStream, ref args[1]);
-
-        if (searchResultIndexes.Count == 0)
-        {
-            Console.WriteLine("Text not found");
-            return 1;
-        }
-        
-        searchResultIndexes.ForEach(Console.WriteLine);
 
         return 0;
     }
 
-    private static bool IsValidParametersList(ref string[] args)
+    private static Command ParseCommandLine(string[] args)
     {
-        if (args.Length != VALID_PARAMETERS_COUNT)
-            return false;
-        if (!args.First().Contains('.'))
-            return false;
-        if (args.First().Length <= MINIMAL_FILE_NAME_SIZE)
-            return false;
-        if (args.Last().Length == 0)
-            return false;
-        return true;
+        const int VALID_PARAMETERS_COUNT = 2;
+        const int MINIMAL_FILE_NAME_SIZE = 3;
+        if ((args.Length != VALID_PARAMETERS_COUNT) ||
+            (!args.First().Contains('.')) ||
+            (args.First().Length <= MINIMAL_FILE_NAME_SIZE) ||
+            (args.Last().Length == 0))
+        {
+            throw new ArgumentException("Error! Arguments list is not valid");
+        }
+
+        return new Command()
+        {
+            FileName = args.First(),
+            StringToSeacrch = args.Last()
+        };
     }
 
-
+    private static List<int> FindSubstringsIndexesInFile(Command command)
+    {
+        using var fileStream = File.OpenRead(command.FileName);
+        using var streamReader = new StreamReader(fileStream); // почитать насчет using
+        var searchResultIndexes = new List<int>();
+        var textLineIndex = 0;
+        while (streamReader.ReadLine() is { } readString)
+        {
+            var index = readString.IndexOf(command.StringToSeacrch, StringComparison.Ordinal);
+            if (index > -1)
+                searchResultIndexes.Add(textLineIndex);
+            textLineIndex++;
+        }
+        return searchResultIndexes;
+    }
 }
