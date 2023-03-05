@@ -12,8 +12,6 @@ findtext.exe “Евгений Онегин.txt” “Я к Вам пишу”
 В комплекте с программой должны обязательно поставляться файлы, позволяющие проверить корректность её работы в автоматическом режиме.
 */
 
-using System.Data;
-
 namespace Lab1;
 
 class Startup
@@ -21,7 +19,7 @@ class Startup
     private struct Command
     {
         public string FileName;
-        public string StringToSeacrch;
+        public string StringToSearch;
     }
 
     public static int Main(string[] args)
@@ -29,21 +27,19 @@ class Startup
         try
         {
             var command = ParseCommandLine(args);
-            var substringsIndexesInFile = FindSubstringsIndexesInFile(command); // лучше возвращать результат
+            var substringsIndexesInFile = FindSubstringsIndexesInFile(command); 
             if (substringsIndexesInFile.Count == 0)
             {
-                Console.WriteLine("Error"); // 
+                Console.WriteLine("Text not found");
                 return 1;
             }
             substringsIndexesInFile.ForEach(Console.WriteLine);
         }
-        catch
-            (Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
             return 1;
         }
-
         return 0;
     }
 
@@ -62,7 +58,7 @@ class Startup
         return new Command()
         {
             FileName = args.First(),
-            StringToSeacrch = args.Last()
+            StringToSearch = args.Last()
         };
     }
 
@@ -74,11 +70,12 @@ class Startup
         var textLineIndex = 0;
         while (streamReader.ReadLine() is { } readString)
         {
-            var index = readString.IndexOf(command.StringToSeacrch, StringComparison.Ordinal);
+            var index = readString.IndexOf(command.StringToSearch, StringComparison.Ordinal);
             if (index > -1)
                 searchResultIndexes.Add(textLineIndex);
             textLineIndex++;
         }
+
         return searchResultIndexes;
     }
 }
