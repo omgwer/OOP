@@ -27,7 +27,7 @@ class Startup
         try
         {
             var command = ParseCommandLine(args);
-            var substringsIndexesInFile = FindSubstringsIndexesInFile(command); 
+            var substringsIndexesInFile = FindSubstringsIndexesInFile(command);
             if (substringsIndexesInFile.Count == 0)
             {
                 Console.WriteLine("Text not found");
@@ -40,6 +40,7 @@ class Startup
             Console.WriteLine(ex.Message);
             return 1;
         }
+
         return 0;
     }
 
