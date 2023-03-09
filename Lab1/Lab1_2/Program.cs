@@ -3,7 +3,8 @@
 namespace Lab1_2;
 
 // Вариант №6 – radix – 100 баллов
-// Разработайте программу radix.exe, выполняющую перевод чисел из одной произвольной системы счисления в другую произвольную и запись результата в стандартный поток вывода.
+// Разработайте программу radix.exe, выполняющую перевод чисел из одной произвольной системы счисления в другую произвольную и
+// запись результата в стандартный поток вывода.
 // Под произвольной системой счисления понимается система с основанием от 2 до 36.
 // Системы счисления с 11-ричной до 36-ричной должны использовать заглавные буквы латинского алфавита от A до Z для представления разрядов с 1010 до 3510.
 // Формат командной строки приложения:
@@ -21,7 +22,8 @@ class Program
 
     private static readonly char[] ValuesArray =
     {
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+        'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     };
 
     public static int Main(string[] args)
@@ -78,6 +80,60 @@ class Program
 
     private static string ConvertValueToDestinationNotation(Command command)
     {
-        return "";
+        var convertedValue = ConvertToInteger(command.Value);
+        return ConvertToString(convertedValue, command.DestinationNotation);
+    }
+
+    // конвертация в число по основанию 10
+    private static int ConvertToInteger(string inputValue)
+    {
+        var result = 0;
+        var isValueNegative = inputValue.First() == '-';
+        foreach (char character in inputValue)
+        {
+            if (isValueNegative)
+            {
+                if (Int32.MinValue - (result * 10) > ConvertCharToNumber(character))
+                    throw new ArgumentOutOfRangeException($"Ошибка! Превышено значение Int32 {Int32.MinValue}");
+                result = result * 10 - ConvertCharToNumber(character);
+            }
+            else
+            {
+                if (Int32.MaxValue - (result * 10) < ConvertCharToNumber(character))
+                    throw new ArgumentOutOfRangeException($"Ошибка! Превышено значение Int32 {Int32.MinValue}");
+                result = result * 10 + ConvertCharToNumber(character);
+            }
+        }
+        return result;
+    }
+
+    private static int ConvertCharToNumber(char character)
+    {
+        if (character == '-')
+            return -1;
+        for (var i = 0; i < ValuesArray.Length; i++)
+        {
+            if (character == ValuesArray[i])
+                return i;
+        }
+        throw new ArgumentException($"Ошибка валидатора! {character} не должен здесь находиться!");
+    }
+    
+    private static string ConvertToString(int decimalValue, int destinationNotation)
+    {
+        string result = "";
+        long changedIntegerValue = decimalValue;
+        if (decimalValue < 0)
+        {
+            changedIntegerValue = UInt32.MaxValue + changedIntegerValue + 1;
+        }
+        if (changedIntegerValue == 0)
+            return "0";
+        while (changedIntegerValue != 0)
+        {
+            result = ValuesArray[changedIntegerValue % destinationNotation] + result;
+            changedIntegerValue = changedIntegerValue / destinationNotation;
+        }
+        return result;
     }
 }
