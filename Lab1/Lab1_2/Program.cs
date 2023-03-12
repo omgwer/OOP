@@ -18,6 +18,7 @@ class Program
         public int SourceNotation; // Исходная система счисления
         public int DestinationNotation; // Новая система счисления
         public string Value; // Число для преобразования
+        public bool IsNegative;
     }
 
     private static readonly char[] ValuesArray =
@@ -30,16 +31,17 @@ class Program
     {
         try
         {
+          //  string[] some = new[] { "10", "16", "-2147483648" };
+          //  Command command = ParseCommandLine(some); 
             Command command = ParseCommandLine(args);
             string convertedValue = ConvertValueToDestinationNotation(command);
             Console.WriteLine(convertedValue);
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Someone failed");
+            Console.WriteLine(ex.Message);
             return 1;
-        }
-
+        } 
         return 0;
     }
 
@@ -51,20 +53,30 @@ class Program
         var isParseError = false;
         var sourceNotation = 0;
         var destinationNotation = 0;
+        var isNegative = false;
         if (args.Length != VALID_ARGUMENTS_COUNT)
             isParseError = true;
-        else if (int.TryParse(args[0], out sourceNotation) ||
+        else if (!int.TryParse(args[0], out sourceNotation) |
                  sourceNotation is < MIN_NOTATION_NUMBER or > MAX_NOTATION_NUMBER)
             isParseError = true;
-        else if (int.TryParse(args[1], out destinationNotation) ||
+        else if (!int.TryParse(args[1], out destinationNotation) |
                  destinationNotation is < MIN_NOTATION_NUMBER or > MAX_NOTATION_NUMBER)
             isParseError = true;
-        var value = args[2].ToCharArray();
-        var valuesArrayByNotationLimit = ValuesArray[..sourceNotation];
-        for (var i = 0; i < value.Length && !isParseError; i++)
+        var value = "";
+        if (!isParseError)
         {
-            if (!valuesArrayByNotationLimit.Contains(value[i]))
-                isParseError = true;
+            value = args[2];
+            if (value[0] == '-')
+            {
+                isNegative = true;
+                value = value[1..];
+            }
+            var valuesArrayByNotationLimit = ValuesArray[..sourceNotation];
+            for (var i = 0; i < value.Length && !isParseError; i++)
+            {
+                if (!valuesArrayByNotationLimit.Contains(value[i]))
+                    isParseError = true;
+            }
         }
 
         if (isParseError)
@@ -74,36 +86,46 @@ class Program
         {
             SourceNotation = sourceNotation,
             DestinationNotation = destinationNotation,
-            Value = args[2]
+            Value = value,
+            IsNegative = isNegative
         };
     }
 
     private static string ConvertValueToDestinationNotation(Command command)
     {
-        var convertedValue = ConvertToInteger(command.Value);
-        return ConvertToString(convertedValue, command.DestinationNotation);
+        var convertedValue = ConvertToInteger(command.Value, command.SourceNotation, command.IsNegative);
+        var result = ConvertToString(convertedValue, command.DestinationNotation);
+        if (command.IsNegative)
+            result = '-' + result;
+        return result;
     }
 
     // конвертация в число по основанию 10
-    private static int ConvertToInteger(string inputValue)
+    private static int ConvertToInteger(string inputValue, int sourceNotation, bool isNegative)
     {
         var result = 0;
-        var isValueNegative = inputValue.First() == '-';
-        foreach (char character in inputValue)
+        for (var i = 0; i < inputValue.Length; i++)
         {
-            if (isValueNegative)
+            var incrementValue = ConvertCharToNumber(inputValue[i]) *
+                                 Convert.ToInt32(Math.Pow(sourceNotation, inputValue.Length - 1 - i));
+            if (incrementValue < 0)
             {
-                if (Int32.MinValue - (result * 10) > ConvertCharToNumber(character))
+                throw new ArgumentOutOfRangeException($"Ошибка! Превышено значение Int32 {Int32.MinValue}");
+            }
+            if (isNegative)
+            {
+                if (Int32.MinValue - result > -incrementValue)
                     throw new ArgumentOutOfRangeException($"Ошибка! Превышено значение Int32 {Int32.MinValue}");
-                result = result * 10 - ConvertCharToNumber(character);
+                result -= incrementValue;
             }
             else
             {
-                if (Int32.MaxValue - (result * 10) < ConvertCharToNumber(character))
+                if (Int32.MaxValue - result < incrementValue)
                     throw new ArgumentOutOfRangeException($"Ошибка! Превышено значение Int32 {Int32.MinValue}");
-                result = result * 10 + ConvertCharToNumber(character);
+                result += incrementValue;
             }
         }
+
         return result;
     }
 
@@ -112,13 +134,11 @@ class Program
         if (character == '-')
             return -1;
         for (var i = 0; i < ValuesArray.Length; i++)
-        {
             if (character == ValuesArray[i])
                 return i;
-        }
         throw new ArgumentException($"Ошибка валидатора! {character} не должен здесь находиться!");
     }
-    
+
     private static string ConvertToString(int decimalValue, int destinationNotation)
     {
         string result = "";
@@ -127,6 +147,7 @@ class Program
         {
             changedIntegerValue = UInt32.MaxValue + changedIntegerValue + 1;
         }
+
         if (changedIntegerValue == 0)
             return "0";
         while (changedIntegerValue != 0)
@@ -134,6 +155,7 @@ class Program
             result = ValuesArray[changedIntegerValue % destinationNotation] + result;
             changedIntegerValue = changedIntegerValue / destinationNotation;
         }
+
         return result;
     }
 }
