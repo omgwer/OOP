@@ -7,4 +7,16 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Content Include="bin\Debug\net7.0\lab1_3.txt" />
+      <Content Include="bin\Debug\net7.0\negative1.txt" />
+      <Content Include="bin\Debug\net7.0\negative2.txt" />
+      <Content Include="bin\Debug\net7.0\negative3.txt" />
+      <Content Include="bin\Debug\net7.0\out.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="bin\Debug\net7.0\Tests.bat" />
+    </ItemGroup>
+
 </Project>
