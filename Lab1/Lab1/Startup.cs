@@ -33,6 +33,7 @@ class Startup
                 Console.WriteLine("Text not found");
                 return 1;
             }
+
             substringsIndexesInFile.ForEach(Console.WriteLine);
         }
         catch (Exception ex)

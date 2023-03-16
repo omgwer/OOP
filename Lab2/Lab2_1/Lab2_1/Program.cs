@@ -4,7 +4,6 @@
 // В программе должны быть выделены функции, выполняющие считывание массива, его обработку
 // и вывод результата.
 // Пустой массив, переданный программе – допустимые входные данные. При его обработке пустой массив должен оставаться пустым.
-
 using System.Globalization;
 
 class Program
@@ -12,14 +11,16 @@ class Program
     public static int Main()
     {
         try
-        {
+        { // переименовать Parsecomand
+            // нужно работать с текущим массивом, а не копией
+            // добавить сортировку
+            // добавить тесты через фрейворк
             var numbersList = ParseCommandLine();
             var modifiedNumbersList = ModifyElementsByPredicate(numbersList);
             PrintListToOutput(modifiedNumbersList);
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error");
             return 1;
         }
 

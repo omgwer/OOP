@@ -11,10 +11,13 @@ namespace Lab1_2;
 //      radix.exe <source notation> <destination notation> <value>
 // Например, следующим способом программа должна осуществлять перевод шестнадцатеричного числа 1F в его десятичное представление:
 //      radix.exe 16 10 1F
+//  Lab1_2.exe 16 10 -80000000
+// Lab1_2.exe 16 10 -11
 class Program
 {
     struct Command
     {
+        //оставить решение о положительно и отрицательном числе в методе
         public int SourceNotation; // Исходная система счисления
         public int DestinationNotation; // Новая система счисления
         public string Value; // Число для преобразования
@@ -31,10 +34,8 @@ class Program
     {
         try
         {
-          //  string[] some = new[] { "10", "16", "-2147483648" };
-          //  Command command = ParseCommandLine(some); 
-            Command command = ParseCommandLine(args);
-            string convertedValue = ConvertValueToDestinationNotation(command);
+            var command = ParseCommandLine(args);
+            var convertedValue = ConvertValueToDestinationNotation(command);
             Console.WriteLine(convertedValue);
         }
         catch (Exception ex)
@@ -47,6 +48,7 @@ class Program
 
     private static Command ParseCommandLine(string[] args)
     {
+        // упростить для чтения 
         const byte VALID_ARGUMENTS_COUNT = 3;
         const byte MIN_NOTATION_NUMBER = 2;
         const byte MAX_NOTATION_NUMBER = 36;
@@ -106,8 +108,11 @@ class Program
         var result = 0;
         for (var i = 0; i < inputValue.Length; i++)
         {
+            // Заменить на умножение с суммоой (384(10) = 0 * 10 + 3 => 3 * 10 + 8 => 38 * 10 + 4)
             var incrementValue = ConvertCharToNumber(inputValue[i]) *
                                  Convert.ToInt32(Math.Pow(sourceNotation, inputValue.Length - 1 - i));
+            
+            // вынести проверку на переполненеие в отедльную функцию
             if (incrementValue < 0)
             {
                 throw new ArgumentOutOfRangeException($"Ошибка! Превышено значение Int32 {Int32.MinValue}");
@@ -131,6 +136,8 @@ class Program
 
     private static int ConvertCharToNumber(char character)
     {
+        // можно ли через без цикла for 
+        
         if (character == '-')
             return -1;
         for (var i = 0; i < ValuesArray.Length; i++)
@@ -141,7 +148,7 @@ class Program
 
     private static string ConvertToString(int decimalValue, int destinationNotation)
     {
-        string result = "";
+        var result = "";
         long changedIntegerValue = decimalValue;
         if (decimalValue < 0)
         {
