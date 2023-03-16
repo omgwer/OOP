@@ -4,6 +4,7 @@
 // В программе должны быть выделены функции, выполняющие считывание массива, его обработку
 // и вывод результата.
 // Пустой массив, переданный программе – допустимые входные данные. При его обработке пустой массив должен оставаться пустым.
+
 using System.Globalization;
 
 class Program
@@ -13,13 +14,12 @@ class Program
         try
         {
             var numbersList = ParseCommandLine();
-            var minimalElementInList = numbersList.Min();
-            var modifiedNumbersList = ModifyElementsByPredicate(numbersList, minimalElementInList);
+            var modifiedNumbersList = ModifyElementsByPredicate(numbersList);
             PrintListToOutput(modifiedNumbersList);
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.StackTrace);
             return 1;
         }
 
@@ -30,13 +30,15 @@ class Program
     {
         using var inputStream = Console.In;
         var numbersList = new List<double>();
-        var readLine = Console.ReadLine();
-        while (readLine != null)
+        var readLine = inputStream.ReadLine();
+
+        while (!string.IsNullOrEmpty(readLine))
         {
             var elementsList = ParseStringToDoubleList(readLine);
             numbersList.AddRange(elementsList);
             readLine = inputStream.ReadLine();
         }
+
         inputStream.Close();
         return numbersList;
     }
@@ -53,18 +55,21 @@ class Program
         return numbersList;
     }
 
-    private static List<double> ModifyElementsByPredicate(List<double> elementList, double minimalElement)
+    private static List<double> ModifyElementsByPredicate(List<double> elementList)
     {
         var modifiedElementList = new List<double>();
-        elementList.ForEach(e => modifiedElementList.Add(e * minimalElement));
+        if (elementList.Count == 0)
+            return modifiedElementList;
+        var minimalElementInList = elementList.Min();
+        elementList.ForEach(e => modifiedElementList.Add(e * minimalElementInList));
         return modifiedElementList;
     }
 
     private static void PrintListToOutput(List<double> modifiedNumbersList)
     {
         if (modifiedNumbersList.Count == 0)
-            Console.Out.Write("empty list");
-        modifiedNumbersList.ForEach(e => 
+            Console.Out.Write("");
+        modifiedNumbersList.ForEach(e =>
             Console.Out.Write($"{Math.Round(e, 3)} "));
     }
 }
