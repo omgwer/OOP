@@ -19,7 +19,7 @@ class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.StackTrace);
+            Console.WriteLine("Error");
             return 1;
         }
 
