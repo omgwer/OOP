@@ -11,12 +11,13 @@ class Program
     public static int Main()
     {
         try
-        { // переименовать Parsecomand
-            // нужно работать с текущим массивом, а не копией
-            // добавить сортировку
+        { // переименовать Parsecomand - check
+            // нужно работать с текущим массивом, а не копией - check
+            // добавить сортировку - check
             // добавить тесты через фрейворк
-            var numbersList = ParseCommandLine();
-            var modifiedNumbersList = ModifyElementsByPredicate(numbersList);
+            var numbersList = ReadConsoleInput();
+            var modifiedNumbersList = ModifyNumbersListForPredicate(numbersList);
+            modifiedNumbersList.Sort();
             PrintListToOutput(modifiedNumbersList);
         }
         catch (Exception ex)
@@ -27,7 +28,7 @@ class Program
         return 0;
     }
 
-    private static List<double> ParseCommandLine()
+    private static List<double> ReadConsoleInput()
     {
         using var inputStream = Console.In;
         var numbersList = new List<double>();
@@ -56,14 +57,17 @@ class Program
         return numbersList;
     }
 
-    private static List<double> ModifyElementsByPredicate(List<double> elementList)
+    private static List<double> ModifyNumbersListForPredicate(List<double> elementList)
     {
-        var modifiedElementList = new List<double>();
-        if (elementList.Count == 0)
-            return modifiedElementList;
+        var elementsCount = elementList.Count;
+        if (elementsCount== 0)
+            return elementList;
         var minimalElementInList = elementList.Min();
-        elementList.ForEach(e => modifiedElementList.Add(e * minimalElementInList));
-        return modifiedElementList;
+        for (var i = 0; i < elementsCount; i++)
+        {
+            elementList[i] *= minimalElementInList;
+        }
+        return elementList;
     }
 
     private static void PrintListToOutput(List<double> modifiedNumbersList)
