@@ -15,10 +15,10 @@ class Program
             // нужно работать с текущим массивом, а не копией - check
             // добавить сортировку - check
             // добавить тесты через фрейворк
-            var numbersList = ReadConsoleInput();
+            var numbersList = ReadConsoleInput(Console.In);
             var modifiedNumbersList = ModifyNumbersListForPredicate(numbersList);
             modifiedNumbersList.Sort();
-            PrintListToOutput(modifiedNumbersList);
+            PrintListToOutput(modifiedNumbersList, Console.Out);
         }
         catch (Exception ex)
         {
@@ -28,9 +28,8 @@ class Program
         return 0;
     }
 
-    private static List<double> ReadConsoleInput()
+    private static List<double> ReadConsoleInput(TextReader inputStream)
     {
-        using var inputStream = Console.In;
         var numbersList = new List<double>();
         var readLine = inputStream.ReadLine();
 
@@ -41,7 +40,7 @@ class Program
             readLine = inputStream.ReadLine();
         }
 
-        inputStream.Close();
+        //inputStream.Close();
         return numbersList;
     }
 
@@ -70,11 +69,11 @@ class Program
         return elementList;
     }
 
-    private static void PrintListToOutput(List<double> modifiedNumbersList)
+    private static void PrintListToOutput(List<double> modifiedNumbersList, TextWriter outputStream)
     {
         if (modifiedNumbersList.Count == 0)
-            Console.Out.Write("");
+            outputStream.Write("");
         modifiedNumbersList.ForEach(e =>
-            Console.Out.Write($"{Math.Round(e, 3)} "));
+            outputStream.Write($"{Math.Round(e, 3)} "));
     }
 }
