@@ -5,6 +5,7 @@
 // Разработайте на ее основе программу, заменяющую все вхождения искомой строки в стандартном потоке ввода на
 // строку-заменитель и выводящую результат в стандартный поток вывода.
 using System.IO;
+using System.Text;
 
 
 //Console.WriteLine(System.Text.Encoding.GetEncoding(1251).GetString((new byte[] { 195 })));
@@ -51,18 +52,12 @@ class Program
     {
         var streamReader = File.OpenText(command.subject);
         var readMaskSize = command.search.Length;
-        char[] charBuffer = new char[readMaskSize];
+        StringBuilder stringBuilder = new StringBuilder();
+        var charBuffer = getCharArrayInStream(streamReader, readMaskSize);
         
-        
-        char charInFileStream = (char)streamReader.Read();
         while (charInFileStream != char.MaxValue)
         {
-            for (var i = 0; i < readMaskSize; i++)
-            {
-                
-            }
         }
-
         // List<char> some = new List<char>();
         // char s = (char)streamReader.Read();
         // while (s != char.MaxValue)
@@ -73,6 +68,23 @@ class Program
 
         return "some";
     }
+
+    private static char[] getCharArrayInStream(StreamReader streamReader, int arraySize)
+    {
+        char[] charBuffer = new char[arraySize];
+        for (var i = 0; i < arraySize; i++)
+        {
+            var readedChar = (char)streamReader.Read();
+            if (readedChar == char.MaxValue)
+            {
+                return charBuffer;
+            }
+            charBuffer[i] = readedChar;
+        }
+
+        return charBuffer;
+    }
     
     
+
 }

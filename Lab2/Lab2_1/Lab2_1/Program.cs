@@ -5,8 +5,9 @@
 // и вывод результата.
 // Пустой массив, переданный программе – допустимые входные данные. При его обработке пустой массив должен оставаться пустым.
 using System.Globalization;
+using System.Text;
 
-class Program
+public class Program
 {
     public static int Main()
     {
@@ -15,10 +16,9 @@ class Program
             // нужно работать с текущим массивом, а не копией - check
             // добавить сортировку - check
             // добавить тесты через фрейворк
-            var numbersList = ReadConsoleInput();
-            var modifiedNumbersList = ModifyNumbersListForPredicate(numbersList);
-            modifiedNumbersList.Sort();
-            PrintListToOutput(modifiedNumbersList);
+            var input = Console.In;
+            var outputString = ReadNumbersAndModifyByPredicate(input);
+            Console.WriteLine(outputString);
         }
         catch (Exception ex)
         {
@@ -28,9 +28,16 @@ class Program
         return 0;
     }
 
-    private static List<double> ReadConsoleInput()
+    public static string ReadNumbersAndModifyByPredicate(TextReader input)
     {
-        using var inputStream = Console.In;
+        var numbersList = ReadInput(input);
+        var modifiedNumbersList = ModifyNumbersListForPredicate(numbersList);
+        modifiedNumbersList.Sort();
+        return ConvertNumbersListToString(modifiedNumbersList);
+    }
+
+    private static List<double> ReadInput(TextReader inputStream)
+    {
         var numbersList = new List<double>();
         var readLine = inputStream.ReadLine();
 
@@ -70,11 +77,11 @@ class Program
         return elementList;
     }
 
-    private static void PrintListToOutput(List<double> modifiedNumbersList)
+    private static string ConvertNumbersListToString(List<double> modifiedNumbersList)
     {
-        if (modifiedNumbersList.Count == 0)
-            Console.Out.Write("");
+        var stringBuilder = new StringBuilder();
         modifiedNumbersList.ForEach(e =>
-            Console.Out.Write($"{Math.Round(e, 3)} "));
+            stringBuilder.Append($"{Math.Round(e, 3)} "));
+        return stringBuilder.ToString().Trim();
     }
 }
