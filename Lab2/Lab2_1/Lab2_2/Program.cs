@@ -53,10 +53,11 @@ class Program
         var streamReader = File.OpenText(command.subject);
         var readMaskSize = command.search.Length;
         StringBuilder stringBuilder = new StringBuilder();
-        var charBuffer = getCharArrayInStream(streamReader, readMaskSize);
-        
-        while (charInFileStream != char.MaxValue)
+        char[] charBufferArray = new char[readMaskSize];
+        var charBuffer = (char)streamReader.Read();
+        while (charBuffer != char.MaxValue)
         {
+            
         }
         // List<char> some = new List<char>();
         // char s = (char)streamReader.Read();
@@ -71,7 +72,7 @@ class Program
 
     private static char[] getCharArrayInStream(StreamReader streamReader, int arraySize)
     {
-        char[] charBuffer = new char[arraySize];
+       
         for (var i = 0; i < arraySize; i++)
         {
             var readedChar = (char)streamReader.Read();
@@ -84,7 +85,15 @@ class Program
 
         return charBuffer;
     }
-    
-    
+
+    private bool CompareSearchAndBufferStrings(string search, char[] buffer)
+    {
+        bool isEqual = false;
+        for (int i = 0; i < search.Length; i++)
+            
+        return search.Equals(buffer);
+    }
+
+
 
 }
