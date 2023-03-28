@@ -25,8 +25,8 @@ class Program
         var command = new Command()
         {
             subject = "someonetest",
-            replace = "some",
-            search = "lolkek"
+            search = "some",
+            replace = "lolkek"
 
         };
         var result = FindAndReplace(command);
@@ -48,18 +48,15 @@ class Program
 
     private static string FindAndReplace(Command command)
     {
-        var streamReader = File.OpenText(command.subject);
+        
         StringBuilder stringBuilder = new StringBuilder();
         List<char> charBufferList = new List<char>();
-        var charBuffer = (char)streamReader.Read();
-        while (charBuffer != char.MaxValue)
+        foreach (char ch in command.subject)
         {
-            charBufferList.Add(charBuffer);
-            charBuffer = (char)streamReader.Read();
-            
+            charBufferList.Add(ch);
             if (charBufferList.Count == command.search.Length)
             {
-                if (command.search.Equals(charBufferList.ToString()))
+                if (command.search.Equals(string.Concat(charBufferList)))
                 {
                     stringBuilder.Append(command.replace); // если совпало, данные буфера больше не нужны
                     charBufferList.Clear();
@@ -71,8 +68,7 @@ class Program
                 }
             }
         }
-
-        stringBuilder.Append(charBufferList);
+        stringBuilder.Append(string.Concat(charBufferList));
         return stringBuilder.ToString();
     }
 }
