@@ -24,9 +24,9 @@ class Program
 
         var command = new Command()
         {
-            subject = "test.txt",
-            replace = "",
-            search = ""
+            subject = "someonetest",
+            replace = "some",
+            search = "lolkek"
 
         };
         var result = FindAndReplace(command);
@@ -38,8 +38,6 @@ class Program
     {
         if (args.Length != 3)
             throw new Exception("Invalid arguments count");
-        if (!args[0].Contains('.'))
-            throw new Exception("Invalid first argument");
         return new Command()
         {
             subject = args[0],
@@ -51,49 +49,30 @@ class Program
     private static string FindAndReplace(Command command)
     {
         var streamReader = File.OpenText(command.subject);
-        var readMaskSize = command.search.Length;
         StringBuilder stringBuilder = new StringBuilder();
-        char[] charBufferArray = new char[readMaskSize];
+        List<char> charBufferList = new List<char>();
         var charBuffer = (char)streamReader.Read();
         while (charBuffer != char.MaxValue)
         {
+            charBufferList.Add(charBuffer);
+            charBuffer = (char)streamReader.Read();
             
-        }
-        // List<char> some = new List<char>();
-        // char s = (char)streamReader.Read();
-        // while (s != char.MaxValue)
-        // {
-        //     some.Add(s);
-        //     s = (char) streamReader.Read();
-        // }
-
-        return "some";
-    }
-
-    private static char[] getCharArrayInStream(StreamReader streamReader, int arraySize)
-    {
-       
-        for (var i = 0; i < arraySize; i++)
-        {
-            var readedChar = (char)streamReader.Read();
-            if (readedChar == char.MaxValue)
+            if (charBufferList.Count == command.search.Length)
             {
-                return charBuffer;
+                if (command.search.Equals(charBufferList.ToString()))
+                {
+                    stringBuilder.Append(command.replace); // если совпало, данные буфера больше не нужны
+                    charBufferList.Clear();
+                }
+                else  // результат в буфере не совпадает с искомой строкой
+                {
+                    stringBuilder.Append(charBufferList.First());
+                    charBufferList.Remove(charBufferList.First());
+                }
             }
-            charBuffer[i] = readedChar;
         }
 
-        return charBuffer;
+        stringBuilder.Append(charBufferList);
+        return stringBuilder.ToString();
     }
-
-    private bool CompareSearchAndBufferStrings(string search, char[] buffer)
-    {
-        bool isEqual = false;
-        for (int i = 0; i < search.Length; i++)
-            
-        return search.Equals(buffer);
-    }
-
-
-
 }
