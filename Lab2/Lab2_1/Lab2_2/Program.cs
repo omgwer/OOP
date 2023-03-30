@@ -4,12 +4,12 @@
 //     Вычислительная сложность алгоритма, лежащего в основе FindAndReplace, должно линейно зависеть от длины строки Subject
 // Разработайте на ее основе программу, заменяющую все вхождения искомой строки в стандартном потоке ввода на
 // строку-заменитель и выводящую результат в стандартный поток вывода.
-using System.IO;
+
 using System.Text;
 
+namespace Lab_2_2;
 
-//Console.WriteLine(System.Text.Encoding.GetEncoding(1251).GetString((new byte[] { 195 })));
-class Program
+public class Program
 {
     public struct Command
     {
@@ -20,16 +20,15 @@ class Program
 
     public static int Main(string[] args)
     {
-        //Command command = ParseCommandLine(args);
-
-        var command = new Command()
+        try
         {
-            subject = "someonetest",
-            search = "some",
-            replace = "lolkek"
-
-        };
-        var result = FindAndReplace(command);
+            Command command = ParseCommandLine(args);
+            var result = FindAndReplace(command);
+        }
+        catch (Exception ex)
+        {
+            return 1;
+        }
 
         return 0;
     }
@@ -46,9 +45,8 @@ class Program
         };
     }
 
-    private static string FindAndReplace(Command command)
+    public static string FindAndReplace(Command command)
     {
-        
         StringBuilder stringBuilder = new StringBuilder();
         List<char> charBufferList = new List<char>();
         foreach (char ch in command.subject)
@@ -61,13 +59,14 @@ class Program
                     stringBuilder.Append(command.replace); // если совпало, данные буфера больше не нужны
                     charBufferList.Clear();
                 }
-                else  // результат в буфере не совпадает с искомой строкой
+                else // результат в буфере не совпадает с искомой строкой
                 {
                     stringBuilder.Append(charBufferList.First());
                     charBufferList.Remove(charBufferList.First());
                 }
             }
         }
+
         stringBuilder.Append(string.Concat(charBufferList));
         return stringBuilder.ToString();
     }
