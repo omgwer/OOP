@@ -17,16 +17,27 @@ public class Program
         public string search;
         public string replace;
     }
-
+    
+    // считывать несколько строк
     public static int Main(string[] args)
     {
         try
         {
-            Command command = ParseCommandLine(args);
-            var result = FindAndReplace(command);
+            Command command = ParseCommandLine(args);  // вынести из Command subject
+            var inputString = Console.ReadLine();
+            // добавить цикл на чтение до конца файла 
+            if (string.IsNullOrEmpty(inputString))
+                Console.WriteLine("");
+            else
+            {
+                command.subject = inputString;
+                var inputStringAfterReplace = FindAndReplace(command);  // передавать отдельными параметрами
+                Console.WriteLine(inputStringAfterReplace);
+            }
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex.Message);
             return 1;
         }
 
@@ -35,13 +46,12 @@ public class Program
 
     private static Command ParseCommandLine(string[] args)
     {
-        if (args.Length != 3)
+        if (args.Length != 2)
             throw new Exception("Invalid arguments count");
         return new Command()
         {
-            subject = args[0],
-            search = args[1],
-            replace = args[2]
+            search = args[0],
+            replace = args[1]
         };
     }
 

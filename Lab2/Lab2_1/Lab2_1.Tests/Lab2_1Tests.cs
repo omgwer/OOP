@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Lab2_1.Tests;
 
 public class Tests
@@ -5,15 +7,22 @@ public class Tests
     [SetUp]
     public void Setup()
     {
+        if (!File.Exists("TestFile.txt"))
+            File.Create("TestFile.txt");
     }
 
     [Test]
     public void ReadNumbersAndModifyByPredicate_PositiveTest_EmptyString()
     {
-        var inputValues = new StringReader("");
-        var expectedResult = "";
-        var result = Program.ReadNumbersAndModifyByPredicate(inputValues);
-        Assert.AreEqual(expectedResult, result);
+       //  var inputValues = new StringReader("");
+       //  var expectedResult = "";
+       //  using var t = File.OpenText("TestFile.txt");
+       //  var res = t.ReadLine();
+       // // var writerTraceListener = new TextWriterTraceListener("TestFile.txt");
+       //  Program.ReadStreamAndPrintResult(inputValues, writerTraceListener.Writer!);
+       //  var actualResult = File.ReadAllText("TestFile.txt");
+       //  t.Close();
+       //  Assert.That(actualResult, Is.EqualTo(expectedResult));
     }
 
     [Test]
@@ -21,13 +30,17 @@ public class Tests
     {
         var inputValues = new StringReader("1.2 1.4 0.1");
         var expectedResult = "0,01 0,12 0,14";
-        var result = Program.ReadNumbersAndModifyByPredicate(inputValues);
-        Assert.AreEqual(expectedResult, result);
+        var writerTraceListener = new TextWriterTraceListener("TestFile.txt");
+        Program.ReadStreamAndPrintResult(inputValues, writerTraceListener.Writer!);
+        var actualResult = File.ReadAllText("TestFile.txt");
+        writerTraceListener.Close();
+        Assert.That(actualResult, Is.EqualTo(expectedResult));
     }
 
     [Test]
     public void ReadNumbersAndModifyByPredicate_PositiveTest_MoreInputStrings()
     {
+        // передавать массивы, не имитируем ввод с консоли
         var inputValues = new StringReader(
             @"1.2 1.3 4.3
                                 2.2

@@ -4,21 +4,22 @@
 // В программе должны быть выделены функции, выполняющие считывание массива, его обработку
 // и вывод результата.
 // Пустой массив, переданный программе – допустимые входные данные. При его обработке пустой массив должен оставаться пустым.
+
 using System.Globalization;
-using System.Text;
 
 public class Program
 {
     public static int Main()
     {
         try
-        { // переименовать Parsecomand - check
+        {
+            // переименовать Parsecomand - check
             // нужно работать с текущим массивом, а не копией - check
             // добавить сортировку - check
             // добавить тесты через фрейворк
-            var input = Console.In;
-            var outputString = ReadNumbersAndModifyByPredicate(input);
-            Console.WriteLine(outputString);
+            TextReader textReader = Console.In;
+            TextWriter textWriter = Console.Out;
+            ReadStreamAndPrintResult(textReader, textWriter);
         }
         catch (Exception ex)
         {
@@ -28,15 +29,21 @@ public class Program
         return 0;
     }
 
-    public static string ReadNumbersAndModifyByPredicate(TextReader input)
+    public static void ReadStreamAndPrintResult(TextReader textReader, TextWriter textWriter)
     {
-        var numbersList = ReadInput(input);
-        var modifiedNumbersList = ModifyNumbersListForPredicate(numbersList);
+        var modifiedNumbersList = ReadNumbersAndModifyByPredicate(textReader);
         modifiedNumbersList.Sort();
-        return ConvertNumbersListToString(modifiedNumbersList);
+        modifiedNumbersList.ForEach(e => textWriter.Write($"{Math.Round(e, 3)} "));
     }
 
-    private static List<double> ReadInput(TextReader inputStream)
+    public static List<double> ReadNumbersAndModifyByPredicate(TextReader input)
+    {
+        var numbersList = ReadInputStream(input);
+        ModifyNumbersListForPredicate(numbersList);
+        return numbersList;
+    }
+
+    private static List<double> ReadInputStream(TextReader inputStream)
     {
         var numbersList = new List<double>();
         var readLine = inputStream.ReadLine();
@@ -64,24 +71,16 @@ public class Program
         return numbersList;
     }
 
-    private static List<double> ModifyNumbersListForPredicate(List<double> elementList)
+    //void
+    private static void ModifyNumbersListForPredicate(List<double> elementList)
     {
         var elementsCount = elementList.Count;
-        if (elementsCount== 0)
-            return elementList;
+        if (elementsCount == 0)
+            return;
         var minimalElementInList = elementList.Min();
         for (var i = 0; i < elementsCount; i++)
         {
             elementList[i] *= minimalElementInList;
         }
-        return elementList;
-    }
-
-    private static string ConvertNumbersListToString(List<double> modifiedNumbersList)
-    {
-        var stringBuilder = new StringBuilder();
-        modifiedNumbersList.ForEach(e =>
-            stringBuilder.Append($"{Math.Round(e, 3)} "));
-        return stringBuilder.ToString().Trim();
     }
 }
