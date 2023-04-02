@@ -52,7 +52,7 @@ public class Car : ICar
 
     public bool TurnOnEngine()
     {
-        if (!_isTurnedOn) // нет смсла проверять возможность зазпуска, так как заглушить машину можно только при определенных условиях
+        if (!_isTurnedOn) // нет смсла проверять возможность запуска, так как заглушить машину можно только при определенных условиях
             _isTurnedOn = true;
         return true;
     }
@@ -81,7 +81,7 @@ public class Car : ICar
             isCanTurnOffEngine = false;
         }
 
-        if (!isCanTurnOffEngine) throw new Exception(exceptionTextBuilder.ToString());
+        if (!isCanTurnOffEngine) throw new CarException(exceptionTextBuilder.ToString());
 
         _isTurnedOn = false;
         return true;
@@ -91,8 +91,9 @@ public class Car : ICar
     {
         if (gear < CarDictionary.MIN_GEAR_NUMBER | gear > CarDictionary.MAX_GEAR_NUMBER)
         {
-            throw new ArgumentException("Gear value in not valid!");
+            throw new CarException("Gear value in not valid!");
         }
+        CheckTurnOnEngine();
 
         Gear newGear = (Gear)gear; //int newGearInt = (int)newGear;
         var exceptionTextBuilder = new StringBuilder();
@@ -171,13 +172,12 @@ public class Car : ICar
                     exceptionTextBuilder.Append($"Can`t set fifth gear. Current speed  = {_speed}  \\n");
                     isCanSwitchGear = false;
                 }
-
                 break;
             case Gear.NEUTRAL:
                 break;
         }
 
-        if (!isCanSwitchGear) throw new Exception(exceptionTextBuilder.ToString());
+        if (!isCanSwitchGear) throw new CarException(exceptionTextBuilder.ToString());
         _gear = newGear;
         return true;
     }
@@ -185,7 +185,12 @@ public class Car : ICar
     public bool SetSpeed(int speed)
     {
         if (speed < CarDictionary.CAR_SPEED_MIN | speed > CarDictionary.CAR_SPEED_MAX)
-            throw new ArgumentException("Input speed is not valid!");
+            throw new CarException("Input speed is not valid!");
+
+        CheckTurnOnEngine();
+        if (_speed == speed)
+            return true;
+        
         var exceptionTextBuilder = new StringBuilder();
         var isCanSetSpeed = true;
         if (_gear == Gear.NEUTRAL & (speed - _speed) > CarDictionary.CAR_SPEED_ZERO)
@@ -201,19 +206,27 @@ public class Car : ICar
             isCanSetSpeed = false;
         }
 
-        if (!isCanSetSpeed) throw new Exception(exceptionTextBuilder.ToString());
+        if (!isCanSetSpeed) throw new CarException(exceptionTextBuilder.ToString());
         _speed = speed;
-        syncDirection();
+        SyncDirection();
         return true;
     }
 
-    private void syncDirection()
+    private void SyncDirection()
     {
         if (_speed == 0 & _direction != Direction.STANDING_STILL)
             _direction = Direction.STANDING_STILL;
+        else if (_speed != 0 & _gear == Gear.NEUTRAL)
+            return;
         else if (_speed > 0 & _gear == Gear.REVERSE & _direction != Direction.BACKWARD)
             _direction = Direction.BACKWARD;
         else if (_speed > 0 & _gear != Gear.REVERSE & _direction != Direction.FORWARD)
             _direction = Direction.FORWARD;
+    }
+
+    private void CheckTurnOnEngine()
+    {
+        if (!_isTurnedOn)
+            throw new CarException("Engine is turned off!");
     }
 }
