@@ -9,10 +9,10 @@ public interface ICar
     public Direction GetDirection();
     public int GetSpeed();
     public Gear GetGear();
-    public bool TurnOnEngine();
-    public bool TurnOffEngine();
-    public bool SetGear(int gear);
-    public bool SetSpeed(int speed);
+    public void TurnOnEngine();
+    public void TurnOffEngine();
+    public void SetGear(int gear);
+    public void SetSpeed(int speed);
 }
 
 public class Car : ICar
@@ -50,17 +50,16 @@ public class Car : ICar
         return _gear;
     }
 
-    public bool TurnOnEngine()
+    public void TurnOnEngine()
     {
         if (!_isTurnedOn) // нет смсла проверять возможность запуска, так как заглушить машину можно только при определенных условиях
             _isTurnedOn = true;
-        return true;
     }
 
-    public bool TurnOffEngine()
+    public void TurnOffEngine()
     {
         if (!_isTurnedOn)
-            return true;
+            return;
         var exceptionTextBuilder = new StringBuilder();
         var canTurnOffEngine = true;//TODO: убрать один глагол
         if (_direction != Direction.STANDING_STILL)
@@ -69,7 +68,7 @@ public class Car : ICar
             canTurnOffEngine = false;
         }
 
-        if (_speed != 0)
+        if (_speed != CarDictionary.CAR_SPEED_ZERO)
         {
             exceptionTextBuilder.Append("Engine stop possible at zero speed \\n");
             canTurnOffEngine = false;
@@ -84,147 +83,101 @@ public class Car : ICar
         if (!canTurnOffEngine) throw new CarException(exceptionTextBuilder.ToString());
 
         _isTurnedOn = false;
-        return true;
     }
 
-    public bool SetGear(int gear)
+    public void SetGear(int gear)
     {
         if (gear < CarDictionary.MIN_GEAR_NUMBER | gear > CarDictionary.MAX_GEAR_NUMBER)
         {
             throw new CarException("Gear value in not valid!");
         }
-        CheckTurnOnEngine();
+        if ((Gear)gear != Gear.NEUTRAL)
+            CheckIsTurnedOnEngine();
 
         Gear newGear = (Gear)gear; //int newGearInt = (int)newGear;
         var exceptionTextBuilder = new StringBuilder();
-        var isCanSwitchGear = true;//rename
+        var canSwitchGear = true;// TODO: rename
 
-        switch (newGear)
+        if (newGear == Gear.REVERSE)
         {
-            case Gear.REVERSE:
-                if (_speed != CarDictionary.CAR_SPEED_ZERO)
-                {
-                    exceptionTextBuilder.Append("Can`t set reverse gear if the car is moving   \\n");
-                    isCanSwitchGear = false;
-                }
-
-                break;
-            case Gear.FIRST:
-                if (_direction == Direction.BACKWARD)
-                {
-                    exceptionTextBuilder.Append("Can`t set first gear if the car is moving backward   \\n");
-                    isCanSwitchGear = false;
-                }
-                else if (_speed > 30)//TODO: const
-                {
-                    exceptionTextBuilder.Append($"Can`t set first gear. Current speed  = {_speed}  \\n");
-                    isCanSwitchGear = false;
-                }
-
-                break;
-            case Gear.SECOND:
-                if (_direction != Direction.FORWARD)
-                {
-                    exceptionTextBuilder.Append("Can`t set second gear if the car dont moving forward  \\n");
-                    isCanSwitchGear = false;
-                }
-                else if (_speed < 20 | _speed > 50)
-                {
-                    exceptionTextBuilder.Append($"Can`t set second gear. Current speed  = {_speed}  \\n");
-                    isCanSwitchGear = false;
-                }
-
-                break;
-            case Gear.THIRD:
-                if (_direction != Direction.FORWARD)
-                {
-                    exceptionTextBuilder.Append("Can`t set third gear if the car dont moving forward  \\n");
-                    isCanSwitchGear = false;
-                }
-                else if (_speed < 30 | _speed > 60)
-                {
-                    exceptionTextBuilder.Append($"Can`t set third gear. Current speed  = {_speed}  \\n");
-                    isCanSwitchGear = false;
-                }
-
-                break;
-            case Gear.FOURTH:
-                if (_direction != Direction.FORWARD)
-                {
-                    exceptionTextBuilder.Append("Can`t set fourth gear if the car dont moving forward  \\n");
-                    isCanSwitchGear = false;
-                }
-                else if (_speed < 40 | _speed > 90)
-                {
-                    exceptionTextBuilder.Append($"Can`t set fourth gear. Current speed  = {_speed}  \\n");
-                    isCanSwitchGear = false;
-                }
-
-                break;
-            case Gear.FIFTH:
-                if (_direction != Direction.FORWARD)
-                {
-                    exceptionTextBuilder.Append("Can`t set fifth gear if the car dont moving forward  \\n");
-                    isCanSwitchGear = false;
-                }
-                else if (_speed < 50 | _speed > 150)
-                {
-                    exceptionTextBuilder.Append($"Can`t set fifth gear. Current speed  = {_speed}  \\n");
-                    isCanSwitchGear = false;
-                }
-                break;
-            case Gear.NEUTRAL:
-                break;
+            if (_speed != CarDictionary.CAR_SPEED_ZERO)
+            {
+                exceptionTextBuilder.Append("Can`t set reverse gear if the car is moving   \\n");
+                canSwitchGear = false;
+            }
+        } else if (newGear == Gear.FIRST)
+        {
+            if (_direction == Direction.BACKWARD)
+            {
+                exceptionTextBuilder.Append("Can`t set first gear if the car is moving backward   \\n");
+                canSwitchGear = false;
+            }
+            else if (_speed > CarDictionary.GearOnSpeedLimitsDictionary[newGear].Last())//TODO: const
+            {
+                exceptionTextBuilder.Append($"Can`t set first gear. Current speed  = {_speed}  \\n");
+                canSwitchGear = false;
+            }
+        }
+        else if (newGear != Gear.NEUTRAL)
+        {
+            if (_direction != Direction.FORWARD)
+            {
+                exceptionTextBuilder.Append("Can`t set second gear if the car dont moving forward  \\n");
+                canSwitchGear = false;
+            }
+            else if (_speed < CarDictionary.GearOnSpeedLimitsDictionary[newGear].First() | _speed > CarDictionary.GearOnSpeedLimitsDictionary[newGear].Last())
+            {
+                exceptionTextBuilder.Append($"Can`t set second gear. Current speed  = {_speed}  \\n");
+                canSwitchGear = false;
+            }
         }
 
-        if (!isCanSwitchGear) throw new CarException(exceptionTextBuilder.ToString());
+        if (!canSwitchGear) throw new CarException(exceptionTextBuilder.ToString());
         _gear = newGear;
-        return true;
     }
 
-    public bool SetSpeed(int speed)
+    public void SetSpeed(int speed)
     {
         if (speed < CarDictionary.CAR_SPEED_MIN | speed > CarDictionary.CAR_SPEED_MAX)
             throw new CarException("Input speed is not valid!");
 
-        CheckTurnOnEngine();
+        CheckIsTurnedOnEngine();
         if (_speed == speed)
-            return true;//TODO: use void
+            return;//TODO: use void
         
         var exceptionTextBuilder = new StringBuilder();
-        var isCanSetSpeed = true;//TODO: rename
-        if (_gear == Gear.NEUTRAL & (speed - _speed) > CarDictionary.CAR_SPEED_ZERO)//TODO: упросить
+        var canSetSpeed = true;//TODO: rename
+        if (_gear == Gear.NEUTRAL & speed > _speed)//TODO: упросить
         {
             exceptionTextBuilder.Append($"Can`t set new speed. No acceleration in neutral gear   \\n");
-            isCanSetSpeed = false;
+            canSetSpeed = false;
         }
 
         var speedLimitsInGear = CarDictionary.GearOnSpeedLimitsDictionary[_gear];
         if (speed < speedLimitsInGear.First() | speed > speedLimitsInGear.Last())  
         {
             exceptionTextBuilder.Append($"Can`t set new speed. Gear {(int) _gear} not suitable for speed = {speed}   \\n");
-            isCanSetSpeed = false;
+            canSetSpeed = false;
         }
 
-        if (!isCanSetSpeed) throw new CarException(exceptionTextBuilder.ToString());
+        if (!canSetSpeed) throw new CarException(exceptionTextBuilder.ToString());
         _speed = speed;
         SyncDirection();
-        return true;
     }
 
     private void SyncDirection()
     {
-        if (_speed == 0 & _direction != Direction.STANDING_STILL)
+        if (_speed == CarDictionary.CAR_SPEED_ZERO & _direction != Direction.STANDING_STILL)
             _direction = Direction.STANDING_STILL;
-        else if (_speed != 0 & _gear == Gear.NEUTRAL)
+        else if (_speed != CarDictionary.CAR_SPEED_ZERO & _gear == Gear.NEUTRAL)
             return;
-        else if (_speed > 0 & _gear == Gear.REVERSE & _direction != Direction.BACKWARD)
+        else if (_speed > CarDictionary.CAR_SPEED_ZERO & _gear == Gear.REVERSE & _direction != Direction.BACKWARD)
             _direction = Direction.BACKWARD;
-        else if (_speed > 0 & _gear != Gear.REVERSE & _direction != Direction.FORWARD)
+        else if (_speed > CarDictionary.CAR_SPEED_ZERO & _gear != Gear.REVERSE & _direction != Direction.FORWARD)
             _direction = Direction.FORWARD;
     }
 
-    private void CheckTurnOnEngine()//TODO: rename
+    private void CheckIsTurnedOnEngine()//TODO: rename
     {
         if (!_isTurnedOn)
             throw new CarException("Engine is turned off!");

@@ -13,7 +13,7 @@ namespace Lab3_1
             var car = new Car();
             PrintHelp();
             while (_isRun)
-            {
+            {//TODO: добавить возможность переключения на нейтраль при выключенном двигателе
                 Console.Write("Write your command : ");
                 var command = ParseCommandLine();
                 if (command == null)

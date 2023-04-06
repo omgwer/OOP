@@ -8,6 +8,13 @@ public class Tests
     public void Setup()
     {
     }
+    
+    [Test]
+    public void Positive_GearTest_SetNeutralGear_InStopEngine()
+    {
+        var car = new Car();
+        Assert.That(TrySwitchGear(car, Gear.NEUTRAL), Is.True);
+    }
 
     [Test]
     public void Positive_GearTest_SetNeutralGear_NoSpeed()

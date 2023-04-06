@@ -12,17 +12,15 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Lab2_4;
 
-class Program
+public class Program
 {
     public static void Main(string[] args)
     {
         var inputStream = Console.In;
         var outputStream = Console.Out;
-        var upperBound = 100000000;
-        //   Console.WriteLine("Insert max number value:");
-        // var upperBound = ParseCommandLine(args);
-        // var upperBound = Int32.Parse(inputStream.ReadLine());
-        SortedSet<int> primeNumbersSet = new SortedSet<int>();
+        Console.WriteLine("Insert max number value:");
+        var upperBound = Int32.Parse(inputStream.ReadLine());
+        ISet<int> primeNumbersSet = new SortedSet<int>();
         try
         {
             var startDateTime = DateTime.Now;
@@ -36,29 +34,33 @@ class Program
             Console.WriteLine(ex.Message);
         }
 
-        // PrintSet(primeNumbersSet, outputStream);
+        PrintSet(primeNumbersSet, outputStream);
     }
 
-    private static SortedSet<int> GeneratePrimeNumberSet(int upperBound)
+    public static ISet<int> GeneratePrimeNumberSet(int upperBound)
     {
         var sieve = new List<bool>(Enumerable.Repeat(true, upperBound + 1));
+        var sortedSet = new HashSet<int>();
+        if (upperBound < 2)
+        {
+            return sortedSet;
+        }
+        sieve[1] = false;
+        sieve[0] = false;
         var screeningLimit = Math.Sqrt(upperBound);
         for (var i = 2; i <= screeningLimit; i++)
             if (sieve[i])
                 for (var j = i * i; j <= upperBound; j += i)
                     if (sieve[j])
                         sieve[j] = false;
-
-
-        var sortedSet = new SortedSet<int>();
-        for (var i = 0; i < upperBound; i++)
+        
+        for (var i = 2; i <= upperBound; i++)
             if (sieve[i])
                 sortedSet.Add(i);
-
         return sortedSet;
     }
 
-    private static void PrintSet(SortedSet<int> sortedSet, TextWriter textWriter)
+    private static void PrintSet(ISet<int> sortedSet, TextWriter textWriter)
     {
         foreach (var elem in sortedSet)
         {
@@ -68,18 +70,5 @@ class Program
                 textWriter.Write(",");
             }
         }
-    }
-
-    private static int ParseCommandLine(string[] args)
-    {
-        if (args.Length != 1)
-            throw new Exception("Argument count is not valid");
-        var value = int.Parse(args[0]);
-        if (value < 0 & value > 100000000)
-        {
-            throw new Exception("Argument value is not valid");
-        }
-
-        return value;
     }
 }
