@@ -19,56 +19,41 @@ class Program
         var inputStream = Console.In;
         var outputStream = Console.Out;
         var upperBound = 100000000;
-     //   Console.WriteLine("Insert max number value:");
-       // var upperBound = ParseCommandLine(args);
-      // var upperBound = Int32.Parse(inputStream.ReadLine());
-       SortedSet<int> primeNumbersSet = new SortedSet<int>();
-       try
-       {
-           var startDateTime = DateTime.Now;
-           primeNumbersSet = GeneratePrimeNumberSet(upperBound);
-           var endDateTime = DateTime.Now;
-           Console.WriteLine($"{(endDateTime - startDateTime).TotalMilliseconds} ms.");
-           Console.WriteLine(primeNumbersSet.Count);
-       }
-       catch (Exception ex)
-       {
-           Console.WriteLine(ex.Message);
-       }
+        //   Console.WriteLine("Insert max number value:");
+        // var upperBound = ParseCommandLine(args);
+        // var upperBound = Int32.Parse(inputStream.ReadLine());
+        SortedSet<int> primeNumbersSet = new SortedSet<int>();
+        try
+        {
+            var startDateTime = DateTime.Now;
+            primeNumbersSet = GeneratePrimeNumberSet(upperBound);
+            var endDateTime = DateTime.Now;
+            Console.WriteLine($"{(endDateTime - startDateTime).TotalMilliseconds} ms.");
+            Console.WriteLine(primeNumbersSet.Count);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
 
-       // PrintSet(primeNumbersSet, outputStream);
+        // PrintSet(primeNumbersSet, outputStream);
     }
-    
+
     private static SortedSet<int> GeneratePrimeNumberSet(int upperBound)
     {
         var sieve = new List<bool>(Enumerable.Repeat(true, upperBound + 1));
         var screeningLimit = Math.Sqrt(upperBound);
         for (var i = 2; i <= screeningLimit; i++)
-        {
             if (sieve[i])
-            {
                 for (var j = i * i; j <= upperBound; j += i)
-                {
                     if (sieve[j])
-                    {
                         sieve[j] = false;
-                    }
-                }
 
-                // while (multiplier * i < (uint)sieve.Count())
-                // {
-                //     sieve[multiplier * i] = false;
-                //     multiplier++;
-                // }
-            }
-        }
-        
+
         var sortedSet = new SortedSet<int>();
         for (var i = 0; i < upperBound; i++)
-        {
             if (sieve[i])
                 sortedSet.Add(i);
-        }
 
         return sortedSet;
     }
@@ -89,7 +74,7 @@ class Program
     {
         if (args.Length != 1)
             throw new Exception("Argument count is not valid");
-        var value=  int.Parse(args[0]);
+        var value = int.Parse(args[0]);
         if (value < 0 & value > 100000000)
         {
             throw new Exception("Argument value is not valid");

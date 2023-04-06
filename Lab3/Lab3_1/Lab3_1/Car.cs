@@ -26,7 +26,7 @@ public class Car : ICar
     {
         _isTurnedOn = false;
         _direction = Direction.STANDING_STILL;
-        _speed = 0;
+        _speed = CarDictionary.CAR_SPEED_MIN;//TODO: const
         _gear = Gear.NEUTRAL;
     }
 
@@ -62,26 +62,26 @@ public class Car : ICar
         if (!_isTurnedOn)
             return true;
         var exceptionTextBuilder = new StringBuilder();
-        var isCanTurnOffEngine = true;
+        var canTurnOffEngine = true;//TODO: убрать один глагол
         if (_direction != Direction.STANDING_STILL)
         {
             exceptionTextBuilder.Append("Car don`t standing still \\n");
-            isCanTurnOffEngine = false;
+            canTurnOffEngine = false;
         }
 
         if (_speed != 0)
         {
             exceptionTextBuilder.Append("Engine stop possible at zero speed \\n");
-            isCanTurnOffEngine = false;
+            canTurnOffEngine = false;
         }
 
         if (_gear != Gear.NEUTRAL)
         {
             exceptionTextBuilder.Append("Engine stop possible at gearbox is neutral \\n");
-            isCanTurnOffEngine = false;
+            canTurnOffEngine = false;
         }
 
-        if (!isCanTurnOffEngine) throw new CarException(exceptionTextBuilder.ToString());
+        if (!canTurnOffEngine) throw new CarException(exceptionTextBuilder.ToString());
 
         _isTurnedOn = false;
         return true;
@@ -97,7 +97,7 @@ public class Car : ICar
 
         Gear newGear = (Gear)gear; //int newGearInt = (int)newGear;
         var exceptionTextBuilder = new StringBuilder();
-        var isCanSwitchGear = true;
+        var isCanSwitchGear = true;//rename
 
         switch (newGear)
         {
@@ -115,7 +115,7 @@ public class Car : ICar
                     exceptionTextBuilder.Append("Can`t set first gear if the car is moving backward   \\n");
                     isCanSwitchGear = false;
                 }
-                else if (_speed > 30)
+                else if (_speed > 30)//TODO: const
                 {
                     exceptionTextBuilder.Append($"Can`t set first gear. Current speed  = {_speed}  \\n");
                     isCanSwitchGear = false;
@@ -189,11 +189,11 @@ public class Car : ICar
 
         CheckTurnOnEngine();
         if (_speed == speed)
-            return true;
+            return true;//TODO: use void
         
         var exceptionTextBuilder = new StringBuilder();
-        var isCanSetSpeed = true;
-        if (_gear == Gear.NEUTRAL & (speed - _speed) > CarDictionary.CAR_SPEED_ZERO)
+        var isCanSetSpeed = true;//TODO: rename
+        if (_gear == Gear.NEUTRAL & (speed - _speed) > CarDictionary.CAR_SPEED_ZERO)//TODO: упросить
         {
             exceptionTextBuilder.Append($"Can`t set new speed. No acceleration in neutral gear   \\n");
             isCanSetSpeed = false;
@@ -224,7 +224,7 @@ public class Car : ICar
             _direction = Direction.FORWARD;
     }
 
-    private void CheckTurnOnEngine()
+    private void CheckTurnOnEngine()//TODO: rename
     {
         if (!_isTurnedOn)
             throw new CarException("Engine is turned off!");
