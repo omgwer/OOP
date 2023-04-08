@@ -43,7 +43,7 @@ namespace Lab2_3
     {
         public static void Main(string[] args)
         {
-            Dictionary library = new Dictionary();
+            Dictionary library = new MiniDictionary();
             library.LoadLibrary("library.json");
             ConsoleWorker consoleWorker = new ConsoleWorker(Console.In, Console.Out);
             consoleWorker.Run(library);
