@@ -61,7 +61,6 @@ public static class CommandAdapter
         return command;
     }
 
-
     private static void ValidateCommand(Command command)
     {
         StringBuilder errorsInValidate = new StringBuilder();
@@ -111,7 +110,7 @@ public static class CommandAdapter
                 break;
             case CommandType.PRINTVARS:
                 if (command.Identifier != null)
-                    errorsInValidate.Append("PRINTVARS need identifier");
+                    errorsInValidate.Append("PRINTVARS dont need identifier");
                 if (command.FirstVariable != null)
                     errorsInValidate.Append("PRINTVARS dont need first variable");
                 if (command.SecondVariable != null)
@@ -121,7 +120,7 @@ public static class CommandAdapter
                 break;
             case CommandType.PRINTFNS:
                 if (command.Identifier != null)
-                    errorsInValidate.Append("PRINTFNS need identifier");
+                    errorsInValidate.Append("PRINTFNS dont need identifier");
                 if (command.FirstVariable != null)
                     errorsInValidate.Append("PRINTFNS dont need first variable");
                 if (command.SecondVariable != null)

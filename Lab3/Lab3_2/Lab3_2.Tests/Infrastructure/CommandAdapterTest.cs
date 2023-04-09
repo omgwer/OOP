@@ -1,6 +1,6 @@
-﻿using System.Globalization;
-using Lab3_2.Dictionary;
+﻿using Lab3_2.Dictionary;
 using Lab3_2.Infrastructure;
+using NUnit.Framework;
 
 namespace Lab3_2.Tests.Infrastructure;
 
@@ -11,7 +11,7 @@ public class CommandAdapterTests
     public void ConvertToCommand_Should_Return_Command_With_CommandType_VAR()
     {
         // Arrange
-        string value = "var";
+        string value = "var some";
 
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
@@ -24,7 +24,7 @@ public class CommandAdapterTests
     public void ConvertToCommand_Should_Return_Command_With_CommandType_PRINT()
     {
         // Arrange
-        string value = "print";
+        string value = "print test";
 
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
@@ -32,12 +32,12 @@ public class CommandAdapterTests
         // Assert
         Assert.That(result.CommandType, Is.EqualTo(CommandType.PRINT));
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_CommandType_LET()
     {
         // Arrange
-        string value = "let";
+        string value = "let some=one";
 
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
@@ -45,12 +45,12 @@ public class CommandAdapterTests
         // Assert
         Assert.That(result.CommandType, Is.EqualTo(CommandType.LET));
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_CommandType_FN()
     {
         // Arrange
-        string value = "fn";
+        string value = "fn sone=test";
 
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
@@ -58,7 +58,7 @@ public class CommandAdapterTests
         // Assert
         Assert.That(result.CommandType, Is.EqualTo(CommandType.FN));
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_CommandType_PRINTVARS()
     {
@@ -71,7 +71,7 @@ public class CommandAdapterTests
         // Assert
         Assert.That(result.CommandType, Is.EqualTo(CommandType.PRINTVARS));
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_CommandType_PRINTFNS()
     {
@@ -84,7 +84,7 @@ public class CommandAdapterTests
         // Assert
         Assert.That(result.CommandType, Is.EqualTo(CommandType.PRINTFNS));
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_TwoArgumentsAndOperation()
     {
@@ -99,7 +99,7 @@ public class CommandAdapterTests
         var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
-  
+
         // Assert
         Assert.Multiple(() =>
         {
@@ -110,7 +110,7 @@ public class CommandAdapterTests
             Assert.That(result.SecondVariable, Is.EqualTo(secondVariable));
         });
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_OnlyIdentifier()
     {
@@ -125,7 +125,7 @@ public class CommandAdapterTests
         var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
-  
+
         // Assert
         Assert.Multiple(() =>
         {
@@ -136,7 +136,7 @@ public class CommandAdapterTests
             Assert.That(result.SecondVariable, Is.EqualTo(null));
         });
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_IndentifierAndDouble()
     {
@@ -151,7 +151,7 @@ public class CommandAdapterTests
         var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
-  
+
         // Assert
         Assert.Multiple(() =>
         {
@@ -162,7 +162,7 @@ public class CommandAdapterTests
             Assert.That(result.SecondVariable, Is.EqualTo(null));
         });
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_IndentifierAndDouble1()
     {
@@ -177,7 +177,7 @@ public class CommandAdapterTests
         var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
-  
+
         // Assert
         Assert.Multiple(() =>
         {
@@ -188,14 +188,14 @@ public class CommandAdapterTests
             Assert.That(result.SecondVariable, Is.EqualTo(null));
         });
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Return_Command_With_PRINTFNS_WITH_IDENTIFIER()
     {
         // Arrange
         var command = "printfns";
-        var delemiter = " ";
-        var identifier = "some";
+        var delemiter = "";
+        var identifier = "";
         var equals = "";
         var firstVariable = "";
         var operation = "";
@@ -203,18 +203,18 @@ public class CommandAdapterTests
         var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
         // Act
         var result = CommandAdapter.ConvertToCommand(value);
-  
+
         // Assert
         Assert.Multiple(() =>
         {
             Assert.That(result.CommandType, Is.EqualTo(CommandType.PRINTFNS));
-            Assert.That(result.Identifier, Is.EqualTo(identifier));
+            Assert.That(result.Identifier, Is.EqualTo(null));
             Assert.That(result.FirstVariable, Is.EqualTo(null));
             Assert.That(result.Operation, Is.EqualTo(null));
             Assert.That(result.SecondVariable, Is.EqualTo(null));
         });
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_Call_Function_In_Double()
     {
@@ -230,7 +230,7 @@ public class CommandAdapterTests
         // Act
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_MoreAgrumentsInVar()
     {
@@ -246,7 +246,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_CycleLinkInFn()
     {
@@ -262,7 +262,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_VAR_OneArgument()
     {
@@ -278,7 +278,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_VAR_TwoArgumentAndOperation()
     {
@@ -294,7 +294,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_PRINT_OneArgument()
     {
@@ -310,7 +310,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_PRINT_TwoArgumentAndOperation()
     {
@@ -326,7 +326,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_PRINTVARS_OneArgument()
     {
@@ -342,7 +342,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_PRINTVARS_TwoArgumentAndOperation()
     {
@@ -358,7 +358,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_LET_TwoArgumentAndOperation()
     {
@@ -374,7 +374,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_LET_NoOneArguments()
     {
@@ -390,7 +390,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_FN_NoOneArguments()
     {
@@ -406,7 +406,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_FN_FloatArgument()
     {
@@ -422,7 +422,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_FN_OnlyIndentifier()
     {
@@ -448,7 +448,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
-    
+
     [Test]
     public void ConvertToCommand_Should_Throw_Exception_For_Invalid_Command_empty()
     {
@@ -484,7 +484,7 @@ public class CommandAdapterTests
         // Assert
         Assert.IsFalse(result);
     }
-    
+
     [Test]
     public void IsIdentifier_Should_Return_False_For_Invalid_Identifier_EmptyString()
     {
@@ -510,7 +510,7 @@ public class CommandAdapterTests
         // Assert
         Assert.That(result, Is.EqualTo(Operation.ADDITION));
     }
-    
+
     [Test]
     public void ConvertToOperation_Should_Return_Operation_SUBTRACTION()
     {
@@ -523,7 +523,7 @@ public class CommandAdapterTests
         // Assert
         Assert.That(result, Is.EqualTo(Operation.SUBTRACTION));
     }
-    
+
     [Test]
     public void ConvertToOperation_Should_Return_Operation_MULTIPLICATION()
     {
@@ -536,7 +536,7 @@ public class CommandAdapterTests
         // Assert
         Assert.That(result, Is.EqualTo(Operation.MULTIPLICATION));
     }
-    
+
     [Test]
     public void ConvertToOperation_Should_Return_Operation_DIVISION()
     {
@@ -559,7 +559,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToOperation(value));
     }
-    
+
     [Test]
     public void ParseCommandStringAfterEqualsChar_Should_Return_Operation_ValidValueOneArgument_identifier()
     {
@@ -573,7 +573,7 @@ public class CommandAdapterTests
         Assert.That(result.First(), Is.EqualTo(value));
         Assert.That(result.Count, Is.EqualTo(1));
     }
-    
+
     [Test]
     public void ParseCommandStringAfterEqualsChar_Should_Return_Operation_ValidValueOneArgument_double()
     {
@@ -587,7 +587,7 @@ public class CommandAdapterTests
             Assert.That(result, Has.Count.EqualTo(1));
         });
     }
-    
+
     [Test]
     public void ParseCommandStringAfterEqualsChar_Should_Return_Operation_ValidValueOneArgument_intValue()
     {
@@ -601,9 +601,10 @@ public class CommandAdapterTests
             Assert.That(result, Has.Count.EqualTo(1));
         });
     }
-    
+
     [Test]
-    public void ParseCommandStringAfterEqualsChar_Should_Return_Operation_ValidValueOneArgument_IdentifierOperationIdentifier()
+    public void
+        ParseCommandStringAfterEqualsChar_Should_Return_Operation_ValidValueOneArgument_IdentifierOperationIdentifier()
     {
         // Arrange
         var firstArgument = "test";
@@ -620,7 +621,7 @@ public class CommandAdapterTests
             Assert.That(result.Last(), Is.EqualTo(thirdArgument));
         });
     }
-    
+
     [Test]
     public void Negative_ParseCommandStringAfterEqualsChar_InvalidArgument()
     {
@@ -630,7 +631,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ParseCommandStringAfterEqualsChar(value));
     }
-    
+
     [Test]
     public void Negative_ParseCommandStringAfterEqualsChar_InvalidArgument_Float_And_Variable()
     {
@@ -640,7 +641,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ParseCommandStringAfterEqualsChar(value));
     }
-    
+
     [Test]
     public void Negative_ParseCommandStringAfterEqualsChar_InvalidArgument_Float_And_Operation()
     {
@@ -650,7 +651,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ParseCommandStringAfterEqualsChar(value));
     }
-    
+
     [Test]
     public void Negative_ParseCommandStringAfterEqualsChar_InvalidArgument_Variable_And_Operation()
     {
@@ -660,7 +661,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ParseCommandStringAfterEqualsChar(value));
     }
-    
+
     [Test]
     public void Negative_ParseCommandStringAfterEqualsChar_InvalidArgument_OperationOnly()
     {
@@ -670,7 +671,7 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ParseCommandStringAfterEqualsChar(value));
     }
-    
+
     [Test]
     public void Negative_ParseCommandStringAfterEqualsChar_InvalidArgument_FourthArguments()
     {
@@ -680,6 +681,4 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ParseCommandStringAfterEqualsChar(value));
     }
-    
-    
 }
