@@ -7,5 +7,6 @@ public enum CommandType
     FN,
     PRINT,
     PRINTVARS,
-    PRINTFNS
+    PRINTFNS,
+    CLOSE
 }

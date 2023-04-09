@@ -4,22 +4,46 @@ namespace Lab3_2.Infrastructure;
 
 interface IStreamWorker
 {
-    string Read(TextReader textReader);
-    void Write(string value, TextWriter textWriter);
+    Command ReadCommand();
+    void Write(string value);
+    void WriteLine(string value);
 }
 
 public class StreamWorker : IStreamWorker
 {
-    public string Read(TextReader textReader)
+    private readonly TextReader _input;
+    private readonly TextWriter _output;
+
+    public StreamWorker(TextReader textReader, TextWriter textWriter)
     {
-        var lineRead = textReader.ReadLine();
-        if (lineRead == null)
-            throw new IOException("Error in stream read!!!");
-        return lineRead;
+        _input = textReader;
+        _output = textWriter;
+    }
+    
+    ~StreamWorker()
+    {
+        _input.Close();
+        _output.Close();
     }
 
-    public void Write(string value, TextWriter textWriter)
+    public Command ReadCommand()
     {
-        throw new NotImplementedException();
+        var command = _input.ReadLine();
+        return command switch
+        {
+            null => throw new IOException("Error while read stream"),
+            "close" => new Command {CommandType = CommandType.CLOSE},
+            _ => CommandAdapter.ConvertToCommand(command)
+        };
+    }
+
+    public void Write(string value)
+    {
+        _output.Write(value);
+    }
+
+    public void WriteLine(string value)
+    {
+        _output.WriteLine(value);
     }
 }
