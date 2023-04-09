@@ -89,7 +89,7 @@ public class CommandAdapterTests
     public void ConvertToCommand_Should_Return_Command_With_TwoArgumentsAndOperation()
     {
         // Arrange
-        var command = "var";
+        var command = "fn";
         var delemiter = " ";
         var identifier = "test";
         var equals = "=";
@@ -103,7 +103,7 @@ public class CommandAdapterTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.CommandType, Is.EqualTo(CommandType.VAR));
+            Assert.That(result.CommandType, Is.EqualTo(CommandType.FN));
             Assert.That(result.Identifier, Is.EqualTo(identifier));
             Assert.That(result.FirstVariable, Is.EqualTo(firstVariable));
             Assert.That(result.Operation, Is.EqualTo(Operation.MULTIPLICATION));
@@ -141,7 +141,7 @@ public class CommandAdapterTests
     public void ConvertToCommand_Should_Return_Command_With_IndentifierAndDouble()
     {
         // Arrange
-        var command = "var";
+        var command = "let";
         var delemiter = " ";
         var identifier = "some";
         var equals = "=";
@@ -155,7 +155,7 @@ public class CommandAdapterTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.CommandType, Is.EqualTo(CommandType.VAR));
+            Assert.That(result.CommandType, Is.EqualTo(CommandType.LET));
             Assert.That(result.Identifier, Is.EqualTo(identifier));
             Assert.That(result.FirstVariable, Is.EqualTo(firstVariable));
             Assert.That(result.Operation, Is.EqualTo(null));
@@ -167,11 +167,11 @@ public class CommandAdapterTests
     public void ConvertToCommand_Should_Return_Command_With_IndentifierAndDouble1()
     {
         // Arrange
-        var command = "var";
+        var command = "fn";
         var delemiter = " ";
         var identifier = "some";
         var equals = "=";
-        var firstVariable = "2.33";
+        var firstVariable = "day";
         var operation = "";
         var secondVariable = "";
         var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
@@ -193,7 +193,7 @@ public class CommandAdapterTests
     public void ConvertToCommand_Should_Return_Command_With_PRINTFNS_WITH_IDENTIFIER()
     {
         // Arrange
-        var command = "var";
+        var command = "printfns";
         var delemiter = " ";
         var identifier = "some";
         var equals = "";
@@ -248,14 +248,190 @@ public class CommandAdapterTests
     }
     
     [Test]
-    public void Negative_ConvertToCommand_Should_Return_Command_With_MoreAgrumentsInVar()
+    public void Negative_ConvertToCommand_Should_Return_Command_With_CycleLinkInFn()
+    {
+        // Arrange
+        var command = "fn";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
+        var firstVariable = "some";
+        var operation = "";
+        var secondVariable = "";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_VAR_OneArgument()
     {
         // Arrange
         var command = "var";
         var delemiter = " ";
         var identifier = "some";
         var equals = "=";
+        var firstVariable = "some";
+        var operation = "";
+        var secondVariable = "";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_VAR_TwoArgumentAndOperation()
+    {
+        // Arrange
+        var command = "var";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
+        var firstVariable = "some";
+        var operation = "*";
+        var secondVariable = "day";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_PRINT_OneArgument()
+    {
+        // Arrange
+        var command = "print";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
+        var firstVariable = "some";
+        var operation = "";
+        var secondVariable = "";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_PRINT_TwoArgumentAndOperation()
+    {
+        // Arrange
+        var command = "print";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
+        var firstVariable = "some";
+        var operation = "*";
+        var secondVariable = "day";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_PRINTVARS_OneArgument()
+    {
+        // Arrange
+        var command = "printvars";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
+        var firstVariable = "some";
+        var operation = "";
+        var secondVariable = "";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_PRINTVARS_TwoArgumentAndOperation()
+    {
+        // Arrange
+        var command = "printvars";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
+        var firstVariable = "some";
+        var operation = "*";
+        var secondVariable = "day";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_LET_TwoArgumentAndOperation()
+    {
+        // Arrange
+        var command = "let";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
+        var firstVariable = "some";
+        var operation = "*";
+        var secondVariable = "day";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_LET_NoOneArguments()
+    {
+        // Arrange
+        var command = "let";
+        var delemiter = "";
+        var identifier = "";
+        var equals = "";
+        var firstVariable = "";
+        var operation = "";
+        var secondVariable = "";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_FN_NoOneArguments()
+    {
+        // Arrange
+        var command = "fn";
+        var delemiter = "";
+        var identifier = "";
+        var equals = "";
+        var firstVariable = "";
+        var operation = "";
+        var secondVariable = "";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_FN_FloatArgument()
+    {
+        // Arrange
+        var command = "fn";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
         var firstVariable = "2.33";
+        var operation = "";
+        var secondVariable = "";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_FN_OnlyIndentifier()
+    {
+        // Arrange
+        var command = "fn";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "";
+        var firstVariable = "";
         var operation = "";
         var secondVariable = "";
         var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
