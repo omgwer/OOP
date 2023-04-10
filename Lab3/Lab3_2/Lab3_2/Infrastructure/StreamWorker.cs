@@ -33,6 +33,7 @@ public class StreamWorker : IStreamWorker
         {
             null => throw new IOException("Error while read stream"),
             "close" => new Command {CommandType = CommandType.CLOSE},
+            "help" => new Command() {CommandType = CommandType.HELP},
             _ => CommandAdapter.ConvertToCommand(command)
         };
     }

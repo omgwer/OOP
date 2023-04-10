@@ -213,7 +213,7 @@ public static class CommandAdapter
     {
         if (IsIdentifier(value))
             return value;
-        throw new Exception($"Identifier = {value} is not valid. Error");
+        throw new ArgumentException($"Identifier = {value} is not valid. Error");
     }
 
     public static CommandType ConvertToCommandType(string value)

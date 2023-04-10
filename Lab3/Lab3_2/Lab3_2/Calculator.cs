@@ -1,18 +1,12 @@
-using System.Diagnostics;
 using Lab3_2.Dictionary;
 using Lab3_2.Infrastructure;
 using Lab3_2.Service;
 
 namespace Lab3_2;
 
-interface ICalculator
+public class Calculator
 {
-    void Run();
-}
-
-public class Calculator : ICalculator
-{
-    private IMemory _calculatorMemory;
+    private IMemoryService _memoryService;
     private IStreamWorker _streamWorker;
     private bool _isRun;
     private CalculatorService _calculatorService;
@@ -20,8 +14,8 @@ public class Calculator : ICalculator
     public Calculator(TextReader textReader, TextWriter textWriter)
     {
         _streamWorker = new StreamWorker(textReader, textWriter);
-        _calculatorMemory = new Memory();
-        _calculatorService = new CalculatorService(_calculatorMemory);
+        _memoryService = new MemoryService();
+        _calculatorService = new CalculatorService(_memoryService);
     }
 
     public void Run()
@@ -31,6 +25,8 @@ public class Calculator : ICalculator
         while (_isRun)
         {
             var command = ReadCommand();
+            if (command == null) continue;
+
             switch (command.CommandType)
             {
                 case CommandType.VAR:
@@ -57,15 +53,18 @@ public class Calculator : ICalculator
                 case CommandType.CLOSE:
                     Stop();
                     break;
+                case CommandType.HELP:
+                    Help();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
     }
 
-    private Command ReadCommand()
+    private Command? ReadCommand()
     {
-        Command command = null;
+        Command? command = null;
         try
         {
             command = _streamWorker.ReadCommand();
@@ -73,6 +72,11 @@ public class Calculator : ICalculator
         catch (IOException ex)
         {
             Stop();
+        }
+        catch (ArgumentException ex)
+        {
+            _streamWorker.WriteLine("Error in command line!");
+            command = null;
         }
 
         return command;
@@ -82,5 +86,18 @@ public class Calculator : ICalculator
     {
         _isRun = false;
         _streamWorker.WriteLine("Calculator is closed");
+    }
+
+    private void Help()
+    {
+        _streamWorker.WriteLine("Commands list: ");
+        _streamWorker.WriteLine("   var {identifier} ");
+        _streamWorker.WriteLine("   let {identifier} = {float} ");
+        _streamWorker.WriteLine("   let {identifier} = {identifier} ");
+        _streamWorker.WriteLine("   fn {identifier} = {identifier}");
+        _streamWorker.WriteLine("   fn {identifier} = {identifier}{operation}{identifier}");
+        _streamWorker.WriteLine("   print {identifier}");
+        _streamWorker.WriteLine("   printvars");
+        _streamWorker.WriteLine("   printfns");
     }
 }

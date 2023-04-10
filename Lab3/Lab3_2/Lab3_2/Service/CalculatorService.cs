@@ -17,9 +17,9 @@ interface ICalculatorService
 //TODO: PRINT ВСЕГДА возращает число\null
 public class CalculatorService : ICalculatorService
 {
-    private IMemory _memory;
+    private IMemoryService _memory;
 
-    public CalculatorService(IMemory memory)
+    public CalculatorService(IMemoryService memory)
     {
         _memory = memory;
     }
