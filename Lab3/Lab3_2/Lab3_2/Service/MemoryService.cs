@@ -18,6 +18,7 @@ struct FunctionArgument
     public string? SecondOperand;
 }
 
+// TODO: Переменная может хранить ссылку на функуцию
 // TODO: реализовать кэш для вычисленных функций(возможно)
 public class MemoryService : IMemoryService
 {
@@ -53,7 +54,7 @@ public class MemoryService : IMemoryService
         }
         if (IsFunction(command.Identifier))
         {
-            return GetFunctionResult(command.Identifier);
+            return GetFunctionResultRecursive(command.Identifier);
         }
 
         throw new ArgumentException($"{command.Identifier} not found in memory!");
@@ -100,21 +101,29 @@ public class MemoryService : IMemoryService
             {FirstOperand = firstVariable, Operation = operation, SecondOperand = secondVariable});
     }
 
-    private double? GetFunctionResult(string identifier)
+    public double? GetFunctionResultRecursive(string identifier)
     {
         if (!HasIdentifierInMemory(identifier))
         {
             throw new ArgumentException($"Identifier - {identifier} is not found ");
         }
 
-        // Пока через рекурсию.
         if (IsVariable(identifier))
             return _variables[identifier];
         if (IsFunction(identifier))
         {
-            
-            
+            var functionArgument = _functions[identifier];
+            var first = GetFunctionResultRecursive(functionArgument.FirstOperand);
+            if (functionArgument.Operation != null & functionArgument.SecondOperand != null)
+            {
+                var operation = functionArgument.Operation;
+                var second = GetFunctionResultRecursive(functionArgument.SecondOperand);
+                return CalculateValue(first, operation, second);
+            }
+            return first;
         }
+
+        throw new Exception("Someone error");
         // TODO: нужно добавить расчет значения функции
     }
 
@@ -131,5 +140,30 @@ public class MemoryService : IMemoryService
     private bool IsVariable(string identifier)
     {
         return _variables.ContainsKey(identifier);
+    }
+
+    private double? CalculateValue(double? firstVariable, Operation? operation, double? secondVariable)
+    {
+        if (firstVariable == null)
+            return null;
+        if (operation == null)
+            return firstVariable;
+        if (secondVariable == null)
+            return null;
+        switch (operation)
+        {
+            case Operation.ADDITION:
+                return firstVariable + secondVariable;
+            case Operation.SUBTRACTION:
+                return firstVariable - secondVariable;
+            case Operation.MULTIPLICATION:
+                return firstVariable * secondVariable;
+            case Operation.DIVISION:
+                if (secondVariable == 0)
+                    throw new ArgumentException("Error, division by zero!!!");
+                return firstVariable / secondVariable;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(operation), operation, "Error operation in calculate value!");
+        }
     }
 }
