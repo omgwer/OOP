@@ -7,6 +7,7 @@ interface IStreamWorker
     Command ReadCommand();
     void Write(string value);
     void WriteLine(string value);
+    void WriteResult(double? value);
 }
 
 public class StreamWorker : IStreamWorker
@@ -33,6 +34,7 @@ public class StreamWorker : IStreamWorker
         {
             null => throw new IOException("Error while read stream"),
             "close" => new Command {CommandType = CommandType.CLOSE},
+            "exit" => new Command {CommandType = CommandType.CLOSE},
             "help" => new Command() {CommandType = CommandType.HELP},
             _ => CommandAdapter.ConvertToCommand(command)
         };
@@ -51,8 +53,9 @@ public class StreamWorker : IStreamWorker
     public void WriteResult(double? value)
     {
         if (value == null)
-            _output.WriteLine("nan");
+            _output.Write("nan");
         else 
-            _output.WriteLine(Math.Round((double)value, 2));
+            //_output.Write(Math.Round((double)value, 2, MidpointRounding.ToEven));
+            _output.Write(double.Round((double)value, 2));
     }
 }

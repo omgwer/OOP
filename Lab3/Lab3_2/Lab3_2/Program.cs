@@ -1,12 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Lab3_2;
 
-using Lab3_2;
-using Lab3_2.Dictionary;
-using Lab3_2.Infrastructure;
-using Lab3_2.Service;
-
-//Console.WriteLine("Hello, World!");
-
-//new Calculator(Console.In, Console.Out).Run();
-
-new StreamWorker(Console.In,Console.Out).WriteResult(2);
+Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+new Calculator(Console.In, Console.Out).Run();

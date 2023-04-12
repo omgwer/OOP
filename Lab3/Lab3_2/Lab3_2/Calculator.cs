@@ -9,13 +9,11 @@ public class Calculator
     private IMemoryService _memoryService;
     private IStreamWorker _streamWorker;
     private bool _isRun;
- //   private CalculatorService _calculatorService;
 
     public Calculator(TextReader textReader, TextWriter textWriter)
     {
         _streamWorker = new StreamWorker(textReader, textWriter);
         _memoryService = new MemoryService();
-       // _calculatorService = new CalculatorService(_memoryService);
     }
 
     public void Run()
@@ -29,7 +27,7 @@ public class Calculator
                 HandleProcess(command);
         }
     }
-
+    //TODO: case- let test1=test2  argument exception нужно обрабатывать
     private void HandleProcess(Command command)
     {
         switch (command.CommandType)
@@ -44,16 +42,28 @@ public class Calculator
                 _memoryService.Add(command);
                 break;
             case CommandType.PRINT:
-                var variableResult = _memoryService.Get(command.Identifier);
-                //    _streamWorker.WriteLine(variableResult);
+                _streamWorker.WriteResult(_memoryService.Get(command.Identifier));
+                _streamWorker.WriteLine(string.Empty);
                 break;
             case CommandType.PRINTVARS:
                 var variableResultList = _memoryService.GetAllVars();
-                //    variableResultList.ForEach(e => _streamWorker.WriteLine(e));
+                foreach (var (key, value) in variableResultList)
+                {
+                    _streamWorker.Write(key);
+                    _streamWorker.Write(":");
+                    _streamWorker.WriteResult(value);
+                    _streamWorker.WriteLine(string.Empty);
+                }
                 break;
             case CommandType.PRINTFNS:
                 var variableFunctionsList = _memoryService.GetAllFns();
-                //  variableFunctionsList.ForEach(e => _streamWorker.WriteLine(e));
+                foreach (var (key, value) in variableFunctionsList)
+                {
+                    _streamWorker.Write(key);
+                    _streamWorker.Write(":");
+                    _streamWorker.WriteResult(value);
+                    _streamWorker.WriteLine(string.Empty);
+                }
                 break;
             case CommandType.CLOSE:
                 Stop();

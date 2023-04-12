@@ -6,6 +6,13 @@ namespace Lab3_2.Tests.Infrastructure;
 
 public class StreamWorkerTest
 {
+    [SetUp]
+    public void SetUp()
+    {
+        Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+    }
+
+    
    [Test]
     public void ReadCommand_WhenCalledWithNullStream_ThrowsIOException()
     {
@@ -68,7 +75,7 @@ public class StreamWorkerTest
 
         worker.WriteResult(null);
 
-        Assert.AreEqual("nan\r\n", writer.ToString());
+        Assert.AreEqual("nan", writer.ToString());
     }
 
     [Test]
@@ -79,6 +86,17 @@ public class StreamWorkerTest
 
         worker.WriteResult(3.14159);
 
-        Assert.AreEqual("3,14\r\n", writer.ToString());
+        Assert.AreEqual("3.14", writer.ToString());
+    }
+    
+    [Test]
+    public void WriteResult_WhenCalledWithValue_WritesRoundedValueToOutput_Int()
+    {
+        var writer = new StringWriter();
+        var worker = new StreamWorker(null, writer);
+
+        worker.WriteResult(99);
+
+        Assert.AreEqual("99", writer.ToString());
     }
 }
