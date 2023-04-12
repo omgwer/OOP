@@ -2,9 +2,11 @@
 
 using Lab3_2;
 using Lab3_2.Dictionary;
+using Lab3_2.Infrastructure;
 using Lab3_2.Service;
 
 //Console.WriteLine("Hello, World!");
 
-new Calculator(Console.In, Console.Out).Run();
+//new Calculator(Console.In, Console.Out).Run();
 
+new StreamWorker(Console.In,Console.Out).WriteResult(2);

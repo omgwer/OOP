@@ -9,13 +9,13 @@ public class Calculator
     private IMemoryService _memoryService;
     private IStreamWorker _streamWorker;
     private bool _isRun;
-    private CalculatorService _calculatorService;
+ //   private CalculatorService _calculatorService;
 
     public Calculator(TextReader textReader, TextWriter textWriter)
     {
         _streamWorker = new StreamWorker(textReader, textWriter);
         _memoryService = new MemoryService();
-        _calculatorService = new CalculatorService(_memoryService);
+       // _calculatorService = new CalculatorService(_memoryService);
     }
 
     public void Run()
@@ -25,40 +25,44 @@ public class Calculator
         while (_isRun)
         {
             var command = ReadCommand();
-            if (command == null) continue;
+            if (command != null) 
+                HandleProcess(command);
+        }
+    }
 
-            switch (command.CommandType)
-            {
-                case CommandType.VAR:
-                    _calculatorService.VariableDeclaration(command);
-                    break;
-                case CommandType.LET:
-                    _calculatorService.VariableAssigment(command);
-                    break;
-                case CommandType.FN:
-                    _calculatorService.FunctionDeclaration(command);
-                    break;
-                case CommandType.PRINT:
-                    var variableResult = _calculatorService.GetVariable(command);
+    private void HandleProcess(Command command)
+    {
+        switch (command.CommandType)
+        {
+            case CommandType.VAR:
+                _memoryService.Add(command);
+                break;
+            case CommandType.LET:
+                _memoryService.Add(command);
+                break;
+            case CommandType.FN:
+                _memoryService.Add(command);
+                break;
+            case CommandType.PRINT:
+                var variableResult = _memoryService.Get(command.Identifier);
                 //    _streamWorker.WriteLine(variableResult);
-                    break;
-                case CommandType.PRINTVARS:
-                    var variableResultList = _calculatorService.GetAllVariables();
+                break;
+            case CommandType.PRINTVARS:
+                var variableResultList = _memoryService.GetAllVars();
                 //    variableResultList.ForEach(e => _streamWorker.WriteLine(e));
-                    break;
-                case CommandType.PRINTFNS:
-                    var variableFunctionsList = _calculatorService.GetAllFunctions();
-                  //  variableFunctionsList.ForEach(e => _streamWorker.WriteLine(e));
-                    break;
-                case CommandType.CLOSE:
-                    Stop();
-                    break;
-                case CommandType.HELP:
-                    Help();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                break;
+            case CommandType.PRINTFNS:
+                var variableFunctionsList = _memoryService.GetAllFns();
+                //  variableFunctionsList.ForEach(e => _streamWorker.WriteLine(e));
+                break;
+            case CommandType.CLOSE:
+                Stop();
+                break;
+            case CommandType.HELP:
+                Help();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 

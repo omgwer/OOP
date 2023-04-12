@@ -47,4 +47,12 @@ public class StreamWorker : IStreamWorker
     {
         _output.WriteLine(value);
     }
+
+    public void WriteResult(double? value)
+    {
+        if (value == null)
+            _output.WriteLine("nan");
+        else 
+            _output.WriteLine(Math.Round((double)value, 2));
+    }
 }

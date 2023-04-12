@@ -262,6 +262,22 @@ public class CommandAdapterTests
         // Act & Assert
         Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
     }
+    
+    [Test]
+    public void Negative_ConvertToCommand_Should_Return_Command_With_CycleLinkInLet()
+    {
+        // Arrange
+        var command = "let";
+        var delemiter = " ";
+        var identifier = "some";
+        var equals = "=";
+        var firstVariable = "some";
+        var operation = "";
+        var secondVariable = "";
+        var value = command + delemiter + identifier + equals + firstVariable + operation + secondVariable;
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => CommandAdapter.ConvertToCommand(value));
+    }
 
     [Test]
     public void Negative_ConvertToCommand_Should_Return_Command_With_VAR_OneArgument()

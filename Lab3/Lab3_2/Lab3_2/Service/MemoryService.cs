@@ -11,7 +11,7 @@ public interface IMemoryService
     Dictionary<string, double?> GetAllFns();
 }
 
-public struct FunctionArgument
+internal struct FunctionArgument
 {
     public string FirstOperand;
     public Operation? Operation;

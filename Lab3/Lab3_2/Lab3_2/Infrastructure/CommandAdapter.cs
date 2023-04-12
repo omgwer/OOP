@@ -95,6 +95,8 @@ public static class CommandAdapter
                     errorsInValidate.Append("LET dont need second variable");
                 if (command.Operation != null)
                     errorsInValidate.Append("LET dont need second variable");
+                if (command.Identifier == command.FirstVariable)
+                    errorsInValidate.Append("CYCLE links! Error!");
                 break;
             case CommandType.FN:
                 if (command.Identifier == null)
