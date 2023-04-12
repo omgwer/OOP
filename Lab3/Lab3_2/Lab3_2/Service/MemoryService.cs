@@ -8,10 +8,10 @@ public interface IMemoryService
     void Add(Command command);
     double? Get(Command command);
     Dictionary<string, double?> GetAllVars();
-    Dictionary<string, string?> GetAllFns();
+    Dictionary<string, double?> GetAllFns();
 }
 
-struct FunctionArgument
+public struct FunctionArgument
 {
     public string FirstOperand;
     public Operation? Operation;
@@ -22,8 +22,8 @@ struct FunctionArgument
 // TODO: реализовать кэш для вычисленных функций(возможно)
 public class MemoryService : IMemoryService
 {
-    private Dictionary<string, double?> _variables = new();
-    private Dictionary<string, FunctionArgument> _functions = new();
+    public Dictionary<string, double?> _variables = new();
+    public Dictionary<string, FunctionArgument> _functions = new();
 
     public void Add(Command command)
     {
@@ -65,9 +65,15 @@ public class MemoryService : IMemoryService
         return _variables;
     }
 
-    public Dictionary<string, string?> GetAllFns()
+    public Dictionary<string, double?> GetAllFns()
     {
-        throw new NotImplementedException();
+        Dictionary<string, double?> result = new ();
+        foreach (var (key, value) in _functions)
+        {
+            result.Add(key, GetFunctionResultRecursive(key));
+        }
+
+        return result;
     }
 
     private void AddVariable(string identifier, double? value)
@@ -82,12 +88,7 @@ public class MemoryService : IMemoryService
 
     private double? GetVariable(string identifier)
     {
-        if (!HasIdentifierInMemory(identifier))
-        {
-            throw new ArgumentException($"Identifier - {identifier} is not found ");
-        }
-
-        return _variables[identifier];
+        return GetFunctionResultRecursive(identifier);
     }
 
     private void AddFunction(string identifier, string firstVariable, Operation? operation, string? secondVariable)
@@ -101,7 +102,7 @@ public class MemoryService : IMemoryService
             {FirstOperand = firstVariable, Operation = operation, SecondOperand = secondVariable});
     }
 
-    public double? GetFunctionResultRecursive(string identifier)
+    private double? GetFunctionResultRecursive(string identifier)
     {
         if (!HasIdentifierInMemory(identifier))
         {
