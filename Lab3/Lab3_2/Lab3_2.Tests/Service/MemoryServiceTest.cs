@@ -266,6 +266,9 @@ public class MemoryServiceTest
         var firstVariable = "x";
         var operation = Operation.MULTIPLICATION;
         var secondVariable = "y";
+        
+        memoryService.Add(new Command(){CommandType = CommandType.LET, Identifier = "x",FirstVariable = "21"});
+        memoryService.Add(new Command(){CommandType = CommandType.LET, Identifier = "y",FirstVariable = "2"});
 
         // Act
         memoryService.Add(new Command
@@ -279,5 +282,6 @@ public class MemoryServiceTest
 
         // Assert
         Assert.That(memoryService.GetAllFns().ContainsKey(identifier), Is.True);
+        Assert.That((int)memoryService.Get(new Command(){CommandType = CommandType.FN, Identifier = "f"}), Is.EqualTo(42));
     }
 }

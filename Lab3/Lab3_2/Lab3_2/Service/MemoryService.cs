@@ -29,6 +29,7 @@ public class MemoryService : IMemoryService
         switch (command.CommandType)
         {
             case CommandType.VAR:
+                AssertIdentifierIsBusy(command.Identifier);
                 AddVariable(command.Identifier, null);
                 break;
             case CommandType.LET:
@@ -38,6 +39,7 @@ public class MemoryService : IMemoryService
                     AddVariable(command.Identifier, GetVariable(command.FirstVariable));
                 break;
             case CommandType.FN:
+                AssertIdentifierIsBusy(command.Identifier);
                 AddFunction(command.Identifier, command.FirstVariable, command.Operation, command.SecondVariable);
                 break;
             default:
@@ -51,6 +53,7 @@ public class MemoryService : IMemoryService
         {
             return GetVariable(command.Identifier);
         }
+
         if (IsFunction(command.Identifier))
         {
             return GetFunctionResultRecursive(command.Identifier);
@@ -66,7 +69,7 @@ public class MemoryService : IMemoryService
 
     public Dictionary<string, double?> GetAllFns()
     {
-        Dictionary<string, double?> result = new ();
+        Dictionary<string, double?> result = new();
         foreach (var (key, value) in _functions)
         {
             result.Add(key, GetFunctionResultRecursive(key));
@@ -75,19 +78,12 @@ public class MemoryService : IMemoryService
         return result;
     }
 
-    private void Save()
-    {
-        
-    }
-
     private void AddVariable(string identifier, double? value)
     {
-        if (HasIdentifierInMemory(identifier))
-        {
-            throw new ArgumentException($"Identifier - {identifier} is busy ");
-        }
-
-        _variables.Add(identifier, value);
+        if (_variables.ContainsKey(identifier))
+            _variables[identifier] = value;
+        else
+            _variables.Add(identifier, value);
     }
 
     private double? GetVariable(string identifier)
@@ -97,13 +93,8 @@ public class MemoryService : IMemoryService
 
     private void AddFunction(string identifier, string firstVariable, Operation? operation, string? secondVariable)
     {
-        if (HasIdentifierInMemory(identifier))
-        {
-            throw new ArgumentException($"Identifier - {identifier} is busy ");
-        }
-
         _functions.Add(identifier, new FunctionArgument()
-            {FirstOperand = firstVariable, Operation = operation, SecondOperand = secondVariable});
+            { FirstOperand = firstVariable, Operation = operation, SecondOperand = secondVariable });
     }
 
     private double? GetFunctionResultRecursive(string identifier)
@@ -125,17 +116,17 @@ public class MemoryService : IMemoryService
                 var second = GetFunctionResultRecursive(functionArgument.SecondOperand);
                 return CalculateValue(first, operation, second);
             }
+
             return first;
         }
 
         throw new Exception("Someone error");
-        // TODO: нужно добавить расчет значения функции
     }
 
-    private void AssertIdentifierInMemory(string identifier)
+    private void AssertIdentifierIsBusy(string identifier)
     {
-        if (!HasIdentifierInMemory(identifier))
-            throw new Exception($"Identifier - {identifier} is not found");
+        if (HasIdentifierInMemory(identifier))
+            throw new ArgumentException($"Identifier - {identifier} is busy");
     }
 
     private bool HasIdentifierInMemory(string identifier)
@@ -174,7 +165,8 @@ public class MemoryService : IMemoryService
                     throw new ArgumentException("Error, division by zero!!!");
                 return firstVariable / secondVariable;
             default:
-                throw new ArgumentOutOfRangeException(nameof(operation), operation, "Error operation in calculate value!");
+                throw new ArgumentOutOfRangeException(nameof(operation), operation,
+                    "Error operation in calculate value!");
         }
     }
 }
