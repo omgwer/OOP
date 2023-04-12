@@ -7,8 +7,8 @@ public interface IMemoryService
 {
     void Add(Command command);
     double? Get(string identifier);
-    Dictionary<string, double?> GetAllVars();
-    Dictionary<string, double?> GetAllFns();
+    SortedDictionary<string, double?> GetAllVars();
+    SortedDictionary<string, double?> GetAllFns();
 }
 
 internal struct FunctionArgument
@@ -21,8 +21,8 @@ internal struct FunctionArgument
 // TODO: реализовать кэш для вычисленных функций(возможно)
 public class MemoryService : IMemoryService
 {
-    private Dictionary<string, double?> _variables = new();
-    private Dictionary<string, FunctionArgument> _functions = new();
+    private SortedDictionary<string, double?> _variables = new();
+    private SortedDictionary<string, FunctionArgument> _functions = new();
 
     public void Add(Command command)
     {
@@ -62,14 +62,14 @@ public class MemoryService : IMemoryService
         throw new ArgumentException($"{identifier} not found in memory!");
     }
 
-    public Dictionary<string, double?> GetAllVars()
+    public SortedDictionary<string, double?> GetAllVars()
     {
         return _variables;
     }
 
-    public Dictionary<string, double?> GetAllFns()
+    public SortedDictionary<string, double?> GetAllFns()
     {
-        Dictionary<string, double?> result = new();
+        SortedDictionary<string, double?> result = new();
         foreach (var (key, value) in _functions)
         {
             result.Add(key, GetFunctionResultRecursive(key));

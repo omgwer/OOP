@@ -52,10 +52,6 @@ public class StreamWorker : IStreamWorker
 
     public void WriteResult(double? value)
     {
-        if (value == null)
-            _output.Write("nan");
-        else 
-            //_output.Write(Math.Round((double)value, 2, MidpointRounding.ToEven));
-            _output.Write(double.Round((double)value, 2));
+        _output.Write(value == null ? "nan" : $"{value:0.00}");
     }
 }

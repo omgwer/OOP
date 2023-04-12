@@ -1,6 +1,7 @@
 using Lab3_2.Dictionary;
 using Lab3_2.Infrastructure;
 using NUnit.Framework;
+using static NUnit.Framework.Assert;
 
 namespace Lab3_2.Tests.Infrastructure;
 
@@ -17,7 +18,7 @@ public class StreamWorkerTest
     public void ReadCommand_WhenCalledWithNullStream_ThrowsIOException()
     {
         var worker = new StreamWorker(null, null);
-        Assert.Throws<NullReferenceException>(() => worker.ReadCommand());
+        Throws<NullReferenceException>(() => worker.ReadCommand());
     }
 
     [Test]
@@ -28,8 +29,7 @@ public class StreamWorkerTest
         var worker = new StreamWorker(reader, writer);
 
         var result = worker.ReadCommand();
-
-        Assert.AreEqual(CommandType.CLOSE, result.CommandType);
+        That(result.CommandType, Is.EqualTo(CommandType.CLOSE));
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class StreamWorkerTest
 
         var result = worker.ReadCommand();
 
-        Assert.AreEqual(CommandType.HELP, result.CommandType);
+        That(result.CommandType, Is.EqualTo(CommandType.HELP));
     }
 
 
@@ -53,7 +53,7 @@ public class StreamWorkerTest
 
         worker.Write("hello");
 
-        Assert.AreEqual("hello", writer.ToString());
+        That(writer.ToString(), Is.EqualTo("hello"));
     }
 
     [Test]
@@ -64,7 +64,7 @@ public class StreamWorkerTest
 
         worker.WriteLine("hello");
 
-        Assert.AreEqual("hello\r\n", writer.ToString());
+        That(writer.ToString(), Is.EqualTo("hello\r\n"));
     }
 
     [Test]
@@ -75,7 +75,7 @@ public class StreamWorkerTest
 
         worker.WriteResult(null);
 
-        Assert.AreEqual("nan", writer.ToString());
+        That(writer.ToString(), Is.EqualTo("nan"));
     }
 
     [Test]
@@ -86,7 +86,7 @@ public class StreamWorkerTest
 
         worker.WriteResult(3.14159);
 
-        Assert.AreEqual("3.14", writer.ToString());
+        That(writer.ToString(), Is.EqualTo("3.14"));
     }
     
     [Test]
@@ -97,6 +97,6 @@ public class StreamWorkerTest
 
         worker.WriteResult(99);
 
-        Assert.AreEqual("99", writer.ToString());
+        That(writer.ToString(), Is.EqualTo("99.00"));
     }
 }
