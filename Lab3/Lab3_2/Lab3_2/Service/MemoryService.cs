@@ -11,18 +11,15 @@ public interface IMemoryService
     SortedDictionary<string, double?> GetAllFns();
 }
 
-internal struct FunctionArgument
-{
-    public string FirstOperand;
-    public Operation? Operation;
-    public string? SecondOperand;
-}
-
 // TODO: реализовать кэш для вычисленных функций(возможно)
+// TODO: возможная реализация, добавить casheResult для функции, и записывать результат.
+// При обновлении переменной, обойти все функции, на которые она ссылается, и инвалидировать. Так же обойти все функции, на которые ссылаются функции и тд.
+// TODO: пока добавил костыльный кэш
 public class MemoryService : IMemoryService
 {
     private SortedDictionary<string, double?> _variables = new();
     private SortedDictionary<string, FunctionArgument> _functions = new();
+    private Cache _cashe = new Cache();
 
     public void Add(Command command)
     {
@@ -81,7 +78,10 @@ public class MemoryService : IMemoryService
     private void AddVariable(string identifier, double? value)
     {
         if (_variables.ContainsKey(identifier))
+        {
+            _cashe.Invalidate(_functions);
             _variables[identifier] = value;
+        }
         else
             _variables.Add(identifier, value);
     }
@@ -108,16 +108,24 @@ public class MemoryService : IMemoryService
             return _variables[identifier];
         if (IsFunction(identifier))
         {
+            double? result;
             var functionArgument = _functions[identifier];
+            if (functionArgument.cacheResult != null)
+                return functionArgument.cacheResult;
+            
             var first = GetFunctionResultRecursive(functionArgument.FirstOperand);
             if (functionArgument.Operation != null & functionArgument.SecondOperand != null)
             {
                 var operation = functionArgument.Operation;
                 var second = GetFunctionResultRecursive(functionArgument.SecondOperand);
-                return CalculateValue(first, operation, second);
+                result = CalculateValue(first, operation, second);
             }
-
-            return first;
+            else
+            {
+                result = first;
+            }
+            _cashe.CacheValue(functionArgument, result);
+            return result;
         }
 
         throw new Exception("Someone error");
@@ -146,27 +154,33 @@ public class MemoryService : IMemoryService
 
     private double? CalculateValue(double? firstVariable, Operation? operation, double? secondVariable)
     {
+        double? result;
         if (firstVariable == null)
-            return null;
+            result = null;
         if (operation == null)
-            return firstVariable;
+            result = firstVariable;
         if (secondVariable == null)
-            return null;
+            result = null;
         switch (operation)
         {
             case Operation.ADDITION:
-                return firstVariable + secondVariable;
+                result = firstVariable + secondVariable;
+                break;
             case Operation.SUBTRACTION:
-                return firstVariable - secondVariable;
+                result = firstVariable - secondVariable;
+                break;
             case Operation.MULTIPLICATION:
-                return firstVariable * secondVariable;
+                result = firstVariable * secondVariable;
+                break;
             case Operation.DIVISION:
                 if (secondVariable == 0)
                     throw new ArgumentException("Error, division by zero!!!");
-                return firstVariable / secondVariable;
+                result = firstVariable / secondVariable;
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(operation), operation,
                     "Error operation in calculate value!");
         }
+        return result;
     }
 }

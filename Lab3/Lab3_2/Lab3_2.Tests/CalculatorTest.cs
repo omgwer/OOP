@@ -174,7 +174,52 @@ Calculator is closed
         var writer = new StringWriter();
         new Calculator(reader, writer).Run();
 
-        var t = writer.ToString();
+        Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
+    }
+
+
+    [Test]
+    public void Calculator_FirstExample5() //Фибоначчи
+    {
+        var startStream =
+            @"let v0=0
+let v1=1
+fn fib0=v0
+fn fib1=v1
+fn fib2=fib1+fib0
+fn fib3=fib2+fib1
+fn fib4=fib3+fib2
+fn fib5=fib4+fib3
+fn fib6=fib5+fib4
+printfns
+let v0=1
+let v1=1
+printfns
+";
+
+        var expectedResult =
+            @"Calculator is start
+fib0:0.00
+fib1:1.00
+fib2:1.00
+fib3:2.00
+fib4:3.00
+fib5:5.00
+fib6:8.00
+fib0:1.00
+fib1:1.00
+fib2:2.00
+fib3:3.00
+fib4:5.00
+fib5:8.00
+fib6:13.00
+Calculator is closed
+";
+
+        var reader = new StringReader(startStream);
+        var writer = new StringWriter();
+        new Calculator(reader, writer).Run();
+
         Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
     }
 }
