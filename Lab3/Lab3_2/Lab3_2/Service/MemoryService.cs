@@ -18,12 +18,11 @@ public struct FunctionArgument
     public string? SecondOperand;
 }
 
-// TODO: Переменная может хранить ссылку на функуцию
 // TODO: реализовать кэш для вычисленных функций(возможно)
 public class MemoryService : IMemoryService
 {
-    public Dictionary<string, double?> _variables = new();
-    public Dictionary<string, FunctionArgument> _functions = new();
+    private Dictionary<string, double?> _variables = new();
+    private Dictionary<string, FunctionArgument> _functions = new();
 
     public void Add(Command command)
     {
@@ -76,6 +75,11 @@ public class MemoryService : IMemoryService
         return result;
     }
 
+    private void Save()
+    {
+        
+    }
+
     private void AddVariable(string identifier, double? value)
     {
         if (HasIdentifierInMemory(identifier))
@@ -126,6 +130,12 @@ public class MemoryService : IMemoryService
 
         throw new Exception("Someone error");
         // TODO: нужно добавить расчет значения функции
+    }
+
+    private void AssertIdentifierInMemory(string identifier)
+    {
+        if (!HasIdentifierInMemory(identifier))
+            throw new Exception($"Identifier - {identifier} is not found");
     }
 
     private bool HasIdentifierInMemory(string identifier)
