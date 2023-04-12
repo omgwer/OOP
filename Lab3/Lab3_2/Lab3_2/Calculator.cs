@@ -40,15 +40,15 @@ public class Calculator
                     break;
                 case CommandType.PRINT:
                     var variableResult = _calculatorService.GetVariable(command);
-                    _streamWorker.WriteLine(variableResult);
+                //    _streamWorker.WriteLine(variableResult);
                     break;
                 case CommandType.PRINTVARS:
                     var variableResultList = _calculatorService.GetAllVariables();
-                    variableResultList.ForEach(e => _streamWorker.WriteLine(e));
+                //    variableResultList.ForEach(e => _streamWorker.WriteLine(e));
                     break;
                 case CommandType.PRINTFNS:
                     var variableFunctionsList = _calculatorService.GetAllFunctions();
-                    variableFunctionsList.ForEach(e => _streamWorker.WriteLine(e));
+                  //  variableFunctionsList.ForEach(e => _streamWorker.WriteLine(e));
                     break;
                 case CommandType.CLOSE:
                     Stop();

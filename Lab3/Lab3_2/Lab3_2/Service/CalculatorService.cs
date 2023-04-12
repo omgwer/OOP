@@ -4,52 +4,49 @@ namespace Lab3_2.Service;
 
 interface ICalculatorService
 {
-    void VariableDeclaration(Command variableName);  
-    void VariableAssigment(Command variableName); 
-    void FunctionDeclaration(Command variableName);
-    string GetVariable(Command variableName);
-    List<string> GetAllVariables();
-    List<string> GetAllFunctions();
+    void VariableDeclaration(Command command);
+    void VariableAssigment(Command command); 
+    void FunctionDeclaration(Command command);
+    double?  GetVariable(Command command);
+    Dictionary<string, double?> GetAllVariables();
+    Dictionary<string, double?> GetAllFunctions();
 }
 
-//TODO: можно однозначно определить идентефикатор или переменная, прочитав нулевой символ (у значения это цифра)
-//TODO: Любая let\var переменная ВСЕГДА хранит либо double, либо null
-//TODO: PRINT ВСЕГДА возращает число\null
 public class CalculatorService : ICalculatorService
 {
-    private IMemoryService _memory;
+    private IMemoryService _memoryService;
 
-    public CalculatorService(IMemoryService memory)
+    public CalculatorService(IMemoryService memoryService)
     {
-        _memory = memory;
+        _memoryService = memoryService;
     }
 
-    public void VariableDeclaration(Command variableName)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void VariableAssigment(Command variableName)
+    public void VariableDeclaration(Command command)
     {
         throw new NotImplementedException();
     }
 
-    public void FunctionDeclaration(Command variableName)
+    public void VariableAssigment(Command command)
     {
         throw new NotImplementedException();
     }
 
-    public string GetVariable(Command variableName)
+    public void FunctionDeclaration(Command command)
     {
         throw new NotImplementedException();
     }
 
-    public List<string> GetAllVariables()
+    public double? GetVariable(Command command)
     {
         throw new NotImplementedException();
     }
 
-    public List<string> GetAllFunctions()
+    public Dictionary<string, double?> GetAllVariables()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Dictionary<string, double?> GetAllFunctions()
     {
         throw new NotImplementedException();
     }

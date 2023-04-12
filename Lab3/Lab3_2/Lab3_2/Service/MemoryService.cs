@@ -6,7 +6,7 @@ namespace Lab3_2.Service;
 public interface IMemoryService
 {
     void Add(Command command);
-    double? Get(Command command);
+    double? Get(string identifier);
     Dictionary<string, double?> GetAllVars();
     Dictionary<string, double?> GetAllFns();
 }
@@ -47,19 +47,19 @@ public class MemoryService : IMemoryService
         }
     }
 
-    public double? Get(Command command)
+    public double? Get(string identifier)
     {
-        if (IsVariable(command.Identifier))
+        if (IsVariable(identifier))
         {
-            return GetVariable(command.Identifier);
+            return GetVariable(identifier);
         }
 
-        if (IsFunction(command.Identifier))
+        if (IsFunction(identifier))
         {
-            return GetFunctionResultRecursive(command.Identifier);
+            return GetFunctionResultRecursive(identifier);
         }
 
-        throw new ArgumentException($"{command.Identifier} not found in memory!");
+        throw new ArgumentException($"{identifier} not found in memory!");
     }
 
     public Dictionary<string, double?> GetAllVars()
