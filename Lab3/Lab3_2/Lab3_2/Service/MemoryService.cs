@@ -19,7 +19,13 @@ public class MemoryService : IMemoryService
 {
     private SortedDictionary<string, double?> _variables = new();
     private SortedDictionary<string, FunctionArgument> _functions = new();
-    private Cache _cashe = new Cache();
+    private Cache _cashe = new ();
+
+    public MemoryService(bool isCacheOne = false)
+    {
+        if (isCacheOne)
+            _cashe.Run();
+    }
 
     public void Add(Command command)
     {

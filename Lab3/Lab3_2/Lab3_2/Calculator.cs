@@ -10,10 +10,10 @@ public class Calculator
     private IStreamWorker _streamWorker;
     private bool _isRun;
 
-    public Calculator(TextReader textReader, TextWriter textWriter)
+    public Calculator(TextReader textReader, TextWriter textWriter, bool cacheIsOn = false)
     {
         _streamWorker = new StreamWorker(textReader, textWriter);
-        _memoryService = new MemoryService();
+        _memoryService = new MemoryService(cacheIsOn);
     }
 
     public void Run()
