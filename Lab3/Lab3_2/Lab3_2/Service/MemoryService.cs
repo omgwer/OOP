@@ -1,53 +1,51 @@
-﻿using System.Globalization;
-using Lab3_2.Dictionary;
+﻿using Lab3_2.Dictionary;
+using Lab3_2.Service.Caches;
 
 namespace Lab3_2.Service;
 
-public interface IMemoryService
+interface ICache
 {
-    void Add(Command command);
-    double? Get(string identifier);
-    SortedDictionary<string, double?> GetAllVars();
-    SortedDictionary<string, double?> GetAllFns();
+    void Invalidate(SortedDictionary<string, FunctionArgument> functions);
+    void CacheValue(FunctionArgument functionArgument, double? value);
 }
 
-// TODO: реализовать кэш для вычисленных функций(возможно)
-// TODO: возможная реализация, добавить casheResult для функции, и записывать результат.
-// При обновлении переменной, обойти все функции, на которые она ссылается, и инвалидировать. Так же обойти все функции, на которые ссылаются функции и тд.
-// TODO: пока добавил костыльный кэш
-public class MemoryService : IMemoryService
+public class MemoryService
 {
     private SortedDictionary<string, double?> _variables = new();
     private SortedDictionary<string, FunctionArgument> _functions = new();
-    private Cache _cashe = new ();
+    private ICache _cashe;
 
-    public MemoryService(bool isCacheOne = false)
+    // TODO: объявить интерфейс cache 
+    public MemoryService(bool needCache)
     {
-        if (isCacheOne)
-            _cashe.Run();
+        if (needCache)
+            _cashe = new Cache();
+        else
+            _cashe = new LazyCache();
     }
 
-    public void Add(Command command)
+    public void AddVariable(string identifier)
     {
-        switch (command.CommandType)
-        {
-            case CommandType.VAR:
-                AssertIdentifierIsBusy(command.Identifier);
-                AddVariable(command.Identifier, null);
-                break;
-            case CommandType.LET:
-                if (char.IsDigit(command.FirstVariable.First()))
-                    AddVariable(command.Identifier, double.Parse(command.FirstVariable, CultureInfo.InvariantCulture));
-                else
-                    AddVariable(command.Identifier, GetVariable(command.FirstVariable));
-                break;
-            case CommandType.FN:
-                AssertIdentifierIsBusy(command.Identifier);
-                AddFunction(command.Identifier, command.FirstVariable, command.Operation, command.SecondVariable);
-                break;
-            default:
-                throw new ArgumentException("Command is not valid for 'Add' in memoryService");
-        }
+        AssertIdentifierIsBusy(identifier);
+        AddVariable(identifier, null);
+    }
+
+    //TODO: вынести преобразование и проверку парса числа double на слой калькулятора
+    public void SetVariable(string identifier, string firstVariable)
+    {
+        AddVariable(identifier, GetVariable(firstVariable));
+    }
+
+    public void SetVariable(string identifier, double? value)
+    {
+        AddVariable(identifier, value);
+    }
+
+    public void AddFunction(string identifier, string firstVariable, Operation? operation, string? secondVariable)
+    {
+        AssertIdentifierIsBusy(identifier);
+        _functions.Add(identifier, new FunctionArgument()
+            {FirstOperand = firstVariable, Operation = operation, SecondOperand = secondVariable});
     }
 
     public double? Get(string identifier)
@@ -97,12 +95,6 @@ public class MemoryService : IMemoryService
         return GetFunctionResultRecursive(identifier);
     }
 
-    private void AddFunction(string identifier, string firstVariable, Operation? operation, string? secondVariable)
-    {
-        _functions.Add(identifier, new FunctionArgument()
-            { FirstOperand = firstVariable, Operation = operation, SecondOperand = secondVariable });
-    }
-
     private double? GetFunctionResultRecursive(string identifier)
     {
         if (!HasIdentifierInMemory(identifier))
@@ -118,7 +110,7 @@ public class MemoryService : IMemoryService
             var functionArgument = _functions[identifier];
             if (functionArgument.cacheResult != null)
                 return functionArgument.cacheResult;
-            
+
             var first = GetFunctionResultRecursive(functionArgument.FirstOperand);
             if (functionArgument.Operation != null & functionArgument.SecondOperand != null)
             {
@@ -130,6 +122,7 @@ public class MemoryService : IMemoryService
             {
                 result = first;
             }
+
             _cashe.CacheValue(functionArgument, result);
             return result;
         }
@@ -187,6 +180,7 @@ public class MemoryService : IMemoryService
                 throw new ArgumentOutOfRangeException(nameof(operation), operation,
                     "Error operation in calculate value!");
         }
+
         return result;
     }
 }

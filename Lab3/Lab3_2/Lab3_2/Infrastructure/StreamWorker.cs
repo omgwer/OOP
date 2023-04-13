@@ -10,7 +10,7 @@ interface IStreamWorker
     void WriteResult(double? value);
 }
 
-public class StreamWorker : IStreamWorker
+public class StreamWorker
 {
     private readonly TextReader _input;
     private readonly TextWriter _output;

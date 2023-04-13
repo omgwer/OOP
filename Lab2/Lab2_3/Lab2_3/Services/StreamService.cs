@@ -2,15 +2,8 @@ using System.Text;
 
 namespace Lab2_3.Services;
 
-interface IStreamService
-{
-    Dictionary<string, List<string>> OpenFile(string path);
-    void SaveToFile(Dictionary<string, List<string>> dictionary, string path);
-    void Write(string value);
-    string Read();
-}
 
-public class StreamService : IStreamService
+public class StreamService
 {
     private TextReader _reader;
     private TextWriter _writer;
@@ -50,6 +43,7 @@ public class StreamService : IStreamService
             dictionary.Add(wordWithTranslate[0], translatedWordList);
         }
 
+        streamReader.Close();
         return dictionary;
     }
 
@@ -73,6 +67,11 @@ public class StreamService : IStreamService
     public void Write(string value)
     {
         _writer.Write(value);
+    }
+    
+    public void WriteLine(string value)
+    {
+        _writer.WriteLine(value);
     }
 
     public string Read()

@@ -19,11 +19,12 @@ public class CasheCalculatorTest
 
         stringBuilder.Append("let v0=0\r\nlet v1=1\r\nfn fib0=v0\r\nfn fib1=v1\r\n");
 
-        for (var i = 0; i < 30; i++, first++, second++, third++)
+        for (var i = 0; i < 50; i++, first++, second++, third++)
         {
             stringBuilder.Append($"fn fib{first}=fib{second}+fib{third}\r\n");
         }
 
+        stringBuilder.Append($"let v0=1\r\n");
         stringBuilder.Append($"print fib{second}\r\n");
 
 
@@ -31,7 +32,9 @@ public class CasheCalculatorTest
         var sw = new Stopwatch();
         sw.Start();
 
-        new Calculator(reader, Console.Out, false).Run();
+        new Calculator(reader, Console.Out, true).Run();
+        
+        
 
         sw.Stop();
         Console.WriteLine($"'time' : {sw.Elapsed}"); 

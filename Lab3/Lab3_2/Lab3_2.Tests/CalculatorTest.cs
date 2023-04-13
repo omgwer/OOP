@@ -29,7 +29,7 @@ Calculator is closed
 ";
         var reader = new StringReader("help");
         var writer = new StringWriter();
-        new Calculator(reader, writer).Run();
+        new Calculator(reader, writer, false).Run();
         Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
     }
 
@@ -42,7 +42,7 @@ Calculator is closed
 ";
         var reader = new StringReader("close");
         var writer = new StringWriter();
-        new Calculator(reader, writer).Run();
+        new Calculator(reader, writer, false).Run();
         Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
     }
 
@@ -73,7 +73,7 @@ Calculator is closed
 
         var reader = new StringReader(startStream);
         var writer = new StringWriter();
-        new Calculator(reader, writer).Run();
+        new Calculator(reader, writer, false).Run();
         Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
     }
 
@@ -107,7 +107,7 @@ Calculator is closed
 
         var reader = new StringReader(startStream);
         var writer = new StringWriter();
-        new Calculator(reader, writer).Run();
+        new Calculator(reader, writer, false).Run();
 
         var t = writer.ToString();
         Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
@@ -134,7 +134,7 @@ Calculator is closed
 
         var reader = new StringReader(startStream);
         var writer = new StringWriter();
-        new Calculator(reader, writer).Run();
+        new Calculator(reader, writer, false).Run();
 
         var t = writer.ToString();
         Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
@@ -172,7 +172,7 @@ Calculator is closed
 
         var reader = new StringReader(startStream);
         var writer = new StringWriter();
-        new Calculator(reader, writer).Run();
+        new Calculator(reader, writer, false).Run();
 
         Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
     }
@@ -218,7 +218,7 @@ Calculator is closed
 
         var reader = new StringReader(startStream);
         var writer = new StringWriter();
-        new Calculator(reader, writer).Run();
+        new Calculator(reader, writer, false).Run();
 
         Assert.That(writer.ToString(), Is.EqualTo(expectedResult));
     }

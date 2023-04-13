@@ -17,30 +17,30 @@ Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-U
 // printfns
 // ";
 
-StringBuilder stringBuilder = new StringBuilder();
-int first = 2;
-int second = 1;
-int third = 0;
+// StringBuilder stringBuilder = new StringBuilder();
+// int first = 2;
+// int second = 1;
+// int third = 0;
+//
+// stringBuilder.Append(@"let v0=0
+// let v1=1
+// fn fib0=v0
+// fn fib1=v1
+// ");
+//
+// for (var i = 0; i < 50; i++, first++, second++, third++)
+// {
+//     stringBuilder.Append($"fn fib{first}=fib{second}+fib{third}\r\n");
+// }
+//
+// stringBuilder.Append("print fib51\r\n");
 
-stringBuilder.Append(@"let v0=0
-let v1=1
-fn fib0=v0
-fn fib1=v1
-");
+// var reader = new StringReader(stringBuilder.ToString());
+// var sw = new Stopwatch();
+// sw.Start();
 
-for (var i = 0; i < 50; i++, first++, second++, third++)
-{
-    stringBuilder.Append($"fn fib{first}=fib{second}+fib{third}\r\n");
-}
+new Calculator(Console.In, Console.Out, false).Run();
 
-stringBuilder.Append("print fib51\r\n");
-
-var reader = new StringReader(stringBuilder.ToString());
-var sw = new Stopwatch();
-sw.Start();
-
-new Calculator(reader, Console.Out).Run();
-
-sw.Stop();
-Console.WriteLine($"'time' : {sw.Elapsed}"); // Здесь логируем
+// sw.Stop();
+// Console.WriteLine($"'time' : {sw.Elapsed}"); // Здесь логируем
 

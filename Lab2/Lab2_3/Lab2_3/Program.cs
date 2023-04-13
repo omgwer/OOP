@@ -46,10 +46,10 @@ using Lab2_3.Services;
             // ConsoleWorker consoleWorker = new ConsoleWorker(Console.In, Console.Out);
             // consoleWorker.Run(library);
 
-var test = new StreamService(Console.In, Console.Out);
-var dictionary = test.OpenFile("test.txt");
+var library = new Library(Console.In, Console.Out);
 
-test.SaveToFile(dictionary, "output.txt");
+while (library.IsRun())
+    library.HandleInput();
 
 //
 // var reader = new StringReader(stringBuilder.ToString());

@@ -1,14 +1,7 @@
 namespace Lab2_3.Services;
 
-public interface IMiniDictionary
-{
-    public void SetDictionary(Dictionary<string, List<string>> dictionary);
-    public Dictionary<string, List<string>> GetDictionary();
-    public List<string>? TranslateWord(string word);
-    public void AddWord(string word, string translate);
-}
 
-public class MiniDictionary : IMiniDictionary
+public class MiniDictionary
 {
     private Dictionary<string, List<string>> _dictionary = new();
 

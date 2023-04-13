@@ -1,3 +1,4 @@
+using System.Globalization;
 using Lab3_2.Dictionary;
 using Lab3_2.Infrastructure;
 using Lab3_2.Service;
@@ -6,14 +7,14 @@ namespace Lab3_2;
 
 public class Calculator
 {
-    private IMemoryService _memoryService;
-    private IStreamWorker _streamWorker;
+    private MemoryService _memoryService;
+    private StreamWorker _streamWorker;
     private bool _isRun;
 
-    public Calculator(TextReader textReader, TextWriter textWriter, bool cacheIsOn = false)
+    public Calculator(TextReader textReader, TextWriter textWriter, bool needCache)
     {
         _streamWorker = new StreamWorker(textReader, textWriter);
-        _memoryService = new MemoryService(cacheIsOn);
+        _memoryService = new MemoryService(needCache);
     }
 
     public void Run()
@@ -27,19 +28,22 @@ public class Calculator
                 HandleProcess(command);
         }
     }
-    //TODO: case- let test1=test2  argument exception нужно обрабатывать
+    
     private void HandleProcess(Command command)
     {
         switch (command.CommandType)
         {
             case CommandType.VAR:
-                _memoryService.Add(command);
+                _memoryService.AddVariable(command.Identifier);
                 break;
             case CommandType.LET:
-                _memoryService.Add(command);
+                if (char.IsDigit(command.FirstVariable.First()))
+                    _memoryService.SetVariable(command.Identifier, double.Parse(command.FirstVariable, CultureInfo.InvariantCulture));
+                else
+                    _memoryService.SetVariable(command.Identifier, command.FirstVariable);
                 break;
             case CommandType.FN:
-                _memoryService.Add(command);
+                _memoryService.AddFunction(command.Identifier, command.FirstVariable, command.Operation, command.SecondVariable);
                 break;
             case CommandType.PRINT:
                 _streamWorker.WriteResult(_memoryService.Get(command.Identifier));

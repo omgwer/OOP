@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 public class MiniDictionaryTests
 {
-    private IMiniDictionary _miniDictionary;
+    private MiniDictionary _miniDictionary;
 
     [SetUp]
     public void Setup()
