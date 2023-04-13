@@ -37,21 +37,22 @@ using Lab2_3;
 */
 
 
-namespace Lab2_3
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            Dictionary library = new MiniDictionary();
-            library.LoadLibrary("library.json");
-            ConsoleWorker consoleWorker = new ConsoleWorker(Console.In, Console.Out);
-            consoleWorker.Run(library);
-        }
-    }
-}
 
-Dictionary<string, List<string>>
 
+            // Library library = new Library();
+            // library.LoadLibrary("library.json");
+            // ConsoleWorker consoleWorker = new ConsoleWorker(Console.In, Console.Out);
+            // consoleWorker.Run(library);
+
+Console.WriteLine("hello world");
+//
+// var reader = new StringReader(stringBuilder.ToString());
+// var sw = new Stopwatch();
+// sw.Start();
+//
+// new Calculator(reader, Console.Out).Run();
+//
+// sw.Stop();
+// Console.WriteLine($"'time' : {sw.Elapsed}"); // Здесь логируем
 
 
