@@ -1,30 +1,43 @@
+using System.Text;
+
 namespace Lab2_3.Services;
 
 interface IStreamService
 {
     Dictionary<string, List<string>> OpenFile(string path);
     void SaveToFile(Dictionary<string, List<string>> dictionary, string path);
-    void Write();
+    void Write(string value);
+    string Read();
 }
 
 public class StreamService : IStreamService
 {
-    private StreamReader _reader;
-    private StreamWriter _writer;
-    public StreamService(StreamReader streamReader, StreamWriter streamWriter)
+    private TextReader _reader;
+    private TextWriter _writer;
+
+    public StreamService(TextReader streamReader, TextWriter streamWriter)
     {
         _reader = streamReader;
         _writer = streamWriter;
     }
 
+    ~StreamService()
+    {
+        _reader.Close();
+        _writer.Close();
+    }
+
     public Dictionary<string, List<string>> OpenFile(string path)
     {
         using StreamReader streamReader = new StreamReader(path);
-        var translatedWordList = new List<string>();
+        if (!File.Exists(path))
+            throw new Exception("File not found!");
+        Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
         while (streamReader.ReadLine() is { } wordsString)
         {
+            var translatedWordList = new List<string>();
             var wordWithTranslate = wordsString!.Split(" ");
-            if (wordWithTranslate.Length < 3)
+            if (wordWithTranslate.Length < 2)
             {
                 throw new Exception("Word is dont have a translated word");
             }
@@ -34,18 +47,39 @@ public class StreamService : IStreamService
                 translatedWordList.Add(wordWithTranslate[i]);
             }
 
-            //   MiniMiniDictionary.Add(wordWithTranslate[0], translatedWordList);
-            //  translatedWordList.Clear();
+            dictionary.Add(wordWithTranslate[0], translatedWordList);
         }
+
+        return dictionary;
     }
 
     public void SaveToFile(Dictionary<string, List<string>> dictionary, string path)
     {
-        throw new NotImplementedException();
+        List<string> someone = new List<string>();
+
+        foreach (var (key, value) in dictionary)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(key);
+            stringBuilder.Append(" ");
+            var words = string.Join(" ", value);
+            stringBuilder.Append(words);
+            someone.Add(stringBuilder.ToString());
+        }
+
+        File.WriteAllLines(path, someone);
     }
 
-    public void Write()
+    public void Write(string value)
     {
-        throw new NotImplementedException();
+        _writer.Write(value);
+    }
+
+    public string Read()
+    {
+        var result = _reader.ReadLine();
+        if (result != null)
+            return result;
+        throw new Exception("Error while read stream");
     }
 }

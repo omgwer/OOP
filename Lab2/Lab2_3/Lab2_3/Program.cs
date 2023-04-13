@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Lab2_3;
+using Lab2_3.Services;
+
 /*
 Разработайте программу-словарь, осуществляющую перевод слов и словосочетаний, поступающих со стандартного потока ввода, с английского языка на русский с использованием заданного файла словаря и выводящую результат перевода в стандартный поток вывода.
 Если вводимое слово или словосочетание, отсутствует в словаре, программа должна попросить пользователя ввести перевод и запомнить его, в случае, если пользователь ввел непустую строку.
@@ -44,7 +46,11 @@ using Lab2_3;
             // ConsoleWorker consoleWorker = new ConsoleWorker(Console.In, Console.Out);
             // consoleWorker.Run(library);
 
-Console.WriteLine("hello world");
+var test = new StreamService(Console.In, Console.Out);
+var dictionary = test.OpenFile("test.txt");
+
+test.SaveToFile(dictionary, "output.txt");
+
 //
 // var reader = new StringReader(stringBuilder.ToString());
 // var sw = new Stopwatch();

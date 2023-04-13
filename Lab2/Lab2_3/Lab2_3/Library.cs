@@ -4,27 +4,33 @@ namespace Lab2_3;
 
 interface ILibrary
 {
-    void FindWord(string word);
-    void SaveDictionary(string path);
-    void LoadDictionary(string path);
+    Library Run();
+    void HandleInput();
 }
 
 public class Library : ILibrary
 {
     private IMiniDictionary _miniDictionary = new MiniDictionary();
-    private IStreamService _streamService = new StreamService();
+    private IStreamService _streamService;
+    private bool _isRun = false;
 
-    public void FindWord(string word)
+    public Library(TextReader textReader, TextWriter textWriter)
     {
-        throw new NotImplementedException();
+        _isRun = true;
+        _streamService = new StreamService(textReader, textWriter);
     }
 
-    public void SaveDictionary(string path)
+    public Library Run()
     {
+        _isRun = true;
+        return this;
     }
 
-    public void LoadDictionary(string pathToFile)
+    public void HandleInput()
     {
-        
+        while (_isRun)
+        {
+            
+        }
     }
 }

@@ -35,7 +35,6 @@ for (var i = 0; i < 50; i++, first++, second++, third++)
 
 stringBuilder.Append("print fib51\r\n");
 
-
 var reader = new StringReader(stringBuilder.ToString());
 var sw = new Stopwatch();
 sw.Start();
