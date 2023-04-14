@@ -46,7 +46,15 @@ public class Library
                 _streamService.WriteLine("Dictionary has been changed , input 'Y' or 'y' for save changes");
                 var requestValue = _streamService.Read();
                 if (requestValue == "Y" | requestValue == "y")
-                    _streamService.SaveToFile(_miniDictionary.GetDictionary(), path);
+                {
+                    if (path == string.Empty)
+                    {
+                        _streamService.WriteLine("File name is not entered, please input file name");
+                        path = _streamService.Read();
+                    }
+                    _streamService.SaveToFile(_miniDictionary.GetDictionary(), path);    
+                }
+
                 _isRun = false;
                 return;
             }

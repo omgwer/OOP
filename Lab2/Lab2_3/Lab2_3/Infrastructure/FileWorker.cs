@@ -1,29 +1,21 @@
 using System.Text;
 
-namespace Lab2_3.Services;
+namespace Lab2_3.Infrastructure;
 
-
-public class StreamService
+// TODO: Возможно стоит сделать интерфейс IOWorker 
+public class FileWorker
 {
-    private TextReader _reader;
-    private TextWriter _writer;
+    private readonly string _path;
 
-    public StreamService(TextReader streamReader, TextWriter streamWriter)
+    public FileWorker(string path)
     {
-        _reader = streamReader;
-        _writer = streamWriter;
+        _path = path;
     }
 
-    ~StreamService()
+    public Dictionary<string, List<string>> OpenFile()
     {
-        _reader.Close();
-        _writer.Close();
-    }
-
-    public Dictionary<string, List<string>> OpenFile(string path)
-    {
-        using StreamReader streamReader = new StreamReader(path);
-        if (!File.Exists(path))
+        using StreamReader streamReader = new StreamReader(_path);
+        if (!File.Exists(_path))
             throw new Exception("File not found!");
         Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
         while (streamReader.ReadLine() is { } wordsString)
@@ -47,7 +39,7 @@ public class StreamService
         return dictionary;
     }
 
-    public void SaveToFile(Dictionary<string, List<string>> dictionary, string path)
+    public void SaveToFile(Dictionary<string, List<string>> dictionary)
     {
         List<string> someone = new List<string>();
 
@@ -61,24 +53,6 @@ public class StreamService
             someone.Add(stringBuilder.ToString());
         }
 
-        File.WriteAllLines(path, someone);
-    }
-
-    public void Write(string value)
-    {
-        _writer.Write(value);
-    }
-    
-    public void WriteLine(string value)
-    {
-        _writer.WriteLine(value);
-    }
-
-    public string Read()
-    {
-        var result = _reader.ReadLine();
-        if (result != null)
-            return result;
-        throw new Exception("Error while read stream");
+        File.WriteAllLines(_path, someone);
     }
 }

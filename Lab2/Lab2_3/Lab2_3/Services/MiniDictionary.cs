@@ -1,6 +1,5 @@
 namespace Lab2_3.Services;
 
-
 public class MiniDictionary
 {
     private Dictionary<string, List<string>> _dictionary = new();

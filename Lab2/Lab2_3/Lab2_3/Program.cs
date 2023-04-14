@@ -38,14 +38,6 @@ using Lab2_3.Services;
 Например, после добавления слов «кошка»«cat» и «кот»«cat», программа должна иметь возможность перевести слово cat, выдав 2 возможных перевода.
 */
 
-
-
-
-            // Library library = new Library();
-            // library.LoadLibrary("library.json");
-            // ConsoleWorker consoleWorker = new ConsoleWorker(Console.In, Console.Out);
-            // consoleWorker.Run(library);
-
 var library = new Library(Console.In, Console.Out);
 
 while (library.IsRun())
