@@ -1,19 +1,19 @@
-using Lab2_3.Services;
+using Lab2_3.Dictionary;
+using Lab2_3.Infrastructure;
 
 namespace Lab2_3;
 
 public class Library
 {
-    private readonly string closeCommand = "...";
-    private MiniDictionary _miniDictionary = new ();
-    private StreamService _streamService;
+    private Services.Dictionary _dictionary = new ();
+    private StreamWorker _streamService;
+    private FileWorker? _fileWorker;
     private bool _isRun;
-    private string path = string.Empty;
 
     public Library(TextReader textReader, TextWriter textWriter)
     {
         _isRun = true;
-        _streamService = new StreamService(textReader, textWriter);
+        _streamService = new StreamWorker(textReader, textWriter);
     }
 
     public bool IsRun()
@@ -23,64 +23,100 @@ public class Library
 
     public void HandleInput()
     {
-        _streamService.WriteLine("Input file name for open file, or input empty string for create a new dictionary");
-        var optionalFilePath = _streamService.Read();
-        if (optionalFilePath == closeCommand)
-            _streamService.WriteLine("Dictionary is close");
-        if (optionalFilePath != string.Empty)
+        InitializeLibrary();
+        
+        while (_isRun)
         {
-            path = optionalFilePath;
-            var dictionary = _streamService.OpenFile(optionalFilePath);
-            _miniDictionary.SetDictionary(dictionary);
+            var wordToTranslate = Read();
+            if (wordToTranslate == MessageDictionary.CLOSE_COMMAND)
+            {
+                CloseLibrary();
+                return;
+            }
+            var translatedWords = TranslateWord(wordToTranslate);
+            if (IsTranslateFound(translatedWords))
+                PrintTranslatedWords(translatedWords!);
+            else
+                TryUpdateLibrary(wordToTranslate);
+        }
+    }
+
+    private void TryUpdateLibrary(string wordToTranslate)
+    {
+        _streamService.WriteLine(MessageDictionary.GetTranslateNotFoundMessage(wordToTranslate));
+        var translateToInputWord = _streamService.Read();
+        if (Equals(translateToInputWord, string.Empty))
+        {
+            _streamService.WriteLine(MessageDictionary.GetDeclineToAddWordToDictionaryMessage(wordToTranslate));
         }
         else
         {
-            _streamService.WriteLine("File name has hot been input! Dictionary create in program memory");
+            _dictionary.AddWord(wordToTranslate, translateToInputWord);
+            _streamService.WriteLine(MessageDictionary.GetWordAddToLibraryMessage(wordToTranslate));
         }
+    }
 
-        while (_isRun)
+    private void InitializeLibrary()
+    {
+        _streamService.WriteLine(MessageDictionary.INITIALIZE_DICTIONARY_REQUEST);
+        var optionalFilePath = Read();
+        if (optionalFilePath != string.Empty)
         {
-            var wordToTranslate = _streamService.Read();
-            if (wordToTranslate == closeCommand)
-            {
-                _streamService.WriteLine("Dictionary has been changed , input 'Y' or 'y' for save changes");
-                var requestValue = _streamService.Read();
-                if (requestValue == "Y" | requestValue == "y")
-                {
-                    if (path == string.Empty)
-                    {
-                        _streamService.WriteLine("File name is not entered, please input file name");
-                        path = _streamService.Read();
-                    }
-                    _streamService.SaveToFile(_miniDictionary.GetDictionary(), path);    
-                }
-
-                _isRun = false;
-                return;
-            }
-            var translatedWords = _miniDictionary.TranslateWord(wordToTranslate);
-            if (translatedWords == null)
-            {
-                _streamService.WriteLine($"Translate for this word - {wordToTranslate} not found. Input translated word for add to dictionary or empty string for cancel");
-                var translateToInputWord = _streamService.Read();
-                if (Equals(translatedWords, ""))
-                {
-                    _streamService.WriteLine($"Word {wordToTranslate} ignored");
-                }
-                else
-                {
-                    _miniDictionary.AddWord(wordToTranslate, translateToInputWord);
-                    _streamService.WriteLine($"Word - {translateToInputWord} added for a dictionary");
-                }
-            }
-            else
-            {
-                foreach (var translatedWord in translatedWords)
-                {
-                    _streamService.Write(translatedWord + " ");
-                    _streamService.WriteLine(string.Empty);
-                }
-            }
+            _fileWorker = new FileWorker(optionalFilePath);
+            var dictionary = _fileWorker.OpenFile();
+            _dictionary.SetDictionary(dictionary);
         }
+        else
+            _streamService.WriteLine(MessageDictionary.CREATE_NEW_DICTIONARY_ALERT);
+    }
+
+    private void CloseLibrary()
+    {
+        _streamService.WriteLine(MessageDictionary.SAVE_FILE_REQUEST);
+        var requestValue = Read();
+        if (NeedToSaveFile(requestValue))
+        {
+            if (_fileWorker == null)
+            {
+                CreateNewFile();
+            }
+            _fileWorker!.SaveToFile(_dictionary.GetDictionary());    
+        }
+        _isRun = false;
+    }
+
+    private string Read()
+    {
+        return _streamService.Read();
+    }
+
+    private bool NeedToSaveFile(string value)
+    {
+        return value == MessageDictionary.ACCEPT_SAVE_DICTIONARY_CHAR | value == MessageDictionary.ACCEPT_SAVE_DICTIONARY_CHAR;
+    }
+
+    private void CreateNewFile()
+    {
+        _streamService.WriteLine(MessageDictionary.SAVE_NEW_FILE_REQUEST);
+        _fileWorker = new FileWorker(_streamService.Read());
+    }
+
+    private List<string>? TranslateWord(string wordToTranslate)
+    {
+        return _dictionary.TranslateWord(wordToTranslate);
+    }
+
+    private void PrintTranslatedWords(List<string> list)
+    {
+        foreach (var translatedWord in list)
+        {
+            _streamService.Write(translatedWord + " ");
+        }
+        _streamService.WriteLine(string.Empty);
+    }
+
+    private bool IsTranslateFound(List<string>? list)
+    {
+        return list != null;
     }
 }

@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Lab2_3;
+﻿using Lab2_3;
 using Lab2_3.Services;
 
 /*
@@ -37,20 +35,7 @@ using Lab2_3.Services;
 Дополнительно можно получить до 20 баллов, если программа сможет осуществлять и обратный перевод словосочетаний. При этом необходимо поддержать возможность существования нескольких вариантов перевода одного и того же слова.
 Например, после добавления слов «кошка»«cat» и «кот»«cat», программа должна иметь возможность перевести слово cat, выдав 2 возможных перевода.
 */
-
 var library = new Library(Console.In, Console.Out);
 
 while (library.IsRun())
     library.HandleInput();
-
-//
-// var reader = new StringReader(stringBuilder.ToString());
-// var sw = new Stopwatch();
-// sw.Start();
-//
-// new Calculator(reader, Console.Out).Run();
-//
-// sw.Stop();
-// Console.WriteLine($"'time' : {sw.Elapsed}"); // Здесь логируем
-
-

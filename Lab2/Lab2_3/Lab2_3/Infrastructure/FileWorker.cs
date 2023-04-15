@@ -1,8 +1,8 @@
 using System.Text;
+using Lab2_3.Dictionary;
 
 namespace Lab2_3.Infrastructure;
 
-// TODO: Возможно стоит сделать интерфейс IOWorker 
 public class FileWorker
 {
     private readonly string _path;
@@ -16,7 +16,7 @@ public class FileWorker
     {
         using StreamReader streamReader = new StreamReader(_path);
         if (!File.Exists(_path))
-            throw new Exception("File not found!");
+            throw new FileLoadException(MessageDictionary.FILE_NOT_FOUND_ALERT);
         Dictionary<string, List<string>> dictionary = new Dictionary<string, List<string>>();
         while (streamReader.ReadLine() is { } wordsString)
         {
