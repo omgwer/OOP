@@ -110,7 +110,8 @@ public class Library
     {
         foreach (var translatedWord in list)
         {
-            _streamService.Write(translatedWord + " ");
+            _streamService.Write(translatedWord);
+            _streamService.Write(" ");
         }
         _streamService.WriteLine(string.Empty);
     }

@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Lab2_3.Services;
 
 public static class WordService
@@ -23,9 +25,10 @@ public static class WordService
                 return false;
             throw new ArgumentException($"Word - {word} is not valid. Chars is not only one language");
         }
+
         return true;
     }
-    
+
     public static bool IsRussianWord(string word)
     {
         for (var i = 0; i < word.Length; i++)
@@ -35,6 +38,30 @@ public static class WordService
                 return false;
             throw new ArgumentException($"Word - {word} is not valid. Chars is not only one language");
         }
+
         return true;
+    }
+
+    public static string ConvertStringByMask(string value, bool[] mask)
+    {
+        var stringBuilder = new StringBuilder();
+        for (var i = 0; i < value.Length; i++)
+        {
+            if (i < mask.Length)
+                stringBuilder.Append(mask[i] ? char.ToUpper(value[i]) : char.ToLower(value[i]));
+            else
+                stringBuilder.Append(value[i]);
+        }
+
+        return stringBuilder.ToString();
+    }
+
+    public static bool[] GetWordMask(string value)
+    {
+        bool[] mask = Enumerable.Repeat(false, value.Length).ToArray();
+        for (var i = 0; i < value.Length; i++)
+            if (char.IsUpper(value[i]))
+                mask[i] = true;
+        return mask;
     }
 }

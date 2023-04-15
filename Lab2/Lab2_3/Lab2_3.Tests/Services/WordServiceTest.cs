@@ -1,6 +1,6 @@
 using Lab2_3.Services;
 
-namespace Lab2_3.Tests;
+namespace Lab2_3.Tests.Services;
 
 public class WordServiceTest
 {
@@ -74,5 +74,75 @@ public class WordServiceTest
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() => WordService.IsEnglishWord(word));
+    }
+    
+    [Test]
+    public void Convert_RussianWord_ToMask_MaskEqualLenghtToWord()
+    {
+        // Arrange
+        var word = "hello";
+        bool[] mask = {true,false, true, true, false};
+
+        // Act
+        var result = WordService.ConvertStringByMask(word, mask);
+
+        // Assert
+        Assert.That(result, Is.EqualTo("HeLLo"));
+    }
+    
+    [Test]
+    public void Convert_EnglishWord_ToMask_MaskEqualLenghtToWord()
+    {
+        // Arrange
+        var word = "привет";
+        bool[] mask = {true,false, true, true, false, true};
+
+        // Act
+        var result = WordService.ConvertStringByMask(word, mask);
+
+        // Assert
+        Assert.That(result, Is.EqualTo("ПрИВеТ"));
+    }
+    
+    [Test]
+    public void Convert_RussianWord_ToMask_MaskIsShortedThatTheWord()
+    {
+        // Arrange
+        var word = "Барсик";
+        bool[] mask = {false,true, true, true};
+
+        // Act
+        var result = WordService.ConvertStringByMask(word, mask);
+
+        // Assert
+        Assert.That(result, Is.EqualTo("бАРСик"));
+    }
+    
+    [Test]
+    public void GetWordMask_GetMaskEnglishWord()
+    {
+        // Arrange
+        var word = "HeLLo";
+        bool[] expectedResult = {true,false, true, true, false};
+
+        // Act
+        var result = WordService.GetWordMask(word);
+
+        // Assert
+        Assert.That(result, Is.EqualTo(expectedResult));
+    }
+    
+    [Test]
+    public void GetWordMask_GetMaskRussianWord()
+    {
+        // Arrange
+        var word = "кОТОфЕй";
+        bool[] expectedResult = {false, true, true,true, false, true, false};
+
+        // Act
+        var result = WordService.GetWordMask(word);
+
+        // Assert
+        Assert.That(result, Is.EqualTo(expectedResult));
     }
 }
