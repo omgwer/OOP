@@ -30,7 +30,7 @@ public class Circle : ISolidShape
     public override string ToString()
     {
         return $"Figure - Circle, Radius - {Radius:0.00}, OutlineColor - {OutlineColor}, " +
-               $"FillColor - {FillColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
+               $"FillColor - {FillColor}, Area - {GetArea():0.00}, Perimeter - {GetPerimeter():0.00}";
     }
 
     public double GetArea()

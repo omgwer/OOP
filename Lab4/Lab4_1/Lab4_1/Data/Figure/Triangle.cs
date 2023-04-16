@@ -35,7 +35,7 @@ public class Triangle : ISolidShape
 
     public override string ToString()
     {
-        return $"Figure - Triangle, FirstPoint - {FirstPoint}, SecondPoint - {SecondPoint}, ThirdPoint - {ThirdPoint}" +
+        return $"Figure - Triangle, FirstPoint - {FirstPoint}, SecondPoint - {SecondPoint}, ThirdPoint - {ThirdPoint}, " +
                $"OutlineColor - {OutlineColor}, FillColor - {FillColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
     }
 

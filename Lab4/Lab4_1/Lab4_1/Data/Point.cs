@@ -26,6 +26,6 @@ public class Point
 
     public override string ToString()
     {
-        return $"X - {_x}, Y - {_y}";
+        return $"X:{_x} Y:{_y}";
     }
 }
