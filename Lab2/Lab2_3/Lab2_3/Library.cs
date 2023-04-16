@@ -1,5 +1,6 @@
 using Lab2_3.Dictionary;
 using Lab2_3.Infrastructure;
+using Lab2_3.Services;
 
 namespace Lab2_3;
 
@@ -34,9 +35,13 @@ public class Library
                 CloseLibrary();
                 return;
             }
+            var mask = WordService.GetWordMask(wordToTranslate);
+            wordToTranslate = wordToTranslate.ToLower();
             var translatedWords = TranslateWord(wordToTranslate);
             if (IsTranslateFound(translatedWords))
-                PrintTranslatedWords(translatedWords!);
+            {
+                PrintTranslatedWords(translatedWords!, mask);
+            }
             else
                 TryUpdateLibrary(wordToTranslate);
         }
@@ -123,11 +128,11 @@ public class Library
         return _dictionary.TranslateWord(wordToTranslate);
     }
 
-    private void PrintTranslatedWords(List<string> list)
+    private void PrintTranslatedWords(List<string> list, bool[] mask)
     {
         foreach (var translatedWord in list)
         {
-            _streamService.Write(translatedWord);
+            _streamService.Write(WordService.ConvertStringByMask(translatedWord, mask));
             _streamService.Write(" ");
         }
         _streamService.WriteLine(string.Empty);

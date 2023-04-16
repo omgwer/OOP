@@ -149,4 +149,32 @@ public class LibraryTestMock
         _textWriterMock.Verify(w => w.WriteLine(MessageDictionary.CLOSE_PROGRAM_WITHOUT_SAVE_MESSAGE), Times.Once);
         _textWriterMock.Verify(w => w.WriteLine(MessageDictionary.SAVE_FILE_REQUEST), Times.Never);
     }
+    
+    [Test]
+    public void OpenLibraryInFileTest_WithMask()
+    {
+        // Arrange
+        _textReaderMock.SetupSequence(r => r.ReadLine())
+            .Returns(TEST_FILE_PATH)
+            .Returns("яБЛокО")
+            .Returns("pUPpy")
+            .Returns("СОбака")
+            .Returns(MessageDictionary.CLOSE_COMMAND);
+
+        // Act
+        while (_library.IsRun())
+        {
+            _library.HandleInput();
+        }
+
+        // Assert
+        _textWriterMock.Verify(w => w.WriteLine(MessageDictionary.INITIALIZE_DICTIONARY_REQUEST), Times.Once);
+        _textWriterMock.Verify(w => w.Write("aPPle"), Times.Once);
+        _textWriterMock.Verify(w => w.Write("сОБака"), Times.Once);
+        _textWriterMock.Verify(w => w.Write("щЕНок"), Times.Once);
+        _textWriterMock.Verify(w => w.Write("DOg"), Times.Once);
+        _textWriterMock.Verify(w => w.Write("PUppy"), Times.Once);
+        _textWriterMock.Verify(w => w.WriteLine(MessageDictionary.CLOSE_PROGRAM_WITHOUT_SAVE_MESSAGE), Times.Once);
+        _textWriterMock.Verify(w => w.WriteLine(MessageDictionary.SAVE_FILE_REQUEST), Times.Never);
+    }
 }
