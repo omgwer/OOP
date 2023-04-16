@@ -1,5 +1,3 @@
-using Lab4_1.Data;
-using Lab4_1.Data.Figure;
 using Lab4_1.Infrastructure;
 using Lab4_1.Service;
 
@@ -20,7 +18,7 @@ public interface ISolidShape : IShape
 
 public class FigureHandler
 {
-    private List<IShape> _figureList = new ();
+    private List<IShape> _figureList = new();
     private StreamWorker _streamWorker;
     private ValidateService _validateService;
     private CommandHandler _commandHandler;
@@ -47,6 +45,17 @@ public class FigureHandler
             _commandHandler.HandleStringCommand(stringValue);
         }
     }
+
+    public void PrintFigureWithMinPerimeter()
+    {
+        
+    }
+
+    public void PrintFigureWithMaxArea()
+    {
+        
+    }
+
 
     public void HandleInput()
     {
