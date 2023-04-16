@@ -9,6 +9,7 @@ public class Library
     private StreamWorker _streamService;
     private FileWorker? _fileWorker;
     private bool _isRun;
+    private bool _isDictionaryChanged = false;
 
     public Library(TextReader textReader, TextWriter textWriter)
     {
@@ -51,8 +52,17 @@ public class Library
         }
         else
         {
-            _dictionary.AddWord(wordToTranslate, translateToInputWord);
-            _streamService.WriteLine(MessageDictionary.GetWordAddToLibraryMessage(wordToTranslate));
+            _isDictionaryChanged = true;
+            try
+            {
+                _dictionary.AddWord(wordToTranslate, translateToInputWord);
+                _streamService.WriteLine(MessageDictionary.GetWordAddToLibraryMessage(wordToTranslate));
+
+            }
+            catch (ArgumentException ex)
+            {
+                _streamService.WriteLine(ex.Message);
+            }
         }
     }
 
@@ -72,6 +82,12 @@ public class Library
 
     private void CloseLibrary()
     {
+        _isRun = false;
+        if (!_isDictionaryChanged)
+        {
+            _streamService.WriteLine(MessageDictionary.CLOSE_PROGRAM_WITHOUT_SAVE_MESSAGE);
+            return;
+        }
         _streamService.WriteLine(MessageDictionary.SAVE_FILE_REQUEST);
         var requestValue = Read();
         if (NeedToSaveFile(requestValue))
@@ -81,8 +97,9 @@ public class Library
                 CreateNewFile();
             }
             _fileWorker!.SaveToFile(_dictionary.GetDictionary());    
+            _streamService.WriteLine(MessageDictionary.CLOSE_PROGRAM_WITH_SAVE_MESSAGE);
         }
-        _isRun = false;
+        _streamService.WriteLine(MessageDictionary.CLOSE_PROGRAM_WITHOUT_SAVE_MESSAGE);
     }
 
     private string Read()
@@ -92,7 +109,7 @@ public class Library
 
     private bool NeedToSaveFile(string value)
     {
-        return value == MessageDictionary.ACCEPT_SAVE_DICTIONARY_CHAR | value == MessageDictionary.ACCEPT_SAVE_DICTIONARY_CHAR;
+        return value == MessageDictionary.ACCEPT_SAVE_DICTIONARY_CHAR || value == MessageDictionary.ACCEPT_SAVE_DICTIONARY_CHAR;
     }
 
     private void CreateNewFile()

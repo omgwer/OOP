@@ -1,3 +1,5 @@
+using Lab2_3.Dictionary;
+
 namespace Lab2_3.Services;
 
 public class Dictionary
@@ -28,25 +30,17 @@ public class Dictionary
     {
         if (WordService.IsEnglishWord(word))
         {
-            if (_dictionaryEnToRu.ContainsKey(word))
-                throw new ArgumentException("The Word is exits for this dictionary");
+            AssertRussianTranslateWordIsValid(translate);
+            AssertIsEnglishDictionaryContainKey(word);
             _dictionaryEnToRu.Add(word, new List<string>() { translate });
-
-            if (_dictionaryRuToEn.ContainsKey(translate) && !_dictionaryRuToEn[translate].Contains(word))
-                _dictionaryRuToEn[translate].Add(word);
-            else
-                _dictionaryRuToEn.Add(translate, new List<string>() { word });
+            SynchronizationRussianDictionary(translate, word);
         }
         else
         {
-            if (_dictionaryRuToEn.ContainsKey(word))
-                throw new ArgumentException("The Word is exits for this dictionary");
+            AssertEnglishTranslateWordIsValid(translate);
+            AssertIsRussianDictionaryContainKey(word);
             _dictionaryRuToEn.Add(word, new List<string>() { translate });
-
-            if (_dictionaryEnToRu.ContainsKey(translate) && !_dictionaryEnToRu[translate].Contains(word))
-                _dictionaryEnToRu[translate].Add(word);
-            else
-                _dictionaryEnToRu.Add(translate, new List<string>() { word });
+            SynchronizationEnglishDictionary(word, translate);
         }
     }
 
@@ -54,10 +48,50 @@ public class Dictionary
     {
         foreach (var (englishWord, russianWordsList) in _dictionaryEnToRu)
         foreach (var russianWord in russianWordsList)
-            //TODO: похоже на код в методе AddWord возможно вынести
-            if (_dictionaryRuToEn.ContainsKey(russianWord) && !_dictionaryRuToEn[russianWord].Contains(englishWord))
-                _dictionaryRuToEn[russianWord].Add(englishWord);
-            else
-                _dictionaryRuToEn.Add(russianWord, new List<string>() { englishWord });
+            SynchronizationRussianDictionary(russianWord, englishWord);
+    }
+
+    private void SynchronizationRussianDictionary(string russianWord, string englishWord)
+    {
+        if (_dictionaryRuToEn.ContainsKey(russianWord) && !_dictionaryRuToEn[russianWord].Contains(englishWord))
+            _dictionaryRuToEn[russianWord].Add(englishWord);
+        else
+            _dictionaryRuToEn.Add(russianWord, new List<string>() { englishWord });
+    }
+
+    private void SynchronizationEnglishDictionary(string russianWord, string englishWord)
+    {
+        if (_dictionaryEnToRu.ContainsKey(englishWord) && !_dictionaryEnToRu[englishWord].Contains(russianWord))
+            _dictionaryEnToRu[englishWord].Add(russianWord);
+        else
+            _dictionaryEnToRu.Add(englishWord, new List<string>() { russianWord });
+    }
+
+    private void AssertIsEnglishDictionaryContainKey(string englishWord)
+    {
+        AssertDictionaryContainKey(_dictionaryEnToRu, englishWord);
+    }
+
+    private void AssertIsRussianDictionaryContainKey(string russianWord)
+    {
+        AssertDictionaryContainKey(_dictionaryRuToEn, russianWord);
+    }
+
+    private void AssertRussianTranslateWordIsValid(string word)
+    {
+        if (WordService.IsEnglishWord(word))
+            throw new ArgumentException(MessageDictionary.GetAddTranslateForEnglishWordErrorMessage(word));
+    }
+
+    private void AssertEnglishTranslateWordIsValid(string word)
+    {
+        if (WordService.IsRussianWord(word))
+            throw new ArgumentException(MessageDictionary.GetAddTranslateForRussianWordErrorMessage(word));
+    }
+
+    private void AssertDictionaryContainKey(Dictionary<string, List<string>> dictionary, string key)
+    {
+        if (dictionary.ContainsKey(key))
+            throw new ArgumentException(MessageDictionary.WORD_IS_EXIST_FOR_DICTIONARY_MESSAGE);
     }
 }
