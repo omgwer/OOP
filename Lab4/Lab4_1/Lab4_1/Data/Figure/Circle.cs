@@ -29,17 +29,18 @@ public class Circle : ISolidShape
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return $"Figure - Circle, Radius - {Radius:0.00}, OutlineColor - {OutlineColor}, " +
+               $"FillColor - {FillColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
     }
 
     public double GetArea()
     {
-        throw new NotImplementedException();
+        return Math.PI * Math.Pow(Radius, 2);
     }
 
     public double GetPerimeter()
     {
-        throw new NotImplementedException();
+        return 2 * Math.PI * Radius;
     }
 
     public uint GetOutlineColor()

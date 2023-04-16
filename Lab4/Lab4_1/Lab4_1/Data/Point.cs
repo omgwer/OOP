@@ -23,4 +23,9 @@ public class Point
             _y = value;
         }
     }
+
+    public override string ToString()
+    {
+        return $"X - {_x}, Y - {_y}";
+    }
 }

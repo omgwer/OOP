@@ -22,17 +22,18 @@ public class Line : IShape
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return $"Figure - Line, StartPoint - {StartPoint}, FinishPoint - {FinishPoint}, " +
+               $"OutlineColor - {OutlineColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
     }
 
     public double GetArea()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public double GetPerimeter()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     public uint GetOutlineColor()

@@ -31,17 +31,18 @@ public class Rectangle : ISolidShape
 
     public override string ToString()
     {
-        throw new NotImplementedException();
+        return $"Figure - Rectangle, LeftTop - {LeftTop}, Width - {Width}, Height - {Height}" +
+               $"OutlineColor - {OutlineColor}, FillColor - {FillColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
     }
     
     public double GetArea()
     {
-        throw new NotImplementedException();
+        return Width * Height;
     }
 
     public double GetPerimeter()
     {
-        throw new NotImplementedException();
+        return 2 * (Width + Height);
     }
 
     public uint GetOutlineColor()
