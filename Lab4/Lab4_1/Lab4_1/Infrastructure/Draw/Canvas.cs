@@ -1,7 +1,7 @@
 using SFML.Graphics;
 using SFML.Window;
 
-namespace Lab4_1.Canvas;
+namespace Lab4_1.Infrastructure.Draw;
 
 interface ICanvas
 {
