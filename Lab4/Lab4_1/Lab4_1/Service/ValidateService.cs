@@ -10,5 +10,7 @@ public class ValidateService
         _canvasWidth = canvasWidth;
         _canvasHeight = canvasHeight;
     }
+    
+    
 
 }
