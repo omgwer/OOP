@@ -18,5 +18,7 @@ public static class FigureDictionary
         INVALID_ARGUMENT_COUNT_ALERT = "Error! invalid argument count.",
         ERROR_TO_CONVERT_STRING_TO_DOUBLE = "Error convert string to double value!",
         ERROR_TO_CONVERT_STRING_TO_FIGURE_TYPE = "Value is not valid to convert to figure type",
-        ERROR_TO_CONVERT_STRING_TO_COLOR = "Value is not valid to convert to figure color";
+        ERROR_TO_CONVERT_STRING_TO_COLOR = "Value is not valid to convert to figure color",
+        FIGURE_WITH_MIN_PERIMETER = "Figure with minimal perimeter",
+        FIGURE_WITH_MAX_AREA = "Figure with max area";
 }
