@@ -16,15 +16,15 @@ public class ValidateServiceTest
     public void ConvertToPoint_Should_ReturnCorrectPoint()
     {
         var point = validateService.ConvertToPoint("10", "20");
-        Assert.AreEqual(10, point.X);
-        Assert.AreEqual(20, point.Y);
+        Assert.That(point.X, Is.EqualTo(10));
+        Assert.That(point.Y, Is.EqualTo(20));
     }
 
     [Test]
     public void ConvertStringToPointValue_Should_ReturnCorrectValue()
     {
         var value = validateService.ConvertStringToPointValue("10");
-        Assert.AreEqual(10, value);
+        Assert.That(value, Is.EqualTo(10));
     }
 
     [Test]
@@ -37,7 +37,7 @@ public class ValidateServiceTest
     public void ConvertToColor_Should_ReturnCorrectColor()
     {
         var color = validateService.ConvertToColor("123456");
-        Assert.AreEqual((uint)123456, color);
+        Assert.That(color, Is.EqualTo((uint)123456));
     }
 
     [Test]
