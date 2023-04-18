@@ -41,6 +41,11 @@ public class Triangle : ISolidShape
             $"OutlineColor - {OutlineColor}, FillColor - {FillColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
     }
 
+    public void Draw(ICanvas canvas)
+    {
+        throw new NotImplementedException();
+    }
+
     public double GetArea()
     {
         double halfPerimeter = GetPerimeter() / 2;

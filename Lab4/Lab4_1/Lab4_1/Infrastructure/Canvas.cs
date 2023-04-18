@@ -4,7 +4,7 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace Lab4_1.Infrastructure.Draw;
+namespace Lab4_1.Infrastructure;
 
 public class Canvas : ICanvas
 {
@@ -55,6 +55,11 @@ public class Canvas : ICanvas
     {
         throw new NotImplementedException();
     }
+    
+    public void Clear()
+    {
+        throw new NotImplementedException();
+    }
 
     public void Draw()
     {
@@ -82,7 +87,7 @@ public class Canvas : ICanvas
                 // Clear screen
                 _window.Clear(windowColor);
 
-                _window.Draw(test2);
+            //    _window.Draw(test2);
                 // Update the window
                 _window.Display();
             } //End game loop
@@ -90,7 +95,6 @@ public class Canvas : ICanvas
         renderThread.Start();
         _isRun = true;
     } //End Main()
-
 
     private void OnClose(object sender, EventArgs e)
     {

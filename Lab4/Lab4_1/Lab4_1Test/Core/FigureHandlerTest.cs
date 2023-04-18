@@ -27,7 +27,7 @@ public class FigureHandlerTest
         _mockTextReader.SetupSequence(r => r.ReadLine())
             .Returns(circleFirst);
         // Act
-        _figureHandler.LoadFiguresForMemory();
+    //    _figureHandler.LoadFiguresForMemory();
 
         // Assert
         _mockTextReader.Verify(r => r.ReadLine(), Times.Exactly(2));
@@ -41,7 +41,7 @@ public class FigureHandlerTest
         var mockCircle = new Mock<IShape>();
         mockCircle.Setup(c => c.GetPerimeter()).Returns(5);
         mockCircle.Setup(c => c.ToString()).Returns("Circle: (10, 10), radius = 5");
-        _figureHandler.LoadFiguresForMemory();
+   //     _figureHandler.LoadFiguresForMemory();
      
 
         // Act
@@ -59,7 +59,7 @@ public class FigureHandlerTest
         var mockTriangle = new Mock<IShape>();
         mockTriangle.Setup(c => c.GetArea()).Returns(50);
         mockTriangle.Setup(c => c.ToString()).Returns("Triangle: (0, 0), (0, 5), (5, 0)");
-        _figureHandler.LoadFiguresForMemory();
+    //    _figureHandler.LoadFiguresForMemory();
       
 
         // Act

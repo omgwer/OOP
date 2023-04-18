@@ -20,7 +20,7 @@ public class CommandHandlerTest
     {
         // Arrange
         var shapes = new List<IShape>();
-        var commandHandler = new CommandHandler(shapes, _validateService);
+        var commandHandler = new CommandHandler(shapes, 100, 200);
         string value = "line 0 0 100 100";
 
         // Act
@@ -40,7 +40,7 @@ public class CommandHandlerTest
     {
         // Arrange
         var shapes = new List<IShape>();
-        var commandHandler = new CommandHandler(shapes, _validateService);
+        var commandHandler = new CommandHandler(shapes, 100, 200);
         string value = "circle 50 50 25";
 
         // Act
@@ -58,7 +58,7 @@ public class CommandHandlerTest
     {
         // Arrange
         var shapes = new List<IShape>();
-        var commandHandler = new CommandHandler(shapes, _validateService);
+        var commandHandler = new CommandHandler(shapes, 100, 200);
         string value = "invalidFigureType";
 
         // Act and Assert

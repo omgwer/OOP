@@ -53,4 +53,9 @@ public class Circle : ISolidShape
     {
         throw new NotImplementedException();
     }
+    
+    public void Draw(ICanvas canvas)
+    {
+        throw new NotImplementedException();
+    }
 }

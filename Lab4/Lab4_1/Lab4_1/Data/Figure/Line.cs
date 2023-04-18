@@ -27,6 +27,11 @@ public class Line : IShape
                $"OutlineColor - {OutlineColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
     }
 
+    public void Draw(ICanvas canvas)
+    {
+        throw new NotImplementedException();
+    }
+
     public double GetArea()
     {
         return 0;

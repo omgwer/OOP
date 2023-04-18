@@ -11,6 +11,8 @@ public interface ICanvas
     void FillTriangle(Point firstPoint, Point secondPoint, Point thirdPoint, double fillColor);
     void DrawRectangle(Point firstPoint, double width, double height, double lineColor);
     void FillRectangle(Point firstPoint, double width, double height, double fillColor);
+
+    void Clear();
     // void
     void Draw();
 }

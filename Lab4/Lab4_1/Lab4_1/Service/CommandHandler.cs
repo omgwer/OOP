@@ -1,4 +1,3 @@
-using Lab4_1.Core;
 using Lab4_1.Core.Abstraction;
 using Lab4_1.Data;
 using Lab4_1.Data.Figure;
@@ -12,9 +11,9 @@ public class CommandHandler
     private ValidateService _validateService;
     private List<IShape> _shapes;
 
-    public CommandHandler(List<IShape> shapes, ValidateService validateService)
+    public CommandHandler(List<IShape> shapes, uint canvasWidth, uint canvasHeight)
     {
-        _validateService = validateService;
+        _validateService = new ValidateService(canvasWidth, canvasHeight);
         _shapes = shapes;
     }
 
@@ -22,8 +21,8 @@ public class CommandHandler
     {
         var stringList = value.Split(SPACE);
         _validateService.AssertArgumentCountForFigure(stringList.Length);
-        FigureType figureType = ConvertFirstArgumentToFigureType(stringList.First());
-        
+        var figureType = ConvertFirstArgumentToFigureType(stringList.First());
+
         switch (figureType)
         {
             case FigureType.LINE:
@@ -41,7 +40,7 @@ public class CommandHandler
                 _validateService.AssertArgumentCountForRectangle(stringList.Length);
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentException("invalid command");
         }
     }
 
@@ -79,7 +78,7 @@ public class CommandHandler
             fillColor = _validateService.ConvertToColor(list[5]);
         _shapes.Add(new Circle(center, radius, outlineColor, fillColor));
     }
-    
+
     private void AddTriangleToList(string[] list)
     {
         Point firstPoint = _validateService.ConvertToPoint(list[1], list[2]);
@@ -91,9 +90,9 @@ public class CommandHandler
             outlineColor = _validateService.ConvertToColor(list[7]);
         if (list.Length >= 9)
             fillColor = _validateService.ConvertToColor(list[8]);
-        _shapes.Add(new Triangle(firstPoint, secondPoint,thirdPoint, outlineColor, fillColor));
+        _shapes.Add(new Triangle(firstPoint, secondPoint, thirdPoint, outlineColor, fillColor));
     }
-    
+
     private void AddRectangleToList(string[] list)
     {
         Point leftTop = _validateService.ConvertToPoint(list[1], list[2]);
@@ -105,6 +104,6 @@ public class CommandHandler
             outlineColor = _validateService.ConvertToColor(list[5]);
         if (list.Length >= 7)
             fillColor = _validateService.ConvertToColor(list[6]);
-        _shapes.Add(new Rectangle(leftTop, width,height, outlineColor, fillColor));
+        _shapes.Add(new Rectangle(leftTop, width, height, outlineColor, fillColor));
     }
 }

@@ -36,6 +36,11 @@ public class Rectangle : ISolidShape
                $"OutlineColor - {OutlineColor}, FillColor - {FillColor}, Area - {GetArea():0.00}, Perimeter - {GetPerimeter():0.00}";
     }
 
+    public void Draw(ICanvas canvas)
+    {
+        throw new NotImplementedException();
+    }
+
     public double GetArea()
     {
         return Width * Height;
