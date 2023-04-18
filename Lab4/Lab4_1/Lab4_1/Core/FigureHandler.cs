@@ -3,6 +3,7 @@ using Lab4_1.Data;
 using Lab4_1.Data.Figure;
 using Lab4_1.Infrastructure;
 using Lab4_1.Service;
+using SFML.Graphics;
 using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Core;
@@ -122,6 +123,7 @@ public class FigureHandler
         {
             shape.Draw(_canvas);
         }
+        _canvas.Draw();
     }
 
     private void Clear()

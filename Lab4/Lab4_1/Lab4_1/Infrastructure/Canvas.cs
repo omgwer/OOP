@@ -13,12 +13,25 @@ public class Canvas : ICanvas
     private readonly uint _height;
     private bool _isRun;
     private Thread renderThread;
+    private List<Shape> _shapes = new List<Shape>();
 
     public Canvas(uint width, uint height)
     {
         //  _window = new RenderWindow(new VideoMode(800, 600), "SFML Works!");
         _width = width;
         _height = height;
+
+        // RectangleShape rectangleShape = new RectangleShape(new Vector2f(150, 5)); // прямоугольник + линия
+        // ConvexShape convexShape = new ConvexShape(); // треугольник
+        //
+        // convexShape.SetPointCount(3);
+        // convexShape.SetPoint(0, new Vector2f(35, 35));
+        // convexShape.SetPoint(1, new Vector2f(45, 45));
+        // convexShape.SetPoint(2, new Vector2f(25, 50));
+
+        //
+        // _shapes.Add(rectangleShape);
+        // _shapes.Add(convexShape);
     }
 
     public void DrawLine(Point start, Point finish, uint lineColor)
@@ -28,12 +41,22 @@ public class Canvas : ICanvas
 
     public void DrawCircle(Point center, double radius, uint lineColor)
     {
-        throw new NotImplementedException();
+        CircleShape circleShape = new CircleShape((float)radius);
+        circleShape.Position = ConvertPointToVector2f(center);
+        circleShape.OutlineColor = new Color(lineColor); // TODO: добавлена прозрвчность
+        circleShape.FillColor = new Color(Color.Transparent);
+        circleShape.OutlineThickness = 25;
+        _shapes.Add(circleShape);
     }
 
     public void FillCircle(Point center, double radius, uint fillColor)
     {
-        throw new NotImplementedException();
+        CircleShape circleShape = new CircleShape((float)radius);
+        circleShape.Position = ConvertPointToVector2f(center);
+        circleShape.OutlineColor = new Color(Color.Transparent);
+        circleShape.FillColor = new Color(fillColor);
+        circleShape.OutlineThickness = 25;
+        _shapes.Add(circleShape);
     }
 
     public void DrawTriangle(Point firstPoint, Point secondPoint, Point thirdPoint, double lineColor)
@@ -55,10 +78,10 @@ public class Canvas : ICanvas
     {
         throw new NotImplementedException();
     }
-    
+
     public void Clear()
     {
-        throw new NotImplementedException();
+        _shapes.Clear();
     }
 
     public void Draw()
@@ -69,16 +92,11 @@ public class Canvas : ICanvas
         {
             _window = new RenderWindow(new VideoMode(800, 600), "SFML Works!");
             _window.SetActive();
-            // Ваш код для отрисовки фигур на canvas
             _window.Closed += new EventHandler(OnClose);
             Color windowColor = new Color(0, 192, 255);
 
-            CircleShape test;
-            RectangleShape test1;
-            Vertex test2 = new Vertex(new Vector2f(5, 5), new Color(123, 123, 123), new Vector2f(50, 50));
             //TODO: https://www.sfml-dev.org/tutorials/2.4/graphics-vertex-array.php
-            
-            // Start the game loop
+
             while (_window.IsOpen)
             {
                 // Process events
@@ -87,20 +105,27 @@ public class Canvas : ICanvas
                 // Clear screen
                 _window.Clear(windowColor);
 
-            //    _window.Draw(test2);
-                // Update the window
+                foreach (var shape in _shapes)
+                {
+                    _window.Draw(shape);
+                }
+
                 _window.Display();
-            } //End game loop
+            }
         });
         renderThread.Start();
         _isRun = true;
-    } //End Main()
+    }
 
     private void OnClose(object sender, EventArgs e)
     {
-        // Close the window when OnClose event is received
         RenderWindow window = (RenderWindow)sender;
         window.Close();
+    }
+
+    private Vector2f ConvertPointToVector2f(Point point)
+    {
+        return new Vector2f((float)point.X, (float)point.Y);
     }
 
     /*

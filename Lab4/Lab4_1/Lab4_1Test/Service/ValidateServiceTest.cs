@@ -19,6 +19,13 @@ public class ValidateServiceTest
         Assert.That(point.X, Is.EqualTo(10));
         Assert.That(point.Y, Is.EqualTo(20));
     }
+    
+    
+    [Test]
+    public void ConvertToPoint_Should_ReturnInCorrectPoint()
+    {
+        Assert.Throws<ArgumentException>(() => validateService.ConvertToPoint("-10", "0"));
+    }
 
     [Test]
     public void ConvertStringToPointValue_Should_ReturnCorrectValue()

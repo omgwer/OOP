@@ -56,6 +56,7 @@ public class Circle : ISolidShape
     
     public void Draw(ICanvas canvas)
     {
-        throw new NotImplementedException();
+        canvas.DrawCircle(Center, Radius, OutlineColor);
+        canvas.FillCircle(Center, Radius, FillColor);
     }
 }
