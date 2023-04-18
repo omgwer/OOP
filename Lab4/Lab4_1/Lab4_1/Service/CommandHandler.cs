@@ -1,3 +1,5 @@
+using Lab4_1.Core;
+using Lab4_1.Core.Abstraction;
 using Lab4_1.Data;
 using Lab4_1.Data.Figure;
 using static Lab4_1.Dictionary.FigureDictionary;

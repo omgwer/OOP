@@ -1,3 +1,4 @@
+using Lab4_1.Core.Abstraction;
 using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Data.Figure;
@@ -35,14 +36,16 @@ public class Triangle : ISolidShape
 
     public override string ToString()
     {
-        return $"Figure - Triangle, FirstPoint - {FirstPoint}, SecondPoint - {SecondPoint}, ThirdPoint - {ThirdPoint}, " +
-               $"OutlineColor - {OutlineColor}, FillColor - {FillColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
+        return
+            $"Figure - Triangle, FirstPoint - {FirstPoint}, SecondPoint - {SecondPoint}, ThirdPoint - {ThirdPoint}, " +
+            $"OutlineColor - {OutlineColor}, FillColor - {FillColor}, Area - {GetArea()}, Perimeter - {GetPerimeter()}";
     }
 
     public double GetArea()
     {
         double halfPerimeter = GetPerimeter() / 2;
-        var triangleArea = Math.Sqrt(halfPerimeter * (halfPerimeter - firstEdgeLength) * (halfPerimeter - secondEdgeLength) *(halfPerimeter - thirdEdgeLength));
+        var triangleArea = Math.Sqrt(halfPerimeter * (halfPerimeter - firstEdgeLength) *
+                                     (halfPerimeter - secondEdgeLength) * (halfPerimeter - thirdEdgeLength));
         return triangleArea;
     }
 

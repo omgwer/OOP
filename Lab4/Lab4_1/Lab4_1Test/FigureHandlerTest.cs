@@ -1,4 +1,6 @@
 ﻿using Lab4_1;
+using Lab4_1.Core;
+using Lab4_1.Core.Abstraction;
 using Moq;
 
 namespace Lab4_1Test;
@@ -21,11 +23,9 @@ public class FigureHandlerTest
     public void LoadFiguresForMemory_Should_Call_CommandHandler_HandleStringCommand_Method_With_Valid_Input()
     {
         // Arrange
-        var inputString = "circle 10 10 5";
+        var circleFirst = "circle 10 10 5";
         _mockTextReader.SetupSequence(r => r.ReadLine())
-                       .Returns(inputString)
-                       .Returns(null);
-
+            .Returns(circleFirst);
         // Act
         _figureHandler.LoadFiguresForMemory();
 
@@ -42,7 +42,7 @@ public class FigureHandlerTest
         mockCircle.Setup(c => c.GetPerimeter()).Returns(5);
         mockCircle.Setup(c => c.ToString()).Returns("Circle: (10, 10), radius = 5");
         _figureHandler.LoadFiguresForMemory();
-        _figureHandler.AddShape(mockCircle.Object);
+     
 
         // Act
         _figureHandler.PrintFigureWithMinPerimeter();
@@ -60,7 +60,7 @@ public class FigureHandlerTest
         mockTriangle.Setup(c => c.GetArea()).Returns(50);
         mockTriangle.Setup(c => c.ToString()).Returns("Triangle: (0, 0), (0, 5), (5, 0)");
         _figureHandler.LoadFiguresForMemory();
-        _figureHandler.AddShape(mockTriangle.Object);
+      
 
         // Act
         _figureHandler.PrintFigureWithMaxArea();

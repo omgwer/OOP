@@ -1,3 +1,4 @@
+using Lab4_1.Core.Abstraction;
 using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Data.Figure;
@@ -8,7 +9,7 @@ public class Line : IShape
     public Point FinishPoint { get; }
     public uint OutlineColor { get; }
 
-    public Line(Point startPoint, Point finishPoint) 
+    public Line(Point startPoint, Point finishPoint)
         : this(startPoint, finishPoint, DEFAULT_COLOR)
     {
     }

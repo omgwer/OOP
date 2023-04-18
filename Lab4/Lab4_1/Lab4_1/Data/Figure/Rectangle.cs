@@ -1,3 +1,4 @@
+using Lab4_1.Core.Abstraction;
 using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Data.Figure;
@@ -9,14 +10,14 @@ public class Rectangle : ISolidShape
     public double Height { get; }
     public uint OutlineColor { get; }
     public uint FillColor { get; }
-    
-    public Rectangle(Point leftTop, double width, double height) 
+
+    public Rectangle(Point leftTop, double width, double height)
         : this(leftTop, width, height, DEFAULT_COLOR)
     {
     }
 
-    public Rectangle(Point leftTop, double width, double height, uint outlineColor) 
-        : this(leftTop, width, height, outlineColor,DEFAULT_COLOR)
+    public Rectangle(Point leftTop, double width, double height, uint outlineColor)
+        : this(leftTop, width, height, outlineColor, DEFAULT_COLOR)
     {
     }
 
@@ -25,7 +26,7 @@ public class Rectangle : ISolidShape
         LeftTop = leftTop;
         Width = width;
         Height = height;
-        OutlineColor =  outlineColor;
+        OutlineColor = outlineColor;
         FillColor = fillColor;
     }
 
@@ -34,7 +35,7 @@ public class Rectangle : ISolidShape
         return $"Figure - Rectangle, LeftTop - {LeftTop}, Width - {Width}, Height - {Height}, " +
                $"OutlineColor - {OutlineColor}, FillColor - {FillColor}, Area - {GetArea():0.00}, Perimeter - {GetPerimeter():0.00}";
     }
-    
+
     public double GetArea()
     {
         return Width * Height;

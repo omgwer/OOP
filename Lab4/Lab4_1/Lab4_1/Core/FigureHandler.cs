@@ -1,23 +1,12 @@
+using Lab4_1.Core.Abstraction;
 using Lab4_1.Data;
 using Lab4_1.Data.Figure;
 using Lab4_1.Infrastructure;
+using Lab4_1.Infrastructure.Draw;
 using Lab4_1.Service;
 using static Lab4_1.Dictionary.FigureDictionary;
 
-namespace Lab4_1;
-
-public interface IShape
-{
-    double GetArea();
-    double GetPerimeter();
-    string ToString();
-    uint GetOutlineColor();
-}
-
-public interface ISolidShape : IShape
-{
-    uint GetFillColor();
-}
+namespace Lab4_1.Core;
 
 public class FigureHandler
 {
@@ -43,7 +32,7 @@ public class FigureHandler
     public void LoadFiguresForMemory()
     {
         var stringValue = _streamWorker.ReadLine();
-        while (stringValue != null)
+        while (!string.IsNullOrEmpty(stringValue))
         {
             _commandHandler.HandleStringCommand(stringValue);
             stringValue = _streamWorker.ReadLine();
@@ -79,9 +68,33 @@ public class FigureHandler
 
     public void HandleInput()
     {
-        _streamWorker.WriteLine("Program wait input: close for exit");
-        var t = _streamWorker.ReadLine();
-        if (t == "close")
-            _isRun = false;
+        _streamWorker.WriteLine(@"Program wait input:");
+        var command = _streamWorker.ReadLine();
+        switch (command)
+        {
+            case "help" : 
+                PrintHelp();
+                break;
+            case "draw" :
+                Draw();
+                break;
+            case "exit":
+                _isRun = false;
+                break;
+        }
+    }
+
+    private void PrintHelp()
+    {
+        _streamWorker.WriteLine("Available commands:");
+        _streamWorker.WriteLine("   - help");
+        _streamWorker.WriteLine("   - draw");
+        _streamWorker.WriteLine("   - exit");
+    }
+
+    private void Draw()
+    {
+        var canvas = new Canvas(800, 600);
+        canvas.Draw();
     }
 }

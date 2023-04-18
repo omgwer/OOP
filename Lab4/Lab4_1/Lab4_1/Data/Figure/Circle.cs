@@ -1,3 +1,4 @@
+using Lab4_1.Core.Abstraction;
 using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Data.Figure;
@@ -14,7 +15,7 @@ public class Circle : ISolidShape
     {
     }
 
-    public Circle(Point center, double radius, uint outlineColor) 
+    public Circle(Point center, double radius, uint outlineColor)
         : this(center, radius, outlineColor, DEFAULT_COLOR)
     {
     }

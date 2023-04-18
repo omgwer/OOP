@@ -1,4 +1,4 @@
-using Lab4_1;
+using Lab4_1.Core.Abstraction;
 using Lab4_1.Data;
 using Lab4_1.Data.Figure;
 using Lab4_1.Service;
@@ -12,7 +12,7 @@ public class CommandHandlerTest
     [SetUp]
     public void Setup()
     {
-        _validateService = new ValidateService(500,500);
+        _validateService = new ValidateService(500, 500);
     }
 
     [Test]
@@ -29,10 +29,10 @@ public class CommandHandlerTest
         // Assert
         Assert.That(shapes.Count, Is.EqualTo(1));
         Assert.IsTrue(shapes[0] is Line);
-       
-        
+
+
         Assert.That(((Line)shapes[0]).StartPoint.ToString(), Is.EqualTo(new Point() { X = 0, Y = 0 }.ToString()));
-        Assert.That(((Line)shapes[0]).FinishPoint.ToString(), Is.EqualTo(new Point(){X = 100, Y = 100}.ToString()));
+        Assert.That(((Line)shapes[0]).FinishPoint.ToString(), Is.EqualTo(new Point() { X = 100, Y = 100 }.ToString()));
     }
 
     [Test]
@@ -49,7 +49,7 @@ public class CommandHandlerTest
         // Assert
         Assert.That(shapes.Count, Is.EqualTo(1));
         Assert.IsTrue(shapes[0] is Circle);
-        Assert.That(((Circle)shapes[0]).Center.ToString(), Is.EqualTo(new Point(){X = 50, Y = 50}.ToString()));
+        Assert.That(((Circle)shapes[0]).Center.ToString(), Is.EqualTo(new Point() { X = 50, Y = 50 }.ToString()));
         Assert.That(((Circle)shapes[0]).Radius, Is.EqualTo(25));
     }
 
