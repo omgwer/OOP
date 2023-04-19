@@ -43,8 +43,8 @@ public class Canvas : ICanvas
     {
         CircleShape circleShape = new CircleShape((float)radius);
         circleShape.Position = ConvertPointToVector2f(center);
-        circleShape.OutlineColor = new Color(lineColor); // TODO: добавлена прозрвчность
-        circleShape.FillColor = new Color(Color.Transparent);
+        circleShape.OutlineColor = Uint32ToColor(lineColor);
+        circleShape.FillColor = Uint32ToColor(lineColor);
         circleShape.OutlineThickness = 25;
         _shapes.Add(circleShape);
     }
@@ -53,10 +53,20 @@ public class Canvas : ICanvas
     {
         CircleShape circleShape = new CircleShape((float)radius);
         circleShape.Position = ConvertPointToVector2f(center);
-        circleShape.OutlineColor = new Color(Color.Transparent);
+        // circleShape.OutlineColor = new Color(Color.Transparent);
         circleShape.FillColor = new Color(fillColor);
-        circleShape.OutlineThickness = 25;
+        //  circleShape.OutlineThickness = 5;
         _shapes.Add(circleShape);
+    }
+
+    private Color Uint32ToColor(uint color)
+    {
+        byte red = (byte)((color >> 16) & 0xFF);
+        byte green = (byte)((color >> 8) & 0xFF);
+        byte blue = (byte)(color & 0xFF);
+        byte alpha = (byte)((color >> 24) & 0xFF);
+
+        return new Color(red, green, blue, alpha);
     }
 
     public void DrawTriangle(Point firstPoint, Point secondPoint, Point thirdPoint, double lineColor)
@@ -93,7 +103,7 @@ public class Canvas : ICanvas
             _window = new RenderWindow(new VideoMode(800, 600), "SFML Works!");
             _window.SetActive();
             _window.Closed += new EventHandler(OnClose);
-            Color windowColor = new Color(0, 192, 255);
+            Color windowColor = new Color(Color.White);
 
             //TODO: https://www.sfml-dev.org/tutorials/2.4/graphics-vertex-array.php
 
@@ -127,6 +137,7 @@ public class Canvas : ICanvas
     {
         return new Vector2f((float)point.X, (float)point.Y);
     }
+
 
     /*
      *  sf::RectangleShape shape1;
