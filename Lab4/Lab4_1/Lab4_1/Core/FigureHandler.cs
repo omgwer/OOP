@@ -10,11 +10,12 @@ namespace Lab4_1.Core;
 
 public class FigureHandler
 {
-    private List<IShape> _figureList = new();
-    private StreamWorker _streamWorker;
-    private CommandHandler _commandHandler;
+    // TODO: add readonly
+    private readonly List<IShape> _figureList = new();
+    private readonly StreamWorker _streamWorker;
+    private readonly CommandHandler _commandHandler;
     private bool _isRun;
-    private ICanvas _canvas;
+    private readonly ICanvas _canvas;
 
     public FigureHandler(TextReader textReader, TextWriter textWriter, uint canvasWidth, uint canvasHeight)
     {
@@ -37,7 +38,11 @@ public class FigureHandler
         foreach (var shape in _figureList)
         {
             if (shape.GetPerimeter() < figurePerimeter)
+            {
                 figureWithMinPerimeter = shape;
+                figurePerimeter = shape.GetPerimeter();
+            }
+
         }
 
         _streamWorker.WriteLine(FIGURE_WITH_MIN_PERIMETER);
@@ -48,12 +53,16 @@ public class FigureHandler
     {
         IShape figureWithMaxArea = new Circle(new Point() { X = 1, Y = 1 }, 0);
         double maxArea = 0;
+        
         foreach (var shape in _figureList)
         {
             if (shape.GetPerimeter() == 0)
                 continue;
             if (shape.GetArea() > maxArea)
+            {
                 figureWithMaxArea = shape;
+                maxArea = shape.GetArea();
+            }
         }
 
         _streamWorker.WriteLine(FIGURE_WITH_MAX_AREA);

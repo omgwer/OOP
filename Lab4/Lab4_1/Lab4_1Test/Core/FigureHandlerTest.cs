@@ -30,44 +30,44 @@ public class FigureHandlerTest
             .Returns(triangleFirst)
             .Returns(triangleSecond)
             .Returns("info");
-            
+
 
         while (_figureHandler.IsRun())
         {
             _figureHandler.HandleInput();
         }
-        
-        
+
+
         // Assert
         _mockTextReader.Verify(r => r.ReadLine(), Times.Exactly(2));
         _mockTextWriter.Verify(w => w.WriteLine(It.IsAny<string>()), Times.Never);
     }
-    
+
     [Test]
     public void DrawHouse()
     {
         var draw = "draw";
         _mockTextReader.SetupSequence(r => r.ReadLine())
-            .Returns("rectangle 0 550 800 50 4278255360 4278255360")  // земля
+            .Returns("rectangle 0 550 800 50 4278255360 4278255360") // земля
             .Returns("rectangle 150 200 500 344 4288323071 4288323071") // дом
-            .Returns("rectangle 250 50 40 90 4278190080 4278190080")  // труба
-            .Returns("triangle 120 200 670 200 400 50 4294901760 4294901760")  //крыша
-            .Returns("circle 250 5 15 4288323071 4288323071")  // smoke
-            .Returns("rectangle 200 445 70 100 4294967040 4294967040")  // door
-            .Returns("circle 410 300 70 4278255615 4278255615")  // окно
-            .Returns("line 405 370 555 370 4278190080")  // окно
-            .Returns("line 480 295 480 445 4278190080")  // окно
-            .Returns("circle 725 45 35 4294967040 4294967040")   // sun
+            .Returns("rectangle 250 50 40 90 4278190080 4278190080") // труба
+            .Returns("triangle 120 200 670 200 400 50 4294901760 4294901760") //крыша
+            .Returns("circle 250 5 15 4288323071 4288323071") // smoke
+            .Returns("rectangle 200 445 70 100 4294967040 4294967040") // door
+            .Returns("circle 410 300 70 4278255615 4278255615") // окно
+            .Returns("line 405 370 555 370 4278190080") // окно
+            .Returns("line 480 295 480 445 4278190080") // окно
+            .Returns("circle 725 45 35 4294967040 4294967040") // sun
             .Returns(draw)
             .Returns("info");
-            
+
 
         while (_figureHandler.IsRun())
         {
             _figureHandler.HandleInput();
         }
-        
-        
+
+
         // Assert
         _mockTextReader.Verify(r => r.ReadLine(), Times.Exactly(2));
         _mockTextWriter.Verify(w => w.WriteLine(It.IsAny<string>()), Times.Never);

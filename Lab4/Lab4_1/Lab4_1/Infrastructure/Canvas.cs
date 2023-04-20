@@ -35,6 +35,7 @@ public class Canvas : ICanvas
         _shapes.Add(line);
     }
 
+    // TODO: при масшабировании скрывать, а не скейлить
     public void DrawCircle(Point center, double radius, uint lineColor)
     {
         CircleShape circleShape = new CircleShape((float)radius);

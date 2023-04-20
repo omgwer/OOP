@@ -44,6 +44,6 @@ public class Line : IShape
 
     public uint GetOutlineColor()
     {
-        throw new NotImplementedException();
+        return OutlineColor;
     }
 }

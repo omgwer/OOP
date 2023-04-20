@@ -46,12 +46,12 @@ public class Circle : ISolidShape
 
     public uint GetOutlineColor()
     {
-        throw new NotImplementedException();
+        return OutlineColor;
     }
 
     public uint GetFillColor()
     {
-        throw new NotImplementedException();
+        return FillColor;
     }
 
     public void Draw(ICanvas canvas)

@@ -56,11 +56,11 @@ public class Rectangle : IShape
 
     public uint GetOutlineColor()
     {
-        throw new NotImplementedException();
+        return OutlineColor;
     }
 
     public uint GetFillColor()
     {
-        throw new NotImplementedException();
+        return FillColor;
     }
 }

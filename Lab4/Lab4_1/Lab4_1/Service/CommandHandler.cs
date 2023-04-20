@@ -17,6 +17,7 @@ public class CommandHandler
         _shapes = shapes;
     }
 
+    // TODO: избавиться от циклической зависимости 
     public void HandleStringCommand(string value)
     {
         var stringList = value.Split(SPACE);
