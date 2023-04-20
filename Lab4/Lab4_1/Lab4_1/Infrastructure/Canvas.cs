@@ -164,8 +164,6 @@ public class Canvas : ICanvas
         return new Color(red, green, blue, alpha);
     }
 }
-
-
 // Красный (Red): 0xFFFF0000 (4294901760)
 // Оранжевый (Orange): 0xFFFFA500 (4294944000)
 // Желтый (Yellow): 0xFFFFFF00 (4294967040)

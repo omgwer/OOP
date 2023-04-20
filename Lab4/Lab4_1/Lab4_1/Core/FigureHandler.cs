@@ -33,13 +33,6 @@ public class FigureHandler
     public void PrintFigureWithMinPerimeter()
     {
         IShape figureWithMinPerimeter = new Circle(new Point() { X = 0, Y = 0 }, 0);
-
-        if (_figureList.Count == 0)
-        {
-            _streamWorker.WriteLine("Figure list is empty!");
-            return;
-        }
-
         double figurePerimeter = double.MaxValue;
         foreach (var shape in _figureList)
         {
@@ -53,16 +46,12 @@ public class FigureHandler
 
     public void PrintFigureWithMaxArea()
     {
-        if (_figureList.Count == 0)
-        {
-            _streamWorker.WriteLine("Figure list is empty!");
-            return;
-        }
-
         IShape figureWithMaxArea = new Circle(new Point() { X = 1, Y = 1 }, 0);
         double maxArea = 0;
         foreach (var shape in _figureList)
         {
+            if (shape.GetPerimeter() == 0)
+                continue;
             if (shape.GetArea() > maxArea)
                 figureWithMaxArea = shape;
         }
@@ -119,6 +108,8 @@ public class FigureHandler
 
     private void Draw()
     {
+        if (_figureList.Count == 0)
+            _streamWorker.WriteLine("Nothing to draw, figure list is empty!");
         foreach (var shape in _figureList)
         {
             shape.Draw(_canvas);
@@ -133,6 +124,12 @@ public class FigureHandler
 
     private void PrintInfo()
     {
+        if (_figureList.Count == 0)
+        {
+            _streamWorker.WriteLine("Nothing to print info! Figure list is empty!");
+            return;
+        }
+
         PrintFigureWithMaxArea();
         PrintFigureWithMinPerimeter();
     }
