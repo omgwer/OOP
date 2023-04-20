@@ -22,7 +22,7 @@ public class Canvas : ICanvas
         _width = width;
         _height = height;
 
-        // RectangleShape rectangleShape = new RectangleShape(new Vector2f(150, 5)); // прямоугольник + линия
+       
         // ConvexShape convexShape = new ConvexShape(); // треугольник
         //
         // convexShape.SetPointCount(3);
@@ -37,14 +37,23 @@ public class Canvas : ICanvas
 
     public void DrawLine(Point start, Point finish, uint lineColor)
     {
-        throw new NotImplementedException();
+        Vector2f startPoint = ConvertPointToVector2f(start);
+        Vector2f endPoint = ConvertPointToVector2f(finish);
+        Vector2f direction = endPoint - startPoint;
+        float length = (float)Math.Sqrt(direction.X * direction.X + direction.Y * direction.Y);
+        float thickness = 5;
+        RectangleShape line = new RectangleShape(new Vector2f(length, thickness));
+        line.Position = startPoint;
+        line.FillColor = ConvertUintToColor(lineColor);
+        line.Rotation = (float)Math.Atan2(direction.Y, direction.X) * 180 / (float)Math.PI;
+        _shapes.Add(line);
     }
 
     public void DrawCircle(Point center, double radius, uint lineColor)
     {
         CircleShape circleShape = new CircleShape((float)radius);
         circleShape.Position = ConvertPointToVector2f(center);
-        circleShape.OutlineColor = Uint32ToColor(lineColor);
+        circleShape.OutlineColor = ConvertUintToColor(lineColor);
         circleShape.FillColor = new Color(Color.Transparent);
         circleShape.OutlineThickness = 4;
         _shapes.Add(circleShape);
@@ -55,38 +64,39 @@ public class Canvas : ICanvas
         CircleShape circleShape = new CircleShape((float)radius);
         circleShape.Position = ConvertPointToVector2f(center);
         circleShape.OutlineColor = new Color(Color.Transparent);
-        circleShape.FillColor = Uint32ToColor(fillColor);
+        circleShape.FillColor = ConvertUintToColor(fillColor);
         _shapes.Add(circleShape);
     }
 
-    private Color Uint32ToColor(uint color)
-    {
-        byte red = (byte)((color >> 16) & 0xFF);
-        byte green = (byte)((color >> 8) & 0xFF);
-        byte blue = (byte)(color & 0xFF);
-        byte alpha = (byte)((color >> 24) & 0xFF);
-
-        return new Color(red, green, blue, alpha);
-    }
-
-    public void DrawTriangle(Point firstPoint, Point secondPoint, Point thirdPoint, double lineColor)
+    public void DrawTriangle(Point firstPoint, Point secondPoint, Point thirdPoint, uint lineColor)
     {
         throw new NotImplementedException();
     }
 
-    public void FillTriangle(Point firstPoint, Point secondPoint, Point thirdPoint, double fillColor)
+    public void FillTriangle(Point firstPoint, Point secondPoint, Point thirdPoint, uint fillColor)
     {
         throw new NotImplementedException();
     }
 
-    public void DrawRectangle(Point firstPoint, double width, double height, double lineColor)
+    public void DrawRectangle(Point firstPoint, double width, double height, uint lineColor)
     {
-        throw new NotImplementedException();
+        RectangleShape rectangleShape = new RectangleShape();
+        rectangleShape.Position = ConvertPointToVector2f(firstPoint);
+        rectangleShape.Size = new Vector2f((float)width, (float)height);
+        rectangleShape.OutlineColor = ConvertUintToColor(lineColor);
+        rectangleShape.FillColor = Color.Transparent;
+        rectangleShape.OutlineThickness = 4;
+        _shapes.Add(rectangleShape);
     }
 
-    public void FillRectangle(Point firstPoint, double width, double height, double fillColor)
+    public void FillRectangle(Point firstPoint, double width, double height, uint fillColor)
     {
-        throw new NotImplementedException();
+        RectangleShape rectangleShape = new RectangleShape();
+        rectangleShape.Position = ConvertPointToVector2f(firstPoint);
+        rectangleShape.Size = new Vector2f((float)width, (float)height);
+        rectangleShape.FillColor = ConvertUintToColor(fillColor);
+        rectangleShape.OutlineColor = Color.Transparent;
+        _shapes.Add(rectangleShape);
     }
 
     public void Clear()
@@ -137,6 +147,16 @@ public class Canvas : ICanvas
     {
         return new Vector2f((float)point.X, (float)point.Y);
     }
+    
+    private Color ConvertUintToColor(uint color)
+    {
+        byte red = (byte)((color >> 16) & 0xFF);
+        byte green = (byte)((color >> 8) & 0xFF);
+        byte blue = (byte)(color & 0xFF);
+        byte alpha = (byte)((color >> 24) & 0xFF);
+
+        return new Color(red, green, blue, alpha);
+    }
 
 
     /*
@@ -175,3 +195,14 @@ triangle[1].color = sf::Color::Blue;
 triangle[2].color = sf::Color::Green;
      */
 }
+
+
+// Красный (Red): 0xFFFF0000 (4294901760)
+// Оранжевый (Orange): 0xFFFFA500 (4294944000)
+// Желтый (Yellow): 0xFFFFFF00 (4294967040)
+// Зеленый (Green): 0xFF008000 (4278255360)
+// Голубой (Cyan): 0xFF00FFFF (4278255615)
+// Синий (Blue): 0xFF0000FF (4278190335)
+// Фиолетовый (Violet): 0xFF8B00FF (4288323071)
+// Черный (Black): 0xFF000000 (4278190080)
+// Прозрачный : (0)

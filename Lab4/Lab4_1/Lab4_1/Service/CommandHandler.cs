@@ -34,9 +34,11 @@ public class CommandHandler
                 AddCircleToList(stringList);
                 break;
             case FigureType.TRIANGLE:
+                AddTriangleToList(stringList);
                 _validateService.AssertArgumentCountForTriangle(stringList.Length);
                 break;
             case FigureType.RECTANGLE:
+                AddRectangleToList(stringList);
                 _validateService.AssertArgumentCountForRectangle(stringList.Length);
                 break;
             default:

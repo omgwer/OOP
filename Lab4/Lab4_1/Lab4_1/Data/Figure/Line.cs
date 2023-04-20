@@ -10,7 +10,7 @@ public class Line : IShape
     public uint OutlineColor { get; }
 
     public Line(Point startPoint, Point finishPoint)
-        : this(startPoint, finishPoint, DEFAULT_COLOR)
+        : this(startPoint, finishPoint, COLOR_TRANSPARENT)
     {
     }
 
@@ -29,7 +29,7 @@ public class Line : IShape
 
     public void Draw(ICanvas canvas)
     {
-        throw new NotImplementedException();
+        canvas.DrawLine(StartPoint, FinishPoint, OutlineColor);
     }
 
     public double GetArea()

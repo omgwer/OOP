@@ -3,7 +3,7 @@ using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Data.Figure;
 
-public class Triangle : ISolidShape
+public class Triangle : IShape
 {
     public Point FirstPoint { get; }
     public Point SecondPoint { get; }

@@ -3,7 +3,7 @@ using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Data.Figure;
 
-public class Rectangle : ISolidShape
+public class Rectangle : IShape
 {
     public Point LeftTop { get; }
     public double Width { get; }
@@ -12,12 +12,12 @@ public class Rectangle : ISolidShape
     public uint FillColor { get; }
 
     public Rectangle(Point leftTop, double width, double height)
-        : this(leftTop, width, height, DEFAULT_COLOR)
+        : this(leftTop, width, height, COLOR_TRANSPARENT)
     {
     }
 
     public Rectangle(Point leftTop, double width, double height, uint outlineColor)
-        : this(leftTop, width, height, outlineColor, DEFAULT_COLOR)
+        : this(leftTop, width, height, outlineColor, COLOR_TRANSPARENT)
     {
     }
 
@@ -38,7 +38,10 @@ public class Rectangle : ISolidShape
 
     public void Draw(ICanvas canvas)
     {
-        throw new NotImplementedException();
+        if (OutlineColor != 0)
+            canvas.DrawRectangle(LeftTop, Width, Height, OutlineColor);
+        if (FillColor != 0)
+            canvas.FillRectangle(LeftTop, Width, Height, FillColor);
     }
 
     public double GetArea()
