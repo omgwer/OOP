@@ -8,7 +8,7 @@ public static class FigureDictionary
         BLACK_COLOR = 0,
         WHITE_COLOR = 16777215,
         DEFAULT_FILL_COLOR = 16777215,
-        DEFAULT_LINE_COLOR = 0;
+        COLOR_TRANSPARENT = 0;
 
     public static readonly string
         LINE = "line",

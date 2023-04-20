@@ -11,12 +11,12 @@ public class Circle : ISolidShape
     public uint FillColor { get; }
 
     public Circle(Point center, double radius)
-        : this(center, radius, DEFAULT_COLOR)
+        : this(center, radius, COLOR_TRANSPARENT)
     {
     }
 
     public Circle(Point center, double radius, uint outlineColor)
-        : this(center, radius, outlineColor, DEFAULT_COLOR)
+        : this(center, radius, outlineColor, COLOR_TRANSPARENT)
     {
     }
 
@@ -53,21 +53,24 @@ public class Circle : ISolidShape
     {
         throw new NotImplementedException();
     }
-    
+
     public void Draw(ICanvas canvas)
     {
-        var fillResize = Radius * 0.95;
-        canvas.DrawCircle(Center, Radius, OutlineColor);
-      //  canvas.FillCircle(Center, fillResize, FillColor);
+        //var fillResize = Radius * 0.95;
+        if (FillColor != COLOR_TRANSPARENT)
+            canvas.FillCircle(Center, Radius, FillColor);
+        if (OutlineColor != COLOR_TRANSPARENT)
+            canvas.DrawCircle(Center, Radius, OutlineColor);
+        
     }
-    
-        // Красный (Red): 0xFFFF0000 (4294901760)
-        // Оранжевый (Orange): 0xFFFFA500 (4294944000)
-        // Желтый (Yellow): 0xFFFFFF00 (4294967040)
-        // Зеленый (Green): 0xFF008000 (4278255360)
-        // Голубой (Cyan): 0xFF00FFFF (4278255615)
-        // Синий (Blue): 0xFF0000FF (4278190335)
-        // Фиолетовый (Violet): 0xFF8B00FF (4288323071)
-        // Черный (Black): 0xFF000000 (4278190080)
-        // Прозрачный : (0)
+
+    // Красный (Red): 0xFFFF0000 (4294901760)
+    // Оранжевый (Orange): 0xFFFFA500 (4294944000)
+    // Желтый (Yellow): 0xFFFFFF00 (4294967040)
+    // Зеленый (Green): 0xFF008000 (4278255360)
+    // Голубой (Cyan): 0xFF00FFFF (4278255615)
+    // Синий (Blue): 0xFF0000FF (4278190335)
+    // Фиолетовый (Violet): 0xFF8B00FF (4288323071)
+    // Черный (Black): 0xFF000000 (4278190080)
+    // Прозрачный : (0)
 }

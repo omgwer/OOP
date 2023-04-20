@@ -3,6 +3,7 @@ using Lab4_1.Data;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Infrastructure;
 
@@ -44,8 +45,8 @@ public class Canvas : ICanvas
         CircleShape circleShape = new CircleShape((float)radius);
         circleShape.Position = ConvertPointToVector2f(center);
         circleShape.OutlineColor = Uint32ToColor(lineColor);
-        circleShape.FillColor = Uint32ToColor(lineColor);
-        circleShape.OutlineThickness = 25;
+        circleShape.FillColor = new Color(Color.Transparent);
+        circleShape.OutlineThickness = 4;
         _shapes.Add(circleShape);
     }
 
@@ -53,9 +54,8 @@ public class Canvas : ICanvas
     {
         CircleShape circleShape = new CircleShape((float)radius);
         circleShape.Position = ConvertPointToVector2f(center);
-        // circleShape.OutlineColor = new Color(Color.Transparent);
-        circleShape.FillColor = new Color(fillColor);
-        //  circleShape.OutlineThickness = 5;
+        circleShape.OutlineColor = new Color(Color.Transparent);
+        circleShape.FillColor = Uint32ToColor(fillColor);
         _shapes.Add(circleShape);
     }
 
