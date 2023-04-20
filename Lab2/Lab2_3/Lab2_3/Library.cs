@@ -4,13 +4,16 @@ using Lab2_3.Services;
 
 namespace Lab2_3;
 
+// TODO: Множественные слова с пробелами ( ввести the red square )
+// TODO: В сохранение добавить разделитель, сохраняется в одну сроку (сохранить Красная площадь The red square)
+
 public class Library
 {
-    private Services.Dictionary _dictionary = new ();
-    private StreamWorker _streamService;
+    private readonly Services.Dictionary _dictionary = new ();
+    private readonly StreamWorker _streamService;
     private FileWorker? _fileWorker;
     private bool _isRun;
-    private bool _isDictionaryChanged = false;
+    private bool _isDictionaryChanged;
 
     public Library(TextReader textReader, TextWriter textWriter)
     {
@@ -78,8 +81,15 @@ public class Library
         if (optionalFilePath != string.Empty)
         {
             _fileWorker = new FileWorker(optionalFilePath);
-            var dictionary = _fileWorker.OpenFile();
-            _dictionary.SetDictionary(dictionary);
+            try
+            {
+                var dictionary = _fileWorker.OpenFile();
+                _dictionary.SetDictionary(dictionary);
+            }
+            catch (FileNotFoundException ex)
+            {
+                _streamService.WriteLine(ex.Message + ". Dictionary create in program memory!");
+            }
         }
         else
             _streamService.WriteLine(MessageDictionary.CREATE_NEW_DICTIONARY_ALERT);
@@ -103,6 +113,7 @@ public class Library
             }
             _fileWorker!.SaveToFile(_dictionary.GetDictionary());    
             _streamService.WriteLine(MessageDictionary.CLOSE_PROGRAM_WITH_SAVE_MESSAGE);
+            return;
         }
         _streamService.WriteLine(MessageDictionary.CLOSE_PROGRAM_WITHOUT_SAVE_MESSAGE);
     }

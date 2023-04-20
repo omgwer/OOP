@@ -1,5 +1,5 @@
 using System.Text;
-using Lab2_3.Dictionary;
+using static Lab2_3.Dictionary.MessageDictionary;
 
 namespace Lab2_3.Infrastructure;
 
@@ -56,13 +56,13 @@ public class FileWorker
     {
         if (value.Length < 2)
         {
-            throw new Exception(MessageDictionary.PARSE_FILE_ERROR_ONE_WORD_IN_LINE);
+            throw new Exception(PARSE_FILE_ERROR_ONE_WORD_IN_LINE);
         }
     }
 
     private void AssertIsFileExist()
     {
         if (!File.Exists(_path))
-            throw new FileNotFoundException(MessageDictionary.FILE_NOT_FOUND_ALERT);
+            throw new FileNotFoundException(FILE_NOT_FOUND_ALERT);
     }
 }

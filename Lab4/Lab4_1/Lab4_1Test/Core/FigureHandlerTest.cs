@@ -1,5 +1,4 @@
 ﻿using Lab4_1.Core;
-using Lab4_1.Core.Abstraction;
 using Moq;
 
 namespace Lab4_1Test.Core;
@@ -46,7 +45,6 @@ public class FigureHandlerTest
     [Test]
     public void DrawHouse()
     {
-        var draw = "draw";
         _mockTextReader.SetupSequence(r => r.ReadLine())
             .Returns("rectangle 0 550 800 50 4278255360 4278255360") // земля
             .Returns("rectangle 150 200 500 344 4288323071 4288323071") // дом
@@ -58,9 +56,8 @@ public class FigureHandlerTest
             .Returns("line 405 370 555 370 4278190080") // окно
             .Returns("line 480 295 480 445 4278190080") // окно
             .Returns("circle 725 45 35 4294967040 4294967040") // sun
-            .Returns(draw)
+            .Returns("draw")
             .Returns("info");
-
 
         while (_figureHandler.IsRun())
         {

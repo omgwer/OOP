@@ -1,4 +1,4 @@
-using Lab2_3.Dictionary;
+using static Lab2_3.Dictionary.MessageDictionary;
 
 namespace Lab2_3.Services;
 
@@ -80,18 +80,18 @@ public class Dictionary
     private void AssertRussianTranslateWordIsValid(string word)
     {
         if (WordService.IsEnglishWord(word))
-            throw new ArgumentException(MessageDictionary.GetAddTranslateForEnglishWordErrorMessage(word));
+            throw new ArgumentException(GetAddTranslateForEnglishWordErrorMessage(word));
     }
 
     private void AssertEnglishTranslateWordIsValid(string word)
     {
         if (WordService.IsRussianWord(word))
-            throw new ArgumentException(MessageDictionary.GetAddTranslateForRussianWordErrorMessage(word));
+            throw new ArgumentException(GetAddTranslateForRussianWordErrorMessage(word));
     }
 
     private void AssertDictionaryContainKey(Dictionary<string, List<string>> dictionary, string key)
     {
         if (dictionary.ContainsKey(key))
-            throw new ArgumentException(MessageDictionary.WORD_IS_EXIST_FOR_DICTIONARY_MESSAGE);
+            throw new ArgumentException(WORD_IS_EXIST_FOR_DICTIONARY_MESSAGE);
     }
 }

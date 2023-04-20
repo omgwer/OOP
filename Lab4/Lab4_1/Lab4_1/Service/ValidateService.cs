@@ -1,4 +1,3 @@
-using Lab4_1.Data;
 using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Service;
@@ -22,22 +21,6 @@ public class ValidateService
     {
         _canvasWidth = canvasWidth;
         _canvasHeight = canvasHeight;
-    }
-
-    public Point ConvertToPoint(string x, string y)
-    {
-        return new Point()
-        {
-            X = ConvertStringToPointValue(x),
-            Y = ConvertStringToPointValue(y)
-        };
-    }
-    
-    public double ConvertStringToPointValue(string value)
-    {
-        if (double.TryParse(value, out var result) && result >= 0)
-            return result;
-        throw new ArgumentException(ERROR_TO_CONVERT_STRING_TO_DOUBLE);
     }
 
     public uint ConvertToColor(string value)

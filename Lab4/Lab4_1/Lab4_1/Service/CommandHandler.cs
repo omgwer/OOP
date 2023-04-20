@@ -1,6 +1,7 @@
 using Lab4_1.Core.Abstraction;
 using Lab4_1.Data;
 using Lab4_1.Data.Figure;
+using static Lab4_1.Data.PointHelper;
 using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Service;
@@ -61,8 +62,8 @@ public class CommandHandler
 
     private void AddLineToList(string[] list)
     {
-        Point startPoint = _validateService.ConvertToPoint(list[1], list[2]);
-        Point finishPoint = _validateService.ConvertToPoint(list[3], list[4]);
+        Point startPoint = ConvertToPoint(list[1], list[2]);
+        Point finishPoint = ConvertToPoint(list[3], list[4]);
         uint outlineColor = DEFAULT_COLOR;
         if (list.Length == 6)
             outlineColor = _validateService.ConvertToColor(list[5]);
@@ -71,8 +72,8 @@ public class CommandHandler
 
     private void AddCircleToList(string[] list)
     {
-        Point center = _validateService.ConvertToPoint(list[1], list[2]);
-        double radius = _validateService.ConvertStringToPointValue(list[3]);
+        Point center = ConvertToPoint(list[1], list[2]);
+        double radius = ConvertStringToPointValue(list[3]);
         uint outlineColor = DEFAULT_COLOR;
         uint fillColor = DEFAULT_COLOR;
         if (list.Length >= 5)
@@ -84,9 +85,9 @@ public class CommandHandler
 
     private void AddTriangleToList(string[] list)
     {
-        Point firstPoint = _validateService.ConvertToPoint(list[1], list[2]);
-        Point secondPoint = _validateService.ConvertToPoint(list[3], list[4]);
-        Point thirdPoint = _validateService.ConvertToPoint(list[5], list[6]);
+        Point firstPoint = ConvertToPoint(list[1], list[2]);
+        Point secondPoint = ConvertToPoint(list[3], list[4]);
+        Point thirdPoint = ConvertToPoint(list[5], list[6]);
         uint outlineColor = DEFAULT_COLOR;
         uint fillColor = DEFAULT_COLOR;
         if (list.Length >= 8)
@@ -98,9 +99,9 @@ public class CommandHandler
 
     private void AddRectangleToList(string[] list)
     {
-        Point leftTop = _validateService.ConvertToPoint(list[1], list[2]);
-        double width = _validateService.ConvertStringToPointValue(list[3]);
-        double height = _validateService.ConvertStringToPointValue(list[4]);
+        Point leftTop = ConvertToPoint(list[1], list[2]);
+        double width = ConvertStringToPointValue(list[3]);
+        double height = ConvertStringToPointValue(list[4]);
         uint outlineColor = DEFAULT_COLOR;
         uint fillColor = DEFAULT_COLOR;
         if (list.Length >= 6)

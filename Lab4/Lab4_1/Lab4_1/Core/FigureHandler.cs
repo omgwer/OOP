@@ -1,15 +1,13 @@
 using Lab4_1.Core.Abstraction;
-using Lab4_1.Data;
-using Lab4_1.Data.Figure;
 using Lab4_1.Infrastructure;
 using Lab4_1.Service;
-using SFML.Graphics;
 using static Lab4_1.Dictionary.FigureDictionary;
 
 namespace Lab4_1.Core;
 
 public class FigureHandler
 {
+    // TODO: добавить схему отношений между связями
     // TODO: add readonly
     private readonly List<IShape> _figureList = new();
     private readonly StreamWorker _streamWorker;
@@ -33,7 +31,7 @@ public class FigureHandler
 
     public void PrintFigureWithMinPerimeter()
     {
-        IShape figureWithMinPerimeter = new Circle(new Point() { X = 0, Y = 0 }, 0);
+        IShape? figureWithMinPerimeter = null;
         double figurePerimeter = double.MaxValue;
         foreach (var shape in _figureList)
         {
@@ -42,18 +40,17 @@ public class FigureHandler
                 figureWithMinPerimeter = shape;
                 figurePerimeter = shape.GetPerimeter();
             }
-
         }
 
         _streamWorker.WriteLine(FIGURE_WITH_MIN_PERIMETER);
-        _streamWorker.WriteLine(figureWithMinPerimeter.ToString());
+        _streamWorker.WriteLine(figureWithMinPerimeter!.ToString());
     }
 
     public void PrintFigureWithMaxArea()
     {
-        IShape figureWithMaxArea = new Circle(new Point() { X = 1, Y = 1 }, 0);
+        IShape? figureWithMaxArea = null;
         double maxArea = 0;
-        
+
         foreach (var shape in _figureList)
         {
             if (shape.GetPerimeter() == 0)
@@ -66,7 +63,7 @@ public class FigureHandler
         }
 
         _streamWorker.WriteLine(FIGURE_WITH_MAX_AREA);
-        _streamWorker.WriteLine(figureWithMaxArea.ToString());
+        _streamWorker.WriteLine(figureWithMaxArea!.ToString());
     }
 
     public void HandleInput()
@@ -99,7 +96,6 @@ public class FigureHandler
                 {
                     _streamWorker.WriteLine(ex.Message);
                 }
-
                 break;
         }
     }
@@ -123,6 +119,7 @@ public class FigureHandler
         {
             shape.Draw(_canvas);
         }
+
         _canvas.Draw();
     }
 

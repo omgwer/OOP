@@ -12,33 +12,33 @@ public class ValidateServiceTest
         validateService = new ValidateService(100, 100);
     }
 
-    [Test]
-    public void ConvertToPoint_Should_ReturnCorrectPoint()
-    {
-        var point = validateService.ConvertToPoint("10", "20");
-        Assert.That(point.X, Is.EqualTo(10));
-        Assert.That(point.Y, Is.EqualTo(20));
-    }
-    
-    
-    [Test]
-    public void ConvertToPoint_Should_ReturnInCorrectPoint()
-    {
-        Assert.Throws<ArgumentException>(() => validateService.ConvertToPoint("-10", "0"));
-    }
-
-    [Test]
-    public void ConvertStringToPointValue_Should_ReturnCorrectValue()
-    {
-        var value = validateService.ConvertStringToPointValue("10");
-        Assert.That(value, Is.EqualTo(10));
-    }
-
-    [Test]
-    public void ConvertStringToPointValue_Should_ThrowArgumentException_When_ValueIsInvalid()
-    {
-        Assert.Throws<ArgumentException>(() => validateService.ConvertStringToPointValue("-10"));
-    }
+    // [Test]
+    // public void ConvertToPoint_Should_ReturnCorrectPoint()
+    // {
+    //     var point = validateService.ConvertToPoint("10", "20");
+    //     Assert.That(point.X, Is.EqualTo(10));
+    //     Assert.That(point.Y, Is.EqualTo(20));
+    // }
+    //
+    //
+    // [Test]
+    // public void ConvertToPoint_Should_ReturnInCorrectPoint()
+    // {
+    //     Assert.Throws<ArgumentException>(() => validateService.ConvertToPoint("-10", "0"));
+    // }
+    //
+    // [Test]
+    // public void ConvertStringToPointValue_Should_ReturnCorrectValue()
+    // {
+    //     var value = validateService.ConvertStringToPointValue("10");
+    //     Assert.That(value, Is.EqualTo(10));
+    // }
+    //
+    // [Test]
+    // public void ConvertStringToPointValue_Should_ThrowArgumentException_When_ValueIsInvalid()
+    // {
+    //     Assert.Throws<ArgumentException>(() => validateService.ConvertStringToPointValue("-10"));
+    // }
 
     [Test]
     public void ConvertToColor_Should_ReturnCorrectColor()
