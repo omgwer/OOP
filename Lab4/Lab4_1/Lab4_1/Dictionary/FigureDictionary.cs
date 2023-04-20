@@ -34,4 +34,5 @@ public static class FigureDictionary
     // Фиолетовый (Violet): 0xFF8B00FF (4288323071)
     // Черный (Black): 0xFF000000 (4278190080)
     // Прозрачный : (0)
+    
 }

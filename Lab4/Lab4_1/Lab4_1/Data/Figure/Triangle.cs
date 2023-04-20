@@ -15,12 +15,12 @@ public class Triangle : IShape
     private double thirdEdgeLength;
 
     public Triangle(Point firstPoint, Point secondPoint, Point thirdPoint)
-        : this(firstPoint, secondPoint, thirdPoint, DEFAULT_COLOR)
+        : this(firstPoint, secondPoint, thirdPoint, COLOR_TRANSPARENT)
     {
     }
 
     public Triangle(Point firstPoint, Point secondPoint, Point thirdPoint, uint outlineColor)
-        : this(firstPoint, secondPoint, thirdPoint, outlineColor, DEFAULT_COLOR)
+        : this(firstPoint, secondPoint, thirdPoint, outlineColor, COLOR_TRANSPARENT)
     {
     }
 
@@ -43,7 +43,10 @@ public class Triangle : IShape
 
     public void Draw(ICanvas canvas)
     {
-        throw new NotImplementedException();
+        if (OutlineColor != 0)
+            canvas.DrawTriangle(FirstPoint,SecondPoint, ThirdPoint, OutlineColor);
+        if (FillColor != 0)
+            canvas.FillTriangle(FirstPoint,SecondPoint, ThirdPoint, FillColor);
     }
 
     public double GetArea()

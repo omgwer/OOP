@@ -82,4 +82,8 @@ public class FigureHandlerTest
         // Assert
         Assert.IsFalse(_figureHandler.IsRun());
     }
+    
+    // triangle 10 10 90 20 20 90 4278190080 4278255615
+    // draw
+    //     triangle 25 5 125 5 20 90 4278255360
 }
