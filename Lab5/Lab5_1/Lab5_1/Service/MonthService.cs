@@ -4,7 +4,9 @@ namespace Lab5_1.Service;
 
 public static class MonthService
 {
-    private static readonly uint LEAP_YEAR_FEBRUARY_INCREMENT = 1;
+    private const uint LEAP_YEAR_FEBRUARY_INCREMENT = 1;
+    private const uint MIN_MONTH = 1;
+    private const uint MAX_MONTH = 12;
 
     private static readonly Dictionary<Month, uint> _dictionary = new()
     {
@@ -34,15 +36,14 @@ public static class MonthService
 
     public static uint GetDaysCountInMonth(uint index, uint year)
     {
-        AssertMonthIndex(index);
+        AssertIsValidPeriod(index);
         return GetDaysCountInMonth((Month)index, year);
     }
-
 
     /** Возвращает количество дней во всех месяцах, до введенного */
     public static uint GetDaysCountBeginningOfTheYear(uint index, uint year)
     {
-        AssertMonthIndex(index);
+        AssertIsValidPeriod(index);
         return GetDaysCountBeginningOfTheYear((Month)index, year);
     }
 
@@ -57,13 +58,17 @@ public static class MonthService
         if (month > Month.FEBRUARY && YearService.IsLeapYear(year))
             daysCount++;
 
-
         return daysCount;
     }
 
-    private static void AssertMonthIndex(uint index)
+    private static bool IsValidPeriod(uint index)
     {
-        if (index is 0 or > 12)
+        return index is >= MIN_MONTH and <= MAX_MONTH;
+    }
+
+    private static void AssertIsValidPeriod(uint index)
+    {
+        if (!IsValidPeriod(index))
             throw new ArgumentException($"{index} - this value is not valid for month index");
     }
 }
