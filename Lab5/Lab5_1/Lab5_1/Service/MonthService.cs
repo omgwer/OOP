@@ -61,6 +61,23 @@ public static class MonthService
         return daysCount;
     }
 
+    public static Month GetMonthBeginningOfThisTimestamp(ref uint timestamp, uint year)
+    {
+        uint month = 1;
+        uint limit = _dictionary[(Month)month];
+        while (timestamp > limit)
+        {
+            timestamp -= limit;
+            month++;
+            limit = _dictionary[(Month)month];
+            if (month == 2 && YearService.IsLeapYear(year)) // Для висикосного февраля
+            {
+                limit++;
+            }
+        }
+        return (Month)month;
+    }
+
     private static bool IsValidPeriod(uint index)
     {
         return index is >= MIN_MONTH and <= MAX_MONTH;

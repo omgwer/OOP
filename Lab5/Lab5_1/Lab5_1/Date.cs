@@ -63,7 +63,9 @@ public class Date
 
     private Date ConvertTimestampToDate(uint timestamp)
     {
-        var timestampCopy = timestamp;
+        var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
+        var month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
+        
         throw new NotImplementedException();
     }
 }

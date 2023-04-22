@@ -40,8 +40,7 @@ public static class YearService
     public static uint GetYearsCountBeginningOfThisTimestamp(ref uint timestamp)
     {
         var years = MIN_YEAR;
-        var endOfYears = false;
-        while (!endOfYears && timestamp >= DAYS_IN_STANDART_YEAR)
+        while (timestamp >= DAYS_IN_STANDART_YEAR)
         {
             var decrement = IsLeapYear(years + 1) ? DAYS_IN_LEAP_YEAR : DAYS_IN_STANDART_YEAR;
             if (timestamp >= decrement)
