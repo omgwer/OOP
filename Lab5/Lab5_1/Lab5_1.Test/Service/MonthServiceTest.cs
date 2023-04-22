@@ -27,7 +27,7 @@ public class DaysInMonthTests
         // Arrange
 
         // Act
-        var actualDaysCount = MonthService.GetDaysCountInMoth(month, year);
+        var actualDaysCount = MonthService.GetDaysCountInMonth(month, year);
 
         // Assert
         Assert.That(actualDaysCount, Is.EqualTo(expectedDaysCount));
@@ -50,7 +50,7 @@ public class DaysInMonthTests
         // Arrange
 
         // Act
-        var actualDaysCount = MonthService.GetDaysCountInMoth(monthIndex, year);
+        var actualDaysCount = MonthService.GetDaysCountInMonth(monthIndex, year);
 
         // Assert
         Assert.That(actualDaysCount, Is.EqualTo(expectedDaysCount));
@@ -64,7 +64,7 @@ public class DaysInMonthTests
         uint year = 2022;
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => MonthService.GetDaysCountInMoth(invalidIndex, year));
+        Assert.Throws<ArgumentException>(() => MonthService.GetDaysCountInMonth(invalidIndex, year));
     }
     
     [Test]
@@ -75,6 +75,39 @@ public class DaysInMonthTests
         uint year = 2022;
 
         // Act & Assert
-        Assert.Throws<ArgumentException>(() => MonthService.GetDaysCountInMoth(invalidIndex, year));
+        Assert.Throws<ArgumentException>(() => MonthService.GetDaysCountInMonth(invalidIndex, year));
+    }
+    
+    
+    [TestCase(1U, 0U, 2023U)]
+    [TestCase(2U, 31U, 2023U)]
+    [TestCase(3U, 59U, 2023U)]
+    [TestCase(12U, 334U, 2023U)]
+    [TestCase(1U, 0U, 2024U)]
+    [TestCase(3U, 60U, 2024U)]
+    [TestCase(12U, 335U, 2024U)]
+    public void GetDaysCountBeginningOfTheYear(uint monthIndex, uint expectedDaysCount, uint year)
+    {
+        // Act
+        var actualDaysCount = MonthService.GetDaysCountBeginningOfTheYear(monthIndex, year);
+
+        // Assert
+        Assert.That(actualDaysCount, Is.EqualTo(expectedDaysCount), $"Days count is not valid - {expectedDaysCount}");
+    }
+    
+    [TestCase(Month.JANUARY, 0U, 2023U)]
+    [TestCase(Month.FEBRUARY, 31U, 2023U)]
+    [TestCase(Month.MARCH, 59U, 2023U)]
+    [TestCase(Month.DECEMBER, 334U, 2023U)]
+    [TestCase(Month.JANUARY, 0U, 2024U)]
+    [TestCase(Month.MARCH, 60U, 2024U)]
+    [TestCase(Month.DECEMBER, 335U, 2024U)]
+    public void GetDaysCountBeginningOfTheYear(Month month, uint expectedDaysCount, uint year)
+    {
+        // Act
+        var actualDaysCount = MonthService.GetDaysCountBeginningOfTheYear(month, year);
+
+        // Assert
+        Assert.That(actualDaysCount, Is.EqualTo(expectedDaysCount), $"Days count is not valid - {expectedDaysCount}");
     }
 }
