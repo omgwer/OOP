@@ -12,7 +12,7 @@ public class Date
     // примечание: год >= 1970
     public Date(uint day, Month month, uint year)
     {
-        _timestamp = ConvertDateToTimestamp(day, month, year);
+        _timestamp = DateService.ConvertDateToTimestamp(day, month, year);
     }
 
     // инициализируем дату количеством дней, прошедших после 1 января 1970 года
@@ -43,29 +43,29 @@ public class Date
     // возвращает день недели
     WeekDay GetWeekDay()
     {
-        DateTime test;
         throw new NotImplementedException();
     }
 
-    private uint ConvertDateToTimestamp(uint day, Month month, uint year)
-    {
-        uint timestamp = 0;
-        timestamp += YearService.GetDaysCountBeginningOfThisYear(year);
-        timestamp += MonthService.GetDaysCountBeginningOfTheYear(month, year);
-        if (day == 0 || day > MonthService.GetDaysCountInMonth(month, year))
-        {
-            throw new ArgumentException($"Days count = {day} is not valid for this data!");
-        }
-
-        timestamp += day;
-        return timestamp;
-    }
-
-    private Date ConvertTimestampToDate(uint timestamp)
-    {
-        var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
-        var month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
-        
-        throw new NotImplementedException();
-    }
+    // private uint ConvertDateToTimestamp(uint day, Month month, uint year)
+    // {
+    //     uint timestamp = 0;
+    //     timestamp += YearService.GetDaysCountBeginningOfThisYear(year);
+    //     timestamp += MonthService.GetDaysCountBeginningOfTheYear(month, year);
+    //     if (day == 0 || day > MonthService.GetDaysCountInMonth(month, year))
+    //     {
+    //         throw new ArgumentException($"Days count = {day} is not valid for this data!");
+    //     }
+    //
+    //     timestamp += day;
+    //     return timestamp;
+    // }
+    //
+    // private Date ConvertTimestampToDate(uint timestamp)
+    // {
+    //     var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
+    //     var month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
+    //     var day = timestamp;
+    //
+    //     return new Date(day, month, year);
+    // }
 }

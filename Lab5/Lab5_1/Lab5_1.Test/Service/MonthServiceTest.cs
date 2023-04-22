@@ -111,17 +111,17 @@ public class DaysInMonthTests
 
     [TestCase(0U, 1970U, Month.JANUARY, 0U)]
     [TestCase(1U, 1970U, Month.JANUARY, 1U)]
-    [TestCase(31U, 1970U, Month.JANUARY, 31U)]
+    [TestCase(31U, 1970U, Month.FEBRUARY, 0U)]
     [TestCase(32U, 1970U, Month.FEBRUARY, 1U)]
-    [TestCase(59U, 1970U, Month.FEBRUARY, 28U)]
+    [TestCase(59U, 1970U, Month.MARCH, 0U)]
     [TestCase(60U, 1970U, Month.MARCH, 1U)]
-    [TestCase(365U, 1970U, Month.DECEMBER, 31U)]
+    [TestCase(364U, 1970U, Month.DECEMBER, 30U)]
     public void GetMonthBeginningOfThisTimestamp_validValues(uint timestamp, uint year, Month expectedMonth, uint expectedTimestampRemainder)
     {
         Month month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
 
         // Assert
-        Assert.That(month, Is.EqualTo(expectedMonth), "Month is not valid");
         Assert.That(timestamp, Is.EqualTo(expectedTimestampRemainder), "Expected days count remainder is not valid");
+        Assert.That(month, Is.EqualTo(expectedMonth), "Month is not valid");
     }
 }

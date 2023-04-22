@@ -65,10 +65,12 @@ public static class MonthService
     {
         uint month = 1;
         uint limit = _dictionary[(Month)month];
-        while (timestamp > limit)
+        while (timestamp >= limit)
         {
             timestamp -= limit;
             month++;
+            if (timestamp == 0)
+                return (Month)month;
             limit = _dictionary[(Month)month];
             if (month == 2 && YearService.IsLeapYear(year)) // Для висикосного февраля
             {
