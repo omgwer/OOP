@@ -22,8 +22,8 @@ public static class DateService
         {
             throw new ArgumentException($"Days count = {day} is not valid for this data!");
         }
-
-        timestamp += --day;
+        // TODO: дырявое решение подумац
+        timestamp += day - 1;
         return timestamp;
     }
 

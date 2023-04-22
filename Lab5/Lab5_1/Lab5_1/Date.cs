@@ -23,49 +23,26 @@ public class Date
     }
 
     // возвращает день месяца (от 1 до 31)
-    uint GetDay()
+    public uint GetDay()
     {
-        throw new NotImplementedException();
+        return DateService.ConvertTimestampToDay(_timestamp);
     }
 
     // возвращает месяц
-    Month GetMonth()
+    public Month GetMonth()
     {
-        throw new NotImplementedException();
+        return DateService.ConvertTimestampToMonth(_timestamp);
     }
 
     // возвращает год
-    uint GetYear()
+    public uint GetYear()
     {
-        throw new NotImplementedException();
+        return DateService.ConvertTimestampToYear(_timestamp);
     }
 
     // возвращает день недели
-    WeekDay GetWeekDay()
+    public WeekDay GetWeekDay()
     {
-        throw new NotImplementedException();
+        return WeekDayService.GetWeekDay(_timestamp);
     }
-
-    // private uint ConvertDateToTimestamp(uint day, Month month, uint year)
-    // {
-    //     uint timestamp = 0;
-    //     timestamp += YearService.GetDaysCountBeginningOfThisYear(year);
-    //     timestamp += MonthService.GetDaysCountBeginningOfTheYear(month, year);
-    //     if (day == 0 || day > MonthService.GetDaysCountInMonth(month, year))
-    //     {
-    //         throw new ArgumentException($"Days count = {day} is not valid for this data!");
-    //     }
-    //
-    //     timestamp += day;
-    //     return timestamp;
-    // }
-    //
-    // private Date ConvertTimestampToDate(uint timestamp)
-    // {
-    //     var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
-    //     var month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
-    //     var day = timestamp;
-    //
-    //     return new Date(day, month, year);
-    // }
 }
