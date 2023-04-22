@@ -2,11 +2,11 @@ namespace Lab5_1.Dictionary;
 
 public enum WeekDay
 {
-    SUNDAY = 1,
-    MONDAY,
+    MONDAY = 1,
     TUESDAY,
     WEDNESDAY,
     THURSDAY,
     FRIDAY,
-    SATURDAY
+    SATURDAY,
+    SUNDAY
 }

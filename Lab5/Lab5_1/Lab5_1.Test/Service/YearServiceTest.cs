@@ -55,9 +55,24 @@ public class YearServiceTests
     [TestCase(10000U)]
     public void AssertIsValidPeriod_ThrowsArgumentException(uint year)
     {
-        // Arrange
-
         // Act & Assert
         Assert.Throws<ArgumentException>(() => YearService.GetDaysCountBeginningOfThisYear(year));
+    }
+
+    [TestCase(0U, 1970U, 0U)]
+    [TestCase(364U, 1970U, 364U)]
+    [TestCase(365U, 1971U, 0U)]
+    [TestCase(730U, 1971U, 365U)]
+    [TestCase(731U, 1972U, 0U)]
+    [TestCase(2932532U, 9999U, 0U)]
+    public void GetYearsCountBeginningOfThisTimestamp_timestamp_zero(uint timestamp, uint expectedYear, uint expectedTimestampRemainder)
+    {
+        // Act
+        var copyOfTimeStamp = timestamp;
+        var years = YearService.GetYearsCountBeginningOfThisTimestamp(ref copyOfTimeStamp);
+
+        // Assert
+        Assert.That(years, Is.EqualTo(expectedYear));
+        Assert.That(copyOfTimeStamp, Is.EqualTo(expectedTimestampRemainder));
     }
 }
