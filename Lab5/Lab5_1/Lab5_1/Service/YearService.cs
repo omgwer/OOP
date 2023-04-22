@@ -12,14 +12,31 @@ public static class YearService
         return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
     }
 
-    public static uint GetDaysCountInPeri(uint year)
+    public static uint GetDaysCountInThisYear(uint year)
     {
+        AssertIsValidPeriod(year);
         return IsLeapYear(year) ? DAYS_IN_LEAP_YEAR : DAYS_IN_STANDART_YEAR;
     }
-    
+
+    /** Возвращает количество дней во всех годах, до введенного */
+    public static uint GetDaysCountBeginningOfThisYear(uint year)
+    {
+        AssertIsValidPeriod(year);
+        uint daysCount = 0;
+        for (uint i = 1970; i < year; i++)
+        {
+            if (IsLeapYear(i))
+                daysCount += DAYS_IN_LEAP_YEAR;
+            else
+                daysCount += DAYS_IN_STANDART_YEAR;
+        }
+
+        return daysCount;
+    }
+
     private static bool IsValidPeriod(uint year)
     {
-        return year is >= MIN_YEAR and < MAX_YEAR;
+        return year is >= MIN_YEAR and <= MAX_YEAR;
     }
 
     private static void AssertIsValidPeriod(uint year)
