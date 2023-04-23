@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.JavaScript;
 using Lab5_1.Dictionary;
 using static Lab5_1.Service.DateService;
 using static Lab5_1.Service.WeekDayService;
@@ -55,7 +56,7 @@ public class Date
     public override string ToString()
     {
         return
-            $"Date object : day is - {GetDay()}, month is {GetMonth()}, year is {GetYear()}, day of the week is {GetWeekDays()}";
+            $"{GetDay():00}:{(int)GetMonth():00}:{GetYear()}";
     }
 
     // ++, --, +, -, +=, -=, >>, <<, ==, !=, >, <, >=, <=
@@ -103,6 +104,63 @@ public class Date
         var secondTimestamp = ConvertDateToTimestamp(secondDate);
         var difference = (int)fistTimestamp - (int)secondTimestamp;
         return difference;
+    }
+    
+    public static bool operator ==(Date firstDate, Date secondDate)
+    {
+        var fistTimestamp = ConvertDateToTimestamp(firstDate);
+        var secondTimestamp = ConvertDateToTimestamp(secondDate);
+        return fistTimestamp == secondTimestamp;
+    }
+    
+    public static bool operator !=(Date firstDate, Date secondDate)
+    {
+        var fistTimestamp = ConvertDateToTimestamp(firstDate);
+        var secondTimestamp = ConvertDateToTimestamp(secondDate);
+        return fistTimestamp != secondTimestamp;
+    }
+    
+    public static bool operator >(Date firstDate, Date secondDate)
+    {
+        var fistTimestamp = ConvertDateToTimestamp(firstDate);
+        var secondTimestamp = ConvertDateToTimestamp(secondDate);
+        return fistTimestamp > secondTimestamp;
+    }
+    
+    public static bool operator <(Date firstDate, Date secondDate)
+    {
+        var fistTimestamp = ConvertDateToTimestamp(firstDate);
+        var secondTimestamp = ConvertDateToTimestamp(secondDate);
+        return fistTimestamp < secondTimestamp;
+    }
+    
+    public static bool operator >=(Date firstDate, Date secondDate)
+    {
+        var fistTimestamp = ConvertDateToTimestamp(firstDate);
+        var secondTimestamp = ConvertDateToTimestamp(secondDate);
+        return fistTimestamp >= secondTimestamp;
+    }
+    
+    public static bool operator <=(Date firstDate, Date secondDate)
+    {
+        var fistTimestamp = ConvertDateToTimestamp(firstDate);
+        var secondTimestamp = ConvertDateToTimestamp(secondDate);
+        return fistTimestamp <= secondTimestamp;
+    }
+    
+    // write operator
+    public static int operator >>(Date date, TextWriter textWriter)
+    {
+        textWriter.WriteLine(date.ToString());
+        //return date.ToString();
+        return 0;
+    }
+
+    // read operator
+    public static int operator <<(Date date, TextReader textReader)
+    {
+       // textWriter.WriteLine(date.ToString());
+       return 0;
     }
 
     private static Date? TryUpdateValue(uint newTimestamp)
