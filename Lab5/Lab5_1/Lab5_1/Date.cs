@@ -7,6 +7,7 @@ namespace Lab5_1;
 public class Date
 {
     private uint _timestamp;
+    private const uint MAX_TIMESTAMP = 2932896; // 31.12.9999
 
     public uint Timestamp => _timestamp;
 
@@ -21,6 +22,8 @@ public class Date
     // например, 2 = 3 января 1970, 32 = 2 февраля 1970 года и т.д.
     public Date(uint timestamp = 0)
     {
+        if (timestamp > MAX_TIMESTAMP)
+            throw new ArgumentException($"Timestap value = {timestamp} is not valid! ");
         _timestamp = timestamp;
     }
 
@@ -52,5 +55,28 @@ public class Date
     {
         return
             $"Date object : day is - {GetDay()}, month is {GetMonth()}, year is {GetYear()}, day of the week is {GetWeekDay()}";
+    }
+
+    // ++, --, +, -, +=, -=, >>, <<, ==, !=, >, <, >=, <=
+    // operator overloading 
+    public static Date operator ++(Date date)
+    {
+        var timestamp = DateService.ConvertDateToTimestamp(date);
+        timestamp++;
+        var newDate = TryUpdateValue(timestamp);
+        return newDate ?? date;
+    }
+
+    private static Date? TryUpdateValue(uint newTimestamp)
+    {
+        try
+        {
+            return new Date(newTimestamp);
+        }
+        catch (ArgumentException exception)
+        {
+            Console.WriteLine($"Cant update timestamp! {exception.Message}");
+            return null;
+        }
     }
 }

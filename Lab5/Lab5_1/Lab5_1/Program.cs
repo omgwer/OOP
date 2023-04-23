@@ -2,8 +2,8 @@
 
 Console.WriteLine("Hello, World!");
 
-DateTimeOffset date = new DateTimeOffset(1972, 1, 1, 0, 0, 0, TimeSpan.Zero); // Эпоха Unix
-DateTimeOffset epoch = new DateTimeOffset(1973, 1, 1, 0, 0, 0, TimeSpan.Zero); // Эпоха Unix
+DateTimeOffset date = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero); // Эпоха Unix
+DateTimeOffset epoch = new DateTimeOffset(9999, 12, 31, 0, 0, 0, TimeSpan.Zero); // Эпоха Unix
 
 
 TimeSpan timeSinceEpoch = epoch - date;
