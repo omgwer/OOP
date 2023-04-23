@@ -22,7 +22,6 @@ public static class DateService
         {
             throw new ArgumentException($"Days count = {day} is not valid for this data!");
         }
-        // TODO: дырявое решение подумац
         timestamp += day - 1;
         return timestamp;
     }
@@ -43,6 +42,6 @@ public static class DateService
     {
         var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
         MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
-        return timestamp + 1;  // TODO: подумац
+        return timestamp + 1; 
     }
 }

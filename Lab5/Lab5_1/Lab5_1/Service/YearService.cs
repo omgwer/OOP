@@ -42,7 +42,7 @@ public static class YearService
         var years = MIN_YEAR;
         while (timestamp >= DAYS_IN_STANDART_YEAR)
         {
-            var decrement = IsLeapYear(years + 1) ? DAYS_IN_LEAP_YEAR : DAYS_IN_STANDART_YEAR;
+            var decrement = IsLeapYear(years) ? DAYS_IN_LEAP_YEAR : DAYS_IN_STANDART_YEAR;
             if (timestamp >= decrement)
             {
                 years++;
