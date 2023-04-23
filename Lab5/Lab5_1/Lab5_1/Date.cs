@@ -1,4 +1,5 @@
-using System.Runtime.InteropServices.JavaScript;
+using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using Lab5_1.Dictionary;
 using static Lab5_1.Service.DateService;
 using static Lab5_1.Service.WeekDayService;
@@ -56,7 +57,7 @@ public class Date
     public override string ToString()
     {
         return
-            $"{GetDay():00}:{(int)GetMonth():00}:{GetYear()}";
+            $"{GetDay():00}.{(int)GetMonth():00}.{GetYear()}";
     }
 
     // ++, --, +, -, +=, -=, >>, <<, ==, !=, >, <, >=, <=
@@ -76,7 +77,7 @@ public class Date
         var newDate = TryUpdateValue(timestamp);
         return newDate ?? date;
     }
-    
+
     /** return null if error in operation */
     public static Date? operator +(Date date, uint days)
     {
@@ -97,7 +98,7 @@ public class Date
         var newDate = TryUpdateValue(timestamp);
         return newDate;
     }
-    
+
     public static int operator -(Date firstDate, Date secondDate)
     {
         var fistTimestamp = ConvertDateToTimestamp(firstDate);
@@ -105,62 +106,85 @@ public class Date
         var difference = (int)fistTimestamp - (int)secondTimestamp;
         return difference;
     }
-    
+
     public static bool operator ==(Date firstDate, Date secondDate)
     {
         var fistTimestamp = ConvertDateToTimestamp(firstDate);
         var secondTimestamp = ConvertDateToTimestamp(secondDate);
         return fistTimestamp == secondTimestamp;
     }
-    
+
     public static bool operator !=(Date firstDate, Date secondDate)
     {
         var fistTimestamp = ConvertDateToTimestamp(firstDate);
         var secondTimestamp = ConvertDateToTimestamp(secondDate);
         return fistTimestamp != secondTimestamp;
     }
-    
+
     public static bool operator >(Date firstDate, Date secondDate)
     {
         var fistTimestamp = ConvertDateToTimestamp(firstDate);
         var secondTimestamp = ConvertDateToTimestamp(secondDate);
         return fistTimestamp > secondTimestamp;
     }
-    
+
     public static bool operator <(Date firstDate, Date secondDate)
     {
         var fistTimestamp = ConvertDateToTimestamp(firstDate);
         var secondTimestamp = ConvertDateToTimestamp(secondDate);
         return fistTimestamp < secondTimestamp;
     }
-    
+
     public static bool operator >=(Date firstDate, Date secondDate)
     {
         var fistTimestamp = ConvertDateToTimestamp(firstDate);
         var secondTimestamp = ConvertDateToTimestamp(secondDate);
         return fistTimestamp >= secondTimestamp;
     }
-    
+
     public static bool operator <=(Date firstDate, Date secondDate)
     {
         var fistTimestamp = ConvertDateToTimestamp(firstDate);
         var secondTimestamp = ConvertDateToTimestamp(secondDate);
         return fistTimestamp <= secondTimestamp;
     }
-    
+
     // write operator
-    public static int operator >>(Date date, TextWriter textWriter)
+    public static int operator >> (Date date, TextWriter textWriter)
     {
         textWriter.WriteLine(date.ToString());
-        //return date.ToString();
         return 0;
     }
 
     // read operator
-    public static int operator <<(Date date, TextReader textReader)
+    public static Date operator <<(Date date, TextReader textReader)
     {
-       // textWriter.WriteLine(date.ToString());
-       return 0;
+        var result = textReader.ReadLine();
+        if (result == null)
+            throw new IOException("Error IO");
+        var dateArr = result.Trim().Split('.');
+        if (dateArr.Length != 3)
+            throw new ArgumentException("Argument count is not valid!");
+        try
+        {
+            var isCanCreateData = true;
+            uint day = 0;
+            uint monthIndex = 0;
+            uint year = 0;
+            isCanCreateData = isCanCreateData && uint.TryParse(dateArr[0], out day);
+            isCanCreateData = isCanCreateData && uint.TryParse(dateArr[1], out monthIndex);
+            isCanCreateData = isCanCreateData && uint.TryParse(dateArr[2], out year);
+            if (!isCanCreateData)
+                throw new ArgumentException("Cant create argument for create Data");
+            var newDate = new Date(day, (Month)monthIndex, year);
+            return newDate;
+        }
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return date;
     }
 
     private static Date? TryUpdateValue(uint newTimestamp)

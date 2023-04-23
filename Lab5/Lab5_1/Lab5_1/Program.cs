@@ -17,3 +17,7 @@ var date = new Date(1);
 
 var t1 = date >> Console.Out;
 
+var t2 = date << Console.In;
+
+var ttt = t2 >> Console.Out;
+
