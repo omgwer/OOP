@@ -67,6 +67,14 @@ public class Date
         return newDate ?? date;
     }
 
+    public static Date operator --(Date date)
+    {
+        var timestamp = DateService.ConvertDateToTimestamp(date);
+        timestamp--;
+        var newDate = TryUpdateValue(timestamp);
+        return newDate ?? date;
+    }
+
     private static Date? TryUpdateValue(uint newTimestamp)
     {
         try
