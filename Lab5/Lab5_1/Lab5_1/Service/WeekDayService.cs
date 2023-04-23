@@ -8,7 +8,6 @@ public static class WeekDayService
     {
         var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
         var month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
-        // TODO: подумац и вынести + 1 
         var day = timestamp + 1;
         return GetWeekDay(day, month, year);
     }

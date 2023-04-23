@@ -1,5 +1,6 @@
 using Lab5_1.Dictionary;
-using Lab5_1.Service;
+using static Lab5_1.Service.DateService;
+using static Lab5_1.Service.WeekDayService;
 
 namespace Lab5_1;
 
@@ -15,7 +16,7 @@ public class Date
     // примечание: год >= 1970
     public Date(uint day, Month month, uint year)
     {
-        _timestamp = DateService.ConvertDateToTimestamp(day, month, year);
+        _timestamp = ConvertDateToTimestamp(day, month, year);
     }
 
     // инициализируем дату количеством дней, прошедших после 1 января 1970 года
@@ -30,38 +31,38 @@ public class Date
     // возвращает день месяца (от 1 до 31)
     public uint GetDay()
     {
-        return DateService.ConvertTimestampToDay(_timestamp);
+        return ConvertTimestampToDay(_timestamp);
     }
 
     // возвращает месяц
     public Month GetMonth()
     {
-        return DateService.ConvertTimestampToMonth(_timestamp);
+        return ConvertTimestampToMonth(_timestamp);
     }
 
     // возвращает год
     public uint GetYear()
     {
-        return DateService.ConvertTimestampToYear(_timestamp);
+        return ConvertTimestampToYear(_timestamp);
     }
 
     // возвращает день недели
-    public WeekDay GetWeekDay()
+    public WeekDay GetWeekDays()
     {
-        return WeekDayService.GetWeekDay(_timestamp);
+        return GetWeekDay(_timestamp);
     }
 
     public override string ToString()
     {
         return
-            $"Date object : day is - {GetDay()}, month is {GetMonth()}, year is {GetYear()}, day of the week is {GetWeekDay()}";
+            $"Date object : day is - {GetDay()}, month is {GetMonth()}, year is {GetYear()}, day of the week is {GetWeekDays()}";
     }
 
     // ++, --, +, -, +=, -=, >>, <<, ==, !=, >, <, >=, <=
     // operator overloading 
     public static Date operator ++(Date date)
     {
-        var timestamp = DateService.ConvertDateToTimestamp(date);
+        var timestamp = ConvertDateToTimestamp(date);
         timestamp++;
         var newDate = TryUpdateValue(timestamp);
         return newDate ?? date;
@@ -69,10 +70,23 @@ public class Date
 
     public static Date operator --(Date date)
     {
-        var timestamp = DateService.ConvertDateToTimestamp(date);
+        var timestamp = ConvertDateToTimestamp(date);
         timestamp--;
         var newDate = TryUpdateValue(timestamp);
         return newDate ?? date;
+    }
+    
+    /** return null if error in operation */
+    public static Date? operator +(Date date, uint days)
+    {
+        if (days == 0)
+            return date;
+        var timestamp = ConvertDateToTimestamp(date);
+        timestamp += days;
+        var newDate = TryUpdateValue(timestamp);
+        // if (newDate == null)
+        //     throw new ArgumentException($"Addiction operation is not available! value error");
+        return newDate;
     }
 
     private static Date? TryUpdateValue(uint newTimestamp)
