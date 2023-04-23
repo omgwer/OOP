@@ -238,4 +238,51 @@ public class DateOperatorsOverloadTest
             Assert.That(newDate, Is.EqualTo(null), "newDate not null! Error");
         });
     }
+    
+    // -
+    [TestCase(1U, Month.JANUARY, 1970U, 0U, 1U, Month.JANUARY, 1970U)]
+    [TestCase(31U, Month.JANUARY, 1970U, 30U, 1U, Month.JANUARY, 1970U)]
+    [TestCase(1U, Month.MARCH, 1970U, 1U, 28U, Month.FEBRUARY, 1970U)]
+    [TestCase(1U, Month.MARCH, 1972U, 1U, 29U, Month.FEBRUARY, 1972U)]
+    [TestCase(1U, Month.JANUARY, 1972U, 1U, 31U, Month.DECEMBER, 1971U)]
+    [TestCase(1U, Month.JANUARY, 1971U, 1U, 31U, Month.DECEMBER, 1970U)]
+    public void CreateANewDateObjectByDate_OperationMinus(uint day, Month month, uint year, uint minusDays,
+        uint expectedDay, Month expectedMonth, uint expectedYear)
+    {
+        var date = new Date(day, month, year);
+        var newDate = date - minusDays;
+        var resultDate = date.GetDay();
+        var resultMonth = date.GetMonth();
+        var resultYear = date.GetYear();
+        var newResultDate = newDate!.GetDay();
+        var newResultMonth = newDate.GetMonth();
+        var newResultYear = newDate.GetYear();
+        Assert.Multiple(() =>
+        {
+            Assert.That(resultDate, Is.EqualTo(day), "Day is not valid");
+            Assert.That(resultMonth, Is.EqualTo(month), "Month is not valid");
+            Assert.That(resultYear, Is.EqualTo(year), "Year is not valid");
+            Assert.That(newResultDate, Is.EqualTo(expectedDay), "Day is not valid");
+            Assert.That(newResultMonth, Is.EqualTo(expectedMonth), "Month is not valid");
+            Assert.That(newResultYear, Is.EqualTo(expectedYear), "Year is not valid");
+        });
+    }
+    
+    [TestCase(1U, Month.JANUARY, 1970U, 1U, 1U, Month.JANUARY, 1970U)]
+    public void Negative_CreateANewDateObjectByDate_OperationMinus(uint day, Month month, uint year, uint minusDays,
+        uint expectedDay, Month expectedMonth, uint expectedYear)
+    {
+        var date = new Date(day, month, year);
+        var newDate = date - minusDays;
+        var resultDate = date.GetDay();
+        var resultMonth = date.GetMonth();
+        var resultYear = date.GetYear();
+        Assert.Multiple(() =>
+        {
+            Assert.That(resultDate, Is.EqualTo(day), "Day is not valid");
+            Assert.That(resultMonth, Is.EqualTo(month), "Month is not valid");
+            Assert.That(resultYear, Is.EqualTo(year), "Year is not valid");
+            Assert.That(newDate, Is.EqualTo(null), "newDate not null! Error");
+        });
+    }
 }

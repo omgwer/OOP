@@ -84,8 +84,16 @@ public class Date
         var timestamp = ConvertDateToTimestamp(date);
         timestamp += days;
         var newDate = TryUpdateValue(timestamp);
-        // if (newDate == null)
-        //     throw new ArgumentException($"Addiction operation is not available! value error");
+        return newDate;
+    }
+
+    public static Date? operator -(Date date, uint days)
+    {
+        if (days == 0)
+            return date;
+        var timestamp = ConvertDateToTimestamp(date);
+        timestamp -= days;
+        var newDate = TryUpdateValue(timestamp);
         return newDate;
     }
 
