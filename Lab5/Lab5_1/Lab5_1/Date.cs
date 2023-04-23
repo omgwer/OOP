@@ -96,6 +96,14 @@ public class Date
         var newDate = TryUpdateValue(timestamp);
         return newDate;
     }
+    
+    public static int operator -(Date firstDate, Date secondDate)
+    {
+        var fistTimestamp = ConvertDateToTimestamp(firstDate);
+        var secondTimestamp = ConvertDateToTimestamp(secondDate);
+        var difference = (int)fistTimestamp - (int)secondTimestamp;
+        return difference;
+    }
 
     private static Date? TryUpdateValue(uint newTimestamp)
     {

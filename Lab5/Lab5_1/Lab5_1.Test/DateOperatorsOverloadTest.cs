@@ -285,4 +285,21 @@ public class DateOperatorsOverloadTest
             Assert.That(newDate, Is.EqualTo(null), "newDate not null! Error");
         });
     }
+    
+    [TestCase(1U, Month.JANUARY, 1970U, 1U, Month.JANUARY, 1970U, 0)]
+    [TestCase(2U, Month.JANUARY, 1970U, 1U, Month.JANUARY, 1970U, 1)]
+    [TestCase(1U, Month.JANUARY, 1970U, 2U, Month.JANUARY, 1970U, -1)]
+    [TestCase(1U, Month.JANUARY, 1970U, 31U, Month.DECEMBER, 9999U, -2932896)]
+    [TestCase(31U, Month.DECEMBER, 9999U, 1U, Month.JANUARY, 1970U, 2932896)]
+    public void Negative_CreateANewDateObjectByDate_OperationMinusForDates(uint day, Month month, uint year,
+        uint secondDay, Month secondMonth, uint secondYear, int expectedDifference)
+    {
+        var firstDate = new Date(day, month, year);
+        var secondDate = new Date(secondDay, secondMonth, secondYear);
+        var difference = firstDate - secondDate;
+        Assert.Multiple(() =>
+        {
+            Assert.That(difference, Is.EqualTo(expectedDifference), "Difference is not equal expected");
+        });
+    }
 }
