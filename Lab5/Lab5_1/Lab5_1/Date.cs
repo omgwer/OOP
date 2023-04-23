@@ -8,6 +8,8 @@ public class Date
 {
     private uint _timestamp;
 
+    public uint Timestamp => _timestamp;
+
     // инициализируем дату заданными днем, месяцем и годом.
     // примечание: год >= 1970
     public Date(uint day, Month month, uint year)
