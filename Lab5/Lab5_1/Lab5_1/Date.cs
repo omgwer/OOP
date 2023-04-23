@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
 using Lab5_1.Dictionary;
 using static Lab5_1.Service.DateService;
 using static Lab5_1.Service.WeekDayService;
