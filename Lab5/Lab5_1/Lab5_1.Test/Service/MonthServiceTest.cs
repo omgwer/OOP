@@ -116,6 +116,10 @@ public class DaysInMonthTests
     [TestCase(59U, 1970U, Month.MARCH, 0U)]
     [TestCase(60U, 1970U, Month.MARCH, 1U)]
     [TestCase(364U, 1970U, Month.DECEMBER, 30U)]
+    [TestCase(0U, 1972U, Month.JANUARY, 0U)]
+    [TestCase(31U, 1972U, Month.FEBRUARY, 0U)]
+    [TestCase(31U+28U, 1972U, Month.FEBRUARY, 28U)]
+    [TestCase(31U+29U, 1972U, Month.MARCH, 0U)]
     public void GetMonthBeginningOfThisTimestamp_validValues(uint timestamp, uint year, Month expectedMonth, uint expectedTimestampRemainder)
     {
         Month month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);

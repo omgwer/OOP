@@ -43,6 +43,6 @@ public static class DateService
     {
         var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
         MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
-        return timestamp;
+        return timestamp + 1;  // TODO: подумац
     }
 }

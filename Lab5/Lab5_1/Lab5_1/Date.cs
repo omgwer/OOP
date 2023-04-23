@@ -45,4 +45,10 @@ public class Date
     {
         return WeekDayService.GetWeekDay(_timestamp);
     }
+
+    public override string ToString()
+    {
+        return
+            $"Date object : day is - {GetDay()}, month is {GetMonth()}, year is {GetYear()}, day of the week is {GetWeekDay()}";
+    }
 }

@@ -82,15 +82,14 @@ public class DateServiceTest
         Assert.That(result, Is.EqualTo(expectedMonth));
     }
 
-    [TestCase(0U, 0U)]
-    [TestCase(30U, 30U)]
-    [TestCase(31U, 0U)]
-    [TestCase(31U + 28U, 0U)]
-    [TestCase(31U + 27U, 27U)]
-    [TestCase(365U, 0U)]
-    [TestCase(364U, 30U)]
-    [TestCase(364U, 30U)]
-    [TestCase(365U + 365U, 0U)]
+    [TestCase(0U, 1U)]
+    [TestCase(30U, 31U)]
+    [TestCase(31U, 1U)]
+    [TestCase(31U + 28U, 1U)]
+    [TestCase(31U + 27U, 28U)]
+    [TestCase(365U, 1U)]
+    [TestCase(364U, 31U)]
+    [TestCase(365U + 365U, 1U)]
     public void ConvertTimestampToDay_ShouldReturnDay_WhenTimestampIsValid(uint timestamp, uint expectedDay)
     {
         // Act
