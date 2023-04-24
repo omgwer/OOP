@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace Lab5_2;
 
 public class MyString
@@ -50,14 +52,14 @@ public class MyString
 
     public MyString SubString(int start, int length = int.MaxValue)
     {
-        if (start > GetLength())
+        if (start >= GetLength())
         {
             throw new ArgumentException("Out of range");
         }
         var newArrayLength =Math.Min(GetLength() - start, length) + 1;
         var newArray = new char[newArrayLength];
         Array.Copy(_characters, start, newArray, 0, newArrayLength - 1);
-        newArray[newArrayLength - 1]= END_OF_LINE;
+        //newArray[newArrayLength - 1]= END_OF_LINE;
         return new MyString(newArray);
     }
 
@@ -68,7 +70,13 @@ public class MyString
 
     public override string ToString()
     {
-        return new string(_characters);
+        var stringBuilder = new StringBuilder();
+        for (var i = 0; i < GetLength(); i++)
+        {
+            stringBuilder.Append(_characters[i]);
+        }
+
+        return stringBuilder.ToString();
     }
 }
 
