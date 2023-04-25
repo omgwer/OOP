@@ -112,7 +112,7 @@ public class Tests
             var input = "abcdef";
             var start = 2;
             var length = 3;
-            var expected = "cde";
+            var expected = "cde\0";
             var myString = new MyString(input);
 
             // Act

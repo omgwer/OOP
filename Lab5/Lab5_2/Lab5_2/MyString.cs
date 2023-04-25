@@ -16,14 +16,14 @@ public class MyString
 
     public MyString(char[] charArray)
     {
-        _characters = charArray.Concat(new [] {END_OF_LINE}).ToArray();
+        _characters = charArray.Concat(new[] { END_OF_LINE }).ToArray();
     }
 
     public MyString(MyString myString)
     {
         _characters = myString.GetStringData();
     }
-    
+
     public MyString(string input)
     {
         _characters = new char[input.Length + 1];
@@ -56,10 +56,10 @@ public class MyString
         {
             throw new ArgumentException("Out of range");
         }
-        var newArrayLength =Math.Min(GetLength() - start, length) + 1;
+
+        var newArrayLength = Math.Min(GetLength() - start, length) + 1;
         var newArray = new char[newArrayLength];
         Array.Copy(_characters, start, newArray, 0, newArrayLength - 1);
-        //newArray[newArrayLength - 1]= END_OF_LINE;
         return new MyString(newArray);
     }
 
@@ -78,6 +78,130 @@ public class MyString
 
         return stringBuilder.ToString();
     }
-}
 
-//public char this[int index] => _characters[index];
+    public static MyString operator +(MyString firstVariable, MyString secondVariable)
+    {
+        var firstString = firstVariable.ToString();
+        var secondString = secondVariable.ToString();
+        return new MyString(firstString + secondString);
+    }
+
+    public static MyString operator +(string firstVariable, MyString secondVariable)
+    {
+        return new MyString(firstVariable + secondVariable.ToString());
+    }
+
+    public static MyString operator +(char[] firstVariable, MyString secondVariable)
+    {
+        return new MyString(new string(firstVariable) + secondVariable.ToString());
+    }
+
+    public static bool operator ==(MyString firstVariable, MyString secondVariable)
+    {
+        var first = firstVariable.GetStringData();
+        var second = secondVariable.GetStringData();
+        if (first.Length != second.Length)
+            return false;
+        for (var i = 0; i < first.Length; i++)
+        {
+            if (first[i] != second[i])
+                return false;
+        }
+
+        return true;
+    }
+
+    public static bool operator !=(MyString firstVariable, MyString secondVariable)
+    {
+        var first = firstVariable.GetStringData();
+        var second = secondVariable.GetStringData();
+        if (first.Length != second.Length)
+            return true;
+        for (var i = 0; i < first.Length; i++)
+        {
+            if (first[i] != second[i])
+                return true;
+        }
+
+        return false;
+    }
+
+    public static bool operator >(MyString firstVariable, MyString secondVariable)
+    {
+        var first = firstVariable.GetStringData();
+        var second = secondVariable.GetStringData();
+        for (var i = 0; i < first.Length; i++)
+        {
+            if (first[i] > second[i])
+                return true;
+            if (first[i] < second[i])
+                return false;
+        }
+
+        return false;
+    }
+
+    public static bool operator <(MyString firstVariable, MyString secondVariable)
+    {
+        var first = firstVariable.GetStringData();
+        var second = secondVariable.GetStringData();
+        for (var i = 0; i < first.Length; i++)
+        {
+            if (first[i] < second[i])
+                return true;
+            if (first[i] > second[i])
+                return false;
+        }
+
+        return false;
+    }
+
+    public static bool operator >=(MyString firstVariable, MyString secondVariable)
+    {
+        var first = firstVariable.GetStringData();
+        var second = secondVariable.GetStringData();
+        for (var i = 0; i < first.Length; i++)
+        {
+            if (first[i] > second[i])
+                return true;
+            if (first[i] < second[i])
+                return false;
+        }
+
+        return firstVariable == secondVariable;
+    }
+
+    public static bool operator <=(MyString firstVariable, MyString secondVariable)
+    {
+        var first = firstVariable.GetStringData();
+        var second = secondVariable.GetStringData();
+        for (var i = 0; i < first.Length; i++)
+        {
+            if (first[i] < second[i])
+                return true;
+            if (first[i] > second[i])
+                return false;
+        }
+
+        return firstVariable != secondVariable;
+    }
+
+    public char this[int index] => _characters[index];
+
+    // write operator
+    public static int operator >> (MyString myString, TextWriter textWriter)
+    {
+        textWriter.WriteLine(myString.ToString());
+        return 0;
+    }
+
+    // read operator
+    public static MyString operator <<(MyString myString, TextReader textReader)
+    {
+        var result = textReader.ReadLine();
+        if (result == null)
+            throw new ArgumentException("Invalid argument");
+
+        return new MyString(result);
+    }
+}
