@@ -4,7 +4,6 @@ namespace Lab5_2;
 
 public class MyString
 {
-    // TODO: добавить нулевой символ
     private readonly char END_OF_LINE = '\0';
     private char[] _characters;
     private int _length;
@@ -183,7 +182,7 @@ public class MyString
                 return false;
         }
 
-        return firstVariable != secondVariable;
+        return firstVariable == secondVariable;
     }
 
     public char this[int index] => _characters[index];

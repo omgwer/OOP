@@ -2,7 +2,6 @@ namespace Lab5_2.Tests;
 
 public class MyStringOverloadTest
 {
-
     [Test]
     public void TestAdditionOperatorMyString()
     {
@@ -17,14 +16,14 @@ public class MyStringOverloadTest
     {
         string str2 = "Hello, ";
         MyString str1 = new MyString("world!");
-        MyString result = str2 + str1 ;
+        MyString result = str2 + str1;
         Assert.That(result.ToString(), Is.EqualTo("Hello, world!"));
     }
 
     [Test]
     public void TestAdditionOperatorCharArray()
     {
-        char[] str1 = new[] { 'H', 'e', 'l', 'l', 'o', ',',' ' };
+        char[] str1 = new[] { 'H', 'e', 'l', 'l', 'o', ',', ' ' };
         MyString str2 = new MyString("world!");
         MyString result = str1 + str2;
         Assert.That(result.ToString(), Is.EqualTo("Hello, world!"));
@@ -77,6 +76,7 @@ public class MyStringOverloadTest
         Assert.IsTrue(str1 >= str2);
         Assert.IsFalse(str2 >= str1);
         Assert.IsTrue(str1 >= str3);
+        Assert.IsTrue(str1 == str3);
     }
 
     [Test]
@@ -85,9 +85,9 @@ public class MyStringOverloadTest
         MyString str1 = new MyString("Hello, world!");
         MyString str2 = new MyString("Goodbye, world!");
         MyString str3 = new MyString("Hello, world!");
-       Assert.IsFalse(str1 <= str2);
-       Assert.IsTrue(str2 <= str1);
-      //  Assert.IsTrue(str1 <= str3);
+        Assert.IsFalse(str1 <= str2);
+        Assert.IsTrue(str2 <= str1);
+        Assert.IsTrue(str1 <= str3);
     }
 
     [Test]

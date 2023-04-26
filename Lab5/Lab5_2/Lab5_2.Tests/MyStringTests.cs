@@ -22,7 +22,7 @@ public class Tests
         public void MyString_CharArrayConstructor_ReturnsExpectedString()
         {
             // Arrange
-            var input = new char[] {'a', 'b', 'c'};
+            var input = new char[] { 'a', 'b', 'c' };
             var expected = "abc";
             var myString = new MyString(input);
 
@@ -37,7 +37,7 @@ public class Tests
         public void MyString_CopyConstructor_ReturnsNewInstance()
         {
             // Arrange
-            var input = new [] {'a', 'b', 'c'};
+            var input = new[] { 'a', 'b', 'c' };
             var myString = new MyString(input);
 
             // Act
@@ -95,7 +95,7 @@ public class Tests
         {
             // Arrange
             var input = "abc";
-            var expected = new [] {'a', 'b', 'c', '\0'};
+            var expected = new[] { 'a', 'b', 'c', '\0' };
             var myString = new MyString(input);
 
             // Act
@@ -134,5 +134,4 @@ public class Tests
             Assert.Throws<ArgumentException>(() => myString.SubString(start));
         }
     }
-
 }
