@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Text;
 
 namespace Lab5_2;
 
-public class MyString
+public class MyString : IEnumerable
 {
     private readonly char END_OF_LINE = '\0';
     private char[] _characters;
@@ -78,6 +79,27 @@ public class MyString
         return stringBuilder.ToString();
     }
 
+    // iterators
+    public IEnumerator GetEnumerator()
+    {
+        return new MyStringEnumerator(_characters);
+    }
+
+    public IEnumerator Begin()
+    {
+        return GetEnumerator();
+    }
+
+    public IEnumerator End()
+    {
+        var enumerator = GetEnumerator();
+        while (enumerator.MoveNext())
+        {
+        }
+        return enumerator;
+    }
+
+    // overloads
     public static MyString operator +(MyString firstVariable, MyString secondVariable)
     {
         var firstString = firstVariable.ToString();
