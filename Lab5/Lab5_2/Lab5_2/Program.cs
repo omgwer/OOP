@@ -9,9 +9,8 @@ MyString myStr = new MyString("Hello, world!");
 IEnumerator enumerator = myStr.Begin();
 IEnumerator endEnumerator = myStr.End();
 
-while (enumerator != endEnumerator)
+while (enumerator.MoveNext())
 {
-    enumerator.MoveNext();
     char c = (char)enumerator.Current;
     Console.Write(c + " ");
 }
