@@ -6,8 +6,8 @@ public static class DateService
 {
     public static Date ConvertTimestampToDate(uint timestamp)
     {
-        var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
-        var month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
+        var year = YearService.ConvertTimestampToYear(ref timestamp);
+        var month = MonthService.ConvertMonthBegginingOfThisTimestamp(ref timestamp, year);
         var day = timestamp;
 
         return new Date(day, month, year);
@@ -18,12 +18,8 @@ public static class DateService
         uint timestamp = 0;
         timestamp += YearService.GetDaysCountBeginningOfThisYear(year);
         timestamp += MonthService.GetDaysCountBeginningOfTheYear(month, year);
-        if (day == 0 || day > MonthService.GetDaysCountInMonth(month, year))
-        {
-            throw new ArgumentException($"Days count = {day} is not valid for this data!");
-        }
-
-        timestamp += day - 1;
+        uint daysInMonthCount = MonthService.GetDaysCountInMonth(month, year);
+        timestamp += DayService.GetDaysCount(day, daysInMonthCount);
         return timestamp;
     }
 
@@ -36,31 +32,27 @@ public static class DateService
         uint timestamp = 0;
         timestamp += YearService.GetDaysCountBeginningOfThisYear(year);
         timestamp += MonthService.GetDaysCountBeginningOfTheYear(month, year);
-        if (day == 0 || day > MonthService.GetDaysCountInMonth(month, year))
-        {
-            throw new ArgumentException($"Days count = {day} is not valid for this data!");
-        }
-
-        timestamp += day - 1;
+        uint daysInMonthCount = MonthService.GetDaysCountInMonth(month, year);
+        timestamp += DayService.GetDaysCount(day, daysInMonthCount);
         return timestamp;
     }
 
     public static uint ConvertTimestampToYear(uint timestamp)
     {
-        return YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
+        return YearService.ConvertTimestampToYear(ref timestamp);
     }
 
     public static Month ConvertTimestampToMonth(uint timestamp)
     {
-        var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
-        return MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
+        var year = YearService.ConvertTimestampToYear(ref timestamp);
+        return MonthService.ConvertMonthBegginingOfThisTimestamp(ref timestamp, year);
     }
 
     // Тут получается стрейф от начала месяца если 0 то это первый день месяца
     public static uint ConvertTimestampToDay(uint timestamp)
     {
-        var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
-        MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
+        var year = YearService.ConvertTimestampToYear(ref timestamp); 
+        MonthService.ConvertMonthBegginingOfThisTimestamp(ref timestamp, year);
         return timestamp + 1;
     }
 }

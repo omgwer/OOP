@@ -8,7 +8,7 @@ namespace Lab5_1;
 public class Date
 {
     private uint _timestamp;
-    private const uint MAX_TIMESTAMP = 2932896; // 31.12.9999
+    private const uint MAX_TIMESTAMP = 2932896; // 31.12.9999  // сделать за константное время. кратное 400
 
     public uint Timestamp => _timestamp;
 
@@ -64,7 +64,7 @@ public class Date
     {
         var timestamp = ConvertDateToTimestamp(date);
         timestamp++;
-        var newDate = TryUpdateValue(timestamp);
+        var newDate = TryConvertTimestampToDay(timestamp);
         return newDate ?? date;
     }
 
@@ -72,7 +72,7 @@ public class Date
     {
         var timestamp = ConvertDateToTimestamp(date);
         timestamp--;
-        var newDate = TryUpdateValue(timestamp);
+        var newDate = TryConvertTimestampToDay(timestamp);
         return newDate ?? date;
     }
 
@@ -83,7 +83,7 @@ public class Date
             return date;
         var timestamp = ConvertDateToTimestamp(date);
         timestamp += days;
-        var newDate = TryUpdateValue(timestamp);
+        var newDate = TryConvertTimestampToDay(timestamp);
         return newDate;
     }
 
@@ -93,7 +93,7 @@ public class Date
             return date;
         var timestamp = ConvertDateToTimestamp(date);
         timestamp -= days;
-        var newDate = TryUpdateValue(timestamp);
+        var newDate = TryConvertTimestampToDay(timestamp);
         return newDate;
     }
 
@@ -179,13 +179,11 @@ public class Date
         }
         catch (ArgumentException ex)
         {
-            Console.WriteLine(ex.Message);
+            throw new Exception(ex.Message);
         }
-
-        return date;
     }
 
-    private static Date? TryUpdateValue(uint newTimestamp)
+    private static Date? TryConvertTimestampToDay(uint newTimestamp)
     {
         try
         {
@@ -193,7 +191,6 @@ public class Date
         }
         catch (ArgumentException exception)
         {
-            Console.WriteLine($"Cant update timestamp! {exception.Message}");
             return null;
         }
     }

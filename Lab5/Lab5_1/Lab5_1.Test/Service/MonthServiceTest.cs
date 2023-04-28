@@ -122,7 +122,7 @@ public class DaysInMonthTests
     [TestCase(31U+29U, 1972U, Month.MARCH, 0U)]
     public void GetMonthBeginningOfThisTimestamp_validValues(uint timestamp, uint year, Month expectedMonth, uint expectedTimestampRemainder)
     {
-        Month month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
+        Month month = MonthService.ConvertMonthBegginingOfThisTimestamp(ref timestamp, year);
 
         // Assert
         Assert.That(timestamp, Is.EqualTo(expectedTimestampRemainder), "Expected days count remainder is not valid");

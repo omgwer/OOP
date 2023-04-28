@@ -61,7 +61,7 @@ public static class MonthService
         return daysCount;
     }
 
-    public static Month GetMonthBeginningOfThisTimestamp(ref uint timestamp, uint year)
+    public static Month ConvertMonthBegginingOfThisTimestamp(ref uint timestamp, uint year)
     {
         uint month = 1;
         uint limit = _dictionary[(Month)month];

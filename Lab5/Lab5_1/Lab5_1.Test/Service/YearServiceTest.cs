@@ -70,7 +70,7 @@ public class YearServiceTests
     {
         // Act
         var copyOfTimeStamp = timestamp;
-        var years = YearService.GetYearsCountBeginningOfThisTimestamp(ref copyOfTimeStamp);
+        var years = YearService.ConvertTimestampToYear(ref copyOfTimeStamp);
 
         // Assert
         Assert.That(years, Is.EqualTo(expectedYear));

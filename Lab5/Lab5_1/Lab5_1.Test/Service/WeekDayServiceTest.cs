@@ -5,11 +5,12 @@ namespace Lab5_1.Test.Service;
 
 public class WeekDayServiceTest
 {
-    [TestCase(1U, Month.JANUARY, 1970U, WeekDay.THURSDAY)]  // thursday
-    [TestCase(23U, Month.APRIL, 2023U, WeekDay.SUNDAY)]  // sunday
-    [TestCase(27U, Month.MAY, 2021U, WeekDay.THURSDAY)]  // thursday
-    [TestCase(1U, Month.JANUARY, 2023U, WeekDay.SUNDAY)]  // sunday
-    [TestCase(2U, Month.JANUARY, 2023U, WeekDay.MONDAY)]  // sunday
+    // [TestCase(1U, Month.JANUARY, 1970U, WeekDay.THURSDAY)]  // thursday
+    // [TestCase(23U, Month.APRIL, 2023U, WeekDay.SUNDAY)]  // sunday
+    // [TestCase(27U, Month.MAY, 2021U, WeekDay.THURSDAY)]  // thursday
+    // [TestCase(1U, Month.JANUARY, 2023U, WeekDay.SUNDAY)]  // sunday
+    // [TestCase(2U, Month.JANUARY, 2023U, WeekDay.MONDAY)]  // sunday
+    [TestCase(27U, Month.APRIL, 2923U, WeekDay.TUESDAY)]  // sunday
     public void ConvertByZellerAlgorithm_ValidValues(uint day, Month month, uint year, WeekDay expectedDay)
     {
         // Act

@@ -11,12 +11,12 @@ public class MyString : IEnumerable
 
     public MyString()
     {
-        _characters = new[] { END_OF_LINE };
+        _characters = new[] {END_OF_LINE};
     }
 
     public MyString(char[] charArray)
     {
-        _characters = charArray.Concat(new[] { END_OF_LINE }).ToArray();
+        _characters = charArray.Concat(new[] {END_OF_LINE}).ToArray();
     }
 
     public MyString(MyString myString)
@@ -65,7 +65,7 @@ public class MyString : IEnumerable
 
     public void Clear()
     {
-        _characters = new[] { END_OF_LINE };
+        _characters = new[] {END_OF_LINE}; // TODO: add case clear and get length
     }
 
     public override string ToString()
@@ -96,6 +96,7 @@ public class MyString : IEnumerable
         while (enumerator.MoveNext())
         {
         }
+
         return enumerator;
     }
 
@@ -151,7 +152,7 @@ public class MyString : IEnumerable
     {
         var first = firstVariable.GetStringData();
         var second = secondVariable.GetStringData();
-        for (var i = 0; i < first.Length; i++)
+        for (var i = 0; i < first.Length || i < second.Length; i++)  // TODO: добавить проверку выхода за границу массивы, добавить тест
         {
             if (first[i] > second[i])
                 return true;
@@ -177,11 +178,11 @@ public class MyString : IEnumerable
         return false;
     }
 
-    public static bool operator >=(MyString firstVariable, MyString secondVariable)
+    public static bool operator >=(MyString firstVariable, MyString secondVariable)  // добавить тесты
     {
         var first = firstVariable.GetStringData();
         var second = secondVariable.GetStringData();
-        for (var i = 0; i < first.Length; i++)
+        for (var i = 0; i < first.Length; i++) 
         {
             if (first[i] > second[i])
                 return true;
@@ -210,7 +211,7 @@ public class MyString : IEnumerable
     public char this[int index] => _characters[index];
 
     // write operator
-    public static int operator >> (MyString myString, TextWriter textWriter)
+    public static int operator >>(MyString myString, TextWriter textWriter)
     {
         textWriter.WriteLine(myString.ToString());
         return 0;

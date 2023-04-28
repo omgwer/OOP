@@ -6,8 +6,8 @@ public static class WeekDayService
 {
     public static WeekDay GetWeekDay(uint timestamp)
     {
-        var year = YearService.GetYearsCountBeginningOfThisTimestamp(ref timestamp);
-        var month = MonthService.GetMonthBeginningOfThisTimestamp(ref timestamp, year);
+        var year = YearService.ConvertTimestampToYear(ref timestamp);
+        var month = MonthService.ConvertMonthBegginingOfThisTimestamp(ref timestamp, year);
         var day = timestamp + 1;
         return GetWeekDay(day, month, year);
     }
