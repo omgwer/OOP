@@ -1,1 +1,0 @@
-#include "CMyStringOverloadTests.h"

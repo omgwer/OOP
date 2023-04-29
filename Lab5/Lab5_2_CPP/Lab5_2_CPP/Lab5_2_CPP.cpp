@@ -1,6 +1,9 @@
+#include "headers/CMyString.h"
+
+#include <iostream>
 
 int main(int argc, char* argv[])
 {
-    
-    return 0;
+	CMyString str1;	
+	return 0;
 }

@@ -9,7 +9,8 @@ CMyString::CMyString()
 	m_str[0] = m_endOfLineCh;
 }
 
-CMyString::CMyString(const char* pString) : CMyString(pString, std::strlen(pString))
+CMyString::CMyString(const char* pString)
+	: CMyString(pString, std::strlen(pString))
 {
 }
 
@@ -23,17 +24,20 @@ CMyString::CMyString(const char* pString, const size_t length)
 
 CMyString::CMyString(CMyString const& other)
 	: CMyString(other.GetStringData(), other.GetLength())
-{	
+{
 }
 
-CMyString::CMyString(CMyString&& other)
+CMyString::CMyString(CMyString&& other)	
 {
 	m_str = const_cast<char*>(other.GetStringData());
-	m_len = other.GetLength();	
+	m_len = other.GetLength();
+	other.m_str = nullptr;
+	other.m_len = 0;
 }
 
-CMyString::CMyString(std::string const& stlString) : CMyString(stlString.c_str(), stlString.length())
-{	
+CMyString::CMyString(std::string const& stlString)
+	: CMyString(stlString.c_str(), stlString.length())
+{
 }
 
 CMyString::~CMyString()
@@ -62,4 +66,10 @@ CMyString CMyString::SubString(size_t start, size_t length) const
 
 void CMyString::Clear()
 {
+	delete[] m_str;
+	m_len = 0;
+	m_str = new char[m_len + 1];
+	m_str[m_len] = m_endOfLineCh;
 }
+
+
