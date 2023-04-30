@@ -1,33 +1,48 @@
+using System.Text;
+using System.Text.RegularExpressions;
 using Lab6_1.Data;
+using Lab6_1.Exceptions;
 
 namespace Lab6_1;
 
 public class HttpUrl
 {
+    private static readonly string URL_REGEX = "^(?:(http|https)?://)?([^/@: ]+)(?::([0-9]{1,5}))?([^ ]*)?";
+    private static readonly string DOMAIN_REGEX = "([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,63}";
+
+    private static readonly ushort
+        DEFAULT_HTTP_PORT = 80,
+        DEFAULT_HTTPS_PORT = 443;
+
+    private static readonly ushort
+        MIN_PORT = 1,
+        MAX_PORT = 65535;
+
+    private Protocol _protocol;
+    private string _domain;
+    private ushort _port;
+    private string _document;
+
     // выполняет парсинг строкового представления URL-а, в случае ошибки парсинга
     // выбрасыват исключение CUrlParsingError, содержащее текстовое описание ошибки
     public HttpUrl(string url)
     {
-        throw new NotImplementedException();
+        ParseUrl(url);
     }
 
-    /*
-        инициализирует URL на основе переданных параметров.
-		При недопустимости входных параметров выбрасывает исключение
-		invalid_argument
-		Если имя документа не начинается с символа /, то добавляет / к имени документа
-	*/
+    //  инициализирует URL на основе переданных параметров.
+    // При недопустимости входных параметров выбрасывает исключение
+    // invalid_argument
+    // Если имя документа не начинается с символа /, то добавляет / к имени документа
     public HttpUrl(string domain, string document, Protocol protocol = Protocol.HTTP)
     {
         throw new NotImplementedException();
     }
 
-    /*
-        инициализирует URL на основе переданных параметров.
-        При недопустимости входных параметров выбрасывает исключение
-        invalid_argument
-        Если имя документа не начинается с символа /, то добавляет / к имени документа
-    */
+    // инициализирует URL на основе переданных параметров.
+    // При недопустимости входных параметров выбрасывает исключение
+    // invalid_argument
+    // Если имя документа не начинается с символа /, то добавляет / к имени документа
     public HttpUrl(string domain, string document, Protocol protocol, ushort port)
     {
         throw new NotImplementedException();
@@ -38,34 +53,125 @@ public class HttpUrl
     // не должен включаться
     public string GetURL()
     {
-        throw new NotImplementedException();
+        const char delemiter = '/';
+        const char colon = ':';
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder
+            .Append(ProtocolDictionary.ProtocolToStringMap[_protocol])
+            .Append(colon)
+            .Append(delemiter)
+            .Append(delemiter)
+            .Append(_domain);
+        if (!(_protocol == Protocol.HTTP && _port == DEFAULT_HTTP_PORT || _protocol == Protocol.HTTPS && _port == DEFAULT_HTTPS_PORT))
+        {
+            stringBuilder.Append(colon).Append(_port);
+        }
+
+        if (_document != string.Empty)
+        {
+            stringBuilder.Append(_document);
+        }
+
+        return stringBuilder.ToString();
     }
 
     // возвращает доменное имя
     public string GetDomain()
     {
-        throw new NotImplementedException();
+        return _domain;
     }
 
-    /* Возвращает имя документа. Примеры: 
-            /
-            /index.html
-            /images/photo.jpg
-    */
+    // Возвращает имя документа. Примеры: 
+    //        /
+    //        /index.html
+    //        /images/photo.jpg
     public string GetDocument()
     {
-        throw new NotImplementedException();
+        return _document;
     }
 
     // возвращает тип протокола
     public Protocol GetProtocol()
     {
-        throw new NotImplementedException();
+        return _protocol;
     }
 
     // возвращает номер порта
     public ushort GetPort()
     {
-        throw new NotImplementedException();
+        return _port;
+    }
+
+    private void ParseUrl(string url)
+    {
+        Match match = Regex.Match(url, URL_REGEX);
+        if (match.Success)
+        {
+            _protocol = ParseProtocol(match.Groups[1].Value);
+            _domain = ParseDomain(match.Groups[2].Value);
+            _port = ParsePort(match.Groups[3].Value, _protocol);
+            _document = ParseDocument(match.Groups[4].Value);
+        }
+        else
+        {
+            throw new UrlParseError("Invalid url");
+        }
+    }
+
+    private Protocol ParseProtocol(string value)
+    {
+        var isCorrectConvert = ProtocolDictionary.StringToProtocolMap.TryGetValue(value, out var varProtocol);
+        if (!isCorrectConvert)
+            throw new UrlParseError("Cant convert string to protocol value");
+        return varProtocol;
+    }
+
+    private string ParseDomain(string value)
+    {
+        var match = Regex.Match(value, DOMAIN_REGEX);
+        if (match.Success)
+        {
+            return match.Value;
+        }
+
+        throw new UrlParseError($"{value} - Is invalid domain name");
+    }
+
+    private ushort ParsePort(string value, Protocol protocol)
+    {
+        if (value.Length == 0)
+        {
+            var isCorrectConvert = ProtocolDictionary.ProtocolToPortMap.TryGetValue(protocol, out var port);
+            if (!isCorrectConvert)
+                throw new UrlParseError($"Error! dont have protocol to convert in dictionary!");
+            return port;
+        }
+
+        ushort.TryParse(value, out var varPort);
+        if (varPort >= MIN_PORT && varPort <= MAX_PORT)
+            return varPort;
+
+        throw new UrlParseError($"{value} - is invalid value for convert to port!");
+    }
+
+    private string ParseDocument(string document)
+    {
+        const char delimiter = '/';
+        if (document == string.Empty)
+            return delimiter.ToString();
+        if (document.First() == delimiter)
+            return document;
+        return delimiter + document;
+    }
+
+    public override string ToString()
+    {
+        const char newStringDelimiter = '\n';
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.Append("Protocol - ").Append(ProtocolDictionary.ProtocolToStringMap[_protocol]).Append(newStringDelimiter);
+        stringBuilder.Append("Domain - ").Append(_domain).Append(newStringDelimiter);
+        stringBuilder.Append("Port - ").Append(_port).Append(newStringDelimiter);
+        stringBuilder.Append("Data - ").Append(_document).Append(newStringDelimiter);
+        return stringBuilder.ToString();
     }
 }
