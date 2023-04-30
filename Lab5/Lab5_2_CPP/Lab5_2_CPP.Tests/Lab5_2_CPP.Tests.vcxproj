@@ -36,6 +36,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="CMyStringIteratorTests.cpp" />
     <ClCompile Include="СMyStringOverloadTests.cpp" />
     <ClCompile Include="СMyStringTests.cpp" />
   </ItemGroup>

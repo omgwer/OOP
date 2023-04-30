@@ -1,12 +1,28 @@
 #include "headers/CMyString.h"
 #include "headers/CMyStringIterator.h"
+#include "CMyStringIterator.cpp"
 #include <iostream>
+
+// range based for
+int rangeBasedFor()
+{
+	CMyString str("Hello, world!");
+    
+	// range-based for loop
+	for (auto ch : str)
+	{
+		std::cout << ch << " ";
+	}
+	std::cout << std::endl;
+	return 0;
+}
 
 int main(int argc, char* argv[])
 {
-	// char  sa = 'd';
-	// char * ptr = &sa;
-	// CMyStringIterator<char> it(ptr);
+	rangeBasedFor();
 	return 0;
 }
+
+
+
 
