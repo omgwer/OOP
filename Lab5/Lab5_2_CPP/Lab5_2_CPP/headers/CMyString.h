@@ -1,6 +1,9 @@
 #pragma once
+#include "CMyStringIterator.h"
+
 #include <cstdint>
 #include <string>
+
 
 class CMyString
 {
@@ -34,22 +37,34 @@ public:
 	CMyString SubString(size_t start, size_t length = SIZE_MAX) const;
 	// очистка строки (строка становится снова нулевой длины)
 	void Clear();
-
+	// overload
 	CMyString& operator=(const CMyString& other);
-	CMyString const operator+(const CMyString& other);
+	CMyString operator+(const CMyString& other) const;
 	CMyString& operator+=(const CMyString& other);
-	bool operator==(const CMyString& other);
-	bool operator!=(const CMyString& other);
-	bool operator>(const CMyString& other);
-	bool operator<(const CMyString& other);
-	bool operator>=(const CMyString& other);
-	bool operator<=(const CMyString& other);
-	const char& operator[](size_t id) const;
-	char& operator[](size_t id);
-	CMyString& operator>>();
+	bool operator==(const CMyString& other) const;
+	bool operator!=(const CMyString& other) const;
+	bool operator>(const CMyString& other) const;
+	bool operator<(const CMyString& other) const;
+	bool operator>=(const CMyString& other) const;
+	bool operator<=(const CMyString& other) const;
+	const char& operator[](size_t index) const;
+	char& operator[](size_t index);
+	// iterators
 
+	using iterator = CMyStringIterator<char>;
+	using const_iterator = CMyStringIterator<const char>;
+
+	iterator begin();
+	iterator end();
+	const_iterator begin() const;
+	const_iterator end() const;	
 private:
 	size_t m_len;
 	char* m_str;
 	char m_endOfLineCh = 0;
+	friend std::istream& operator>>(std::istream& istream, CMyString& myString);
+	friend std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);
 };
+
+std::istream& operator>>(std::istream& istream, CMyString& myString);
+std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);
