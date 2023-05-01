@@ -1,8 +1,10 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Lab6_1;
+using Lab6_1.Infrastructure;
 
-var t = new HttpUrl("http://google.com:1337/file");
+var handler = new HttpUrlHandler(Console.In, Console.Out);
 
-Console.WriteLine(t.ToString());
-Console.WriteLine(t.GetUrl());
+while (handler.IsRun)
+{
+    handler.HandleInput();
+}
