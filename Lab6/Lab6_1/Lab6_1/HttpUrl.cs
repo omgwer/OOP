@@ -9,6 +9,7 @@ public class HttpUrl
 {
     private static readonly string URL_REGEX = "^(?:(http|https)?://)?([^/@: ]+)(?::([0-9]{1,5}))?([^ ]*)?";
     private static readonly string DOMAIN_REGEX = "([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,63}";
+    private static readonly string DOCUMENT_REGEX = @"^/?([\w-]+\/)?[\w-]+\.\w+$";
 
     private static readonly ushort
         DEFAULT_HTTP_PORT = 80,
@@ -36,7 +37,10 @@ public class HttpUrl
     // Если имя документа не начинается с символа /, то добавляет / к имени документа
     public HttpUrl(string domain, string document, Protocol protocol = Protocol.HTTP)
     {
-        throw new NotImplementedException();
+        _protocol = protocol;
+        _domain = ParseDomain(domain);
+        _document = ParseDocument(document);
+        _port = ParsePort(string.Empty, protocol);
     }
 
     // инициализирует URL на основе переданных параметров.
@@ -45,13 +49,18 @@ public class HttpUrl
     // Если имя документа не начинается с символа /, то добавляет / к имени документа
     public HttpUrl(string domain, string document, Protocol protocol, ushort port)
     {
-        throw new NotImplementedException();
+        _protocol = protocol;
+        _domain = ParseDomain(domain);
+        _document = ParseDocument(document);
+        if (port < MIN_PORT || port > MAX_PORT)
+            throw new UrlParseError($"{port} - is invalid value to port!");
+        _port = port;
     }
 
     // возвращает строковое представление URL-а. Порт, являющийся стандартным для
     // выбранного протокола (80 для http и 443 для https) в эту строку
     // не должен включаться
-    public string GetURL()
+    public string GetUrl()
     {
         const char delemiter = '/';
         const char colon = ':';
