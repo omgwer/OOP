@@ -8,7 +8,7 @@ namespace Lab6_1;
 public class HttpUrl
 {
     private static readonly string URL_REGEX = "^(?:(http|https)?://)?([^/@: ]+)(?::([0-9]{1,5}))?([^ ]*)?";
-    private static readonly string DOMAIN_REGEX = "([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,63}";
+    private static readonly string DOMAIN_REGEX = "^([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,63}$";
     private static readonly string DOCUMENT_REGEX = @"^/?([\w-]+\/)?[\w-]+\.\w+$";
 
     private static readonly ushort
@@ -166,8 +166,17 @@ public class HttpUrl
     private string ParseDocument(string document)
     {
         const char delimiter = '/';
+        if (document == delimiter.ToString())
+            return document;
         if (document == string.Empty)
             return delimiter.ToString();
+        
+        var match = Regex.Match(document, DOCUMENT_REGEX);
+        if (!match.Success)
+        {
+            throw new UrlParseError($"{document} - Is invalid domain name");
+        }
+       
         if (document.First() == delimiter)
             return document;
         return delimiter + document;
