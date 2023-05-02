@@ -14,6 +14,7 @@ public class HttpUrlHandler
         _streamReader = streamReader;
         _streamWriter = streamWriter;
         _isRun = true;
+        _streamWriter.WriteLine("Program is run!");
     }
 
     public void HandleInput()
@@ -22,6 +23,7 @@ public class HttpUrlHandler
         if (inputString == null)
         {
             _isRun = false;
+            _streamWriter.WriteLine("Program is closed");
             return;
         }
 

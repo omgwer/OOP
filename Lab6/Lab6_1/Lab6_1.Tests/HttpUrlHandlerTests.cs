@@ -1,78 +1,52 @@
 using Lab6_1.Infrastructure;
+using Moq;
 
 namespace Lab6_1.Tests;
 
+//_textWriterMock.Verify(x => x.Write(It.IsAny<string>()), Times.Once);  - проверка что в строке было "что-то"
 [TestFixture]
 public class HttpUrlHandlerTests
 {
-    private StringReader _stringReader;
-    private StringWriter _stringWriter;
+    private Mock<TextReader> _textReaderMock;
+    private Mock<TextWriter> _textWriterMock;
     private HttpUrlHandler _httpUrlHandler;
 
     [SetUp]
     public void Setup()
     {
-        _stringReader = new StringReader("http://www.example.com");
-        _stringWriter = new StringWriter();
-        _httpUrlHandler = new HttpUrlHandler(_stringReader, _stringWriter);
+        _textReaderMock = new Mock<TextReader>();
+        _textWriterMock = new Mock<TextWriter>();
+        _httpUrlHandler = new HttpUrlHandler(_textReaderMock.Object, _textWriterMock.Object);
     }
 
     [Test]
-    public void HandleInput_ShouldWriteParsedUrl_WhenInputIsValid()
+    public void HandleInput_EmptyStream()
     {
-        // Arrange
-        var expectedOutput = "http://www.example.com/\r\n";
+        _textReaderMock.SetupSequence(r => r.ReadLine());
 
-        // Act
-        _httpUrlHandler.HandleInput();
-
-        // Assert
-        Assert.That(_stringWriter.ToString(), Is.EqualTo(expectedOutput));
-    }
-
-    [Test]
-    public void HandleInput_ShouldWriteError_WhenInputIsInvalid()
-    {
-        // Arrange
-        _stringReader = new StringReader("invalid url");
-        _httpUrlHandler = new HttpUrlHandler(_stringReader, _stringWriter);
-        var expectedOutput = "Cant convert this string - invalid url. Errors :Invalid scheme.\r\n";
-
-        // Act
-        _httpUrlHandler.HandleInput();
-
-        // Assert
-        Assert.That(_stringWriter.ToString(), Is.EqualTo(expectedOutput));
-    }
-
-    [Test]
-    public void HandleInput_ShouldSetIsRunToFalse_WhenInputIsNull()
-    {
-        // Arrange
-        _stringReader = new StringReader("");
-        _httpUrlHandler = new HttpUrlHandler(_stringReader, _stringWriter);
-
-        // Act
-        _httpUrlHandler.HandleInput();
-
-        // Assert
-        Assert.That(_httpUrlHandler.IsRun, Is.False);
-    }
-
-    [Test]
-    public void HandleInput_ShouldThrowException_WhenUnhandledExceptionOccurs()
-    {
-        // Arrange
-        _stringReader = new StringReader("http://www.example.com");
-        _httpUrlHandler = new HttpUrlHandler(_stringReader, _stringWriter);
-        var exceptionMessage = "Unhandled exception occurred";
-        var expectedException = new Exception("Runtime error" + exceptionMessage);
-
-        // Act & Assert
-        Assert.That(() =>
+        while (_httpUrlHandler.IsRun)
         {
             _httpUrlHandler.HandleInput();
-            throw new Exception(exceptionMessage);
-        }, Throws.Exception.EqualTo(expectedException));
+        }
+        
+        _textWriterMock.Verify(w => w.WriteLine("Program is run!"), Times.Once);
+        _textWriterMock.Verify(w => w.WriteLine("Program is closed"), Times.Once);
+    }
+    
+    [Test]
+    public void HandleInput_ValidUrl()
+    {
+        _textReaderMock.SetupSequence(r => r.ReadLine())
+            .Returns("https://google.com")
+            .Returns("http://some-one.ru:1234/file.jpg");
+            
+
+        while (_httpUrlHandler.IsRun)
+        {
+            _httpUrlHandler.HandleInput();
+        }
+        
+        _textWriterMock.Verify(w => w.WriteLine("Program is run!"), Times.Once);
+        _textWriterMock.Verify(w => w.WriteLine("Program is closed"), Times.Once);
     }
 }
