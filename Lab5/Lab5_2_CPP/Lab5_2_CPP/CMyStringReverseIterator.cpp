@@ -39,11 +39,14 @@ template <typename T> CMyStringReverseIterator<T>& CMyStringReverseIterator<T>::
 
 template <typename T> int CMyStringReverseIterator<T>::operator-(const CMyStringReverseIterator<T>& other) const
 {
-	return  m_ch - other.m_ch;
+	int var = -(m_ch - other.m_ch);
+	return  var;
 }
 
 template <typename T> CMyStringReverseIterator<T> CMyStringReverseIterator<T>::operator+(const CMyStringReverseIterator<T>& other)
 {
+	int var = m_ch; // last index  //TODO: доделать реверсивные итераторы
+	
 	return {m_ch + other.m_ch, m_index + other.m_index, m_length + other.m_length};
 }
 

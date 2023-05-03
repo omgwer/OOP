@@ -192,3 +192,23 @@ CMyString::ConstIterator CMyString::end() const
 {
 	return { m_str + m_length, m_length, m_length };
 }
+
+CMyString::ReverseIterator CMyString::rbegin()
+{
+	return { m_str + m_length, m_length, 0 };
+}
+
+CMyString::ReverseIterator CMyString::rend()
+{
+	return { m_str, m_length, m_length };
+}
+
+CMyString::ConstReverseIterator CMyString::rbegin() const
+{
+	return { m_str + m_length, m_length, 0 };
+}
+
+CMyString::ConstReverseIterator CMyString::rend() const
+{
+	return { m_str, m_length, m_length };
+}

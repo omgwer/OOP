@@ -59,7 +59,11 @@ public:
 	Iterator begin();
 	Iterator end();
 	ConstIterator begin() const;
-	ConstIterator end() const;	
+	ConstIterator end() const;
+	ReverseIterator rbegin();
+	ReverseIterator rend();
+	ConstReverseIterator rbegin() const;
+	ConstReverseIterator rend() const;	
 private:
 	size_t m_length;
 	char* m_str;
