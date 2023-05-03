@@ -13,6 +13,9 @@ public:
 	typename CMyStringIterator<T>::reference operator*() const;
 	CMyStringIterator& operator++();
 	CMyStringIterator& operator--();
+	CMyStringIterator operator-(const CMyStringIterator& other);
 private:
 	T* m_ch;
+	size_t m_size;
+	size_t m_index;
 };

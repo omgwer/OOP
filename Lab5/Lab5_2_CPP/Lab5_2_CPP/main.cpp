@@ -9,7 +9,7 @@ int rangeBasedFor()
 	CMyString str("Hello, world!");
     
 	// range-based for loop
-	for (auto ch : str)
+	for (const auto ch : str)
 	{
 		std::cout << ch << " ";
 	}

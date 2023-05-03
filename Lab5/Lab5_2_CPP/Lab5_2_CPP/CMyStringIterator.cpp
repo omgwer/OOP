@@ -1,5 +1,7 @@
 #include "headers/CMyStringIterator.h"
 
+#include <stdexcept>
+
 template <class T> CMyStringIterator<T>::CMyStringIterator(T* p)
 	: m_ch(p)
 {
@@ -35,4 +37,13 @@ template <typename T> CMyStringIterator<T>& CMyStringIterator<T>::operator--()
 {
 	--m_ch;
 	return *this;
+}
+
+template <typename T>
+CMyStringIterator<T> CMyStringIterator<T>::operator-(const CMyStringIterator& other)
+{
+	int difference = m_index - other.m_index;
+	if (difference < 0)
+		throw std::out_of_range("Error! Right operator biggest left operator!");
+	return new CMyStringIterator(); // TODO: добпавить в конструктор 
 }
