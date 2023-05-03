@@ -6,8 +6,8 @@
 
 CMyString::CMyString()
 {
-	m_len = 0;
-	m_str = new char[m_len + 1];
+	m_length = 0;
+	m_str = new char[m_length + 1];
 	m_str[0] = m_endOfLineCh;
 }
 
@@ -18,10 +18,10 @@ CMyString::CMyString(const char* pString)
 
 CMyString::CMyString(const char* pString, const size_t length)
 {
-	m_len = length;
-	m_str = new char[m_len + 1];
+	m_length = length;
+	m_str = new char[m_length + 1];
 	std::memcpy(m_str, pString, length);
-	m_str[m_len] = m_endOfLineCh;
+	m_str[m_length] = m_endOfLineCh;
 }
 
 CMyString::CMyString(CMyString const& other)
@@ -32,9 +32,9 @@ CMyString::CMyString(CMyString const& other)
 CMyString::CMyString(CMyString&& other)
 {
 	m_str = const_cast<char*>(other.GetStringData());
-	m_len = other.GetLength();
+	m_length = other.GetLength();
 	other.m_str = nullptr;
-	other.m_len = 0;
+	other.m_length = 0;
 }
 
 CMyString::CMyString(std::string const& stlString)
@@ -49,7 +49,7 @@ CMyString::~CMyString()
 
 size_t CMyString::GetLength() const
 {
-	return m_len;
+	return m_length;
 }
 
 const char* CMyString::GetStringData() const
@@ -59,19 +59,19 @@ const char* CMyString::GetStringData() const
 
 CMyString CMyString::SubString(const size_t start, const size_t length) const
 {
-	if (start > m_len)
+	if (start > m_length)
 	{
 		throw std::out_of_range("Out of range.");
 	}
-	return CMyString(m_str + start, std::min(m_len - start, length));
+	return CMyString(m_str + start, std::min(m_length - start, length));
 }
 
 void CMyString::Clear()
 {
 	delete[] m_str;
-	m_len = 0;
-	m_str = new char[m_len + 1];
-	m_str[m_len] = m_endOfLineCh;
+	m_length = 0;
+	m_str = new char[m_length + 1];
+	m_str[m_length] = m_endOfLineCh;
 }
 
 CMyString& CMyString::operator=(const CMyString& other)
@@ -80,17 +80,17 @@ CMyString& CMyString::operator=(const CMyString& other)
 	{
 		CMyString tmp(other);
 		std::swap(m_str, tmp.m_str);
-		std::swap(m_len, tmp.m_len);
+		std::swap(m_length, tmp.m_length);
 	}
 	return *this;
 }
 
 CMyString CMyString::operator+(const CMyString& other) const
 {
-	const size_t length = m_len + other.GetLength();
+	const size_t length = m_length + other.GetLength();
 	char* pString = new char[length + 1];
-	std::memcpy(pString, m_str, m_len);
-	std::memcpy(pString + m_len, other.GetStringData(), other.GetLength());
+	std::memcpy(pString, m_str, m_length);
+	std::memcpy(pString + m_length, other.GetStringData(), other.GetLength());
 	pString[length] = m_endOfLineCh;
 	CMyString newString(pString, length);
 	delete[] pString;
@@ -105,7 +105,7 @@ CMyString& CMyString::operator+=(const CMyString& other)
 
 bool CMyString::operator==(const CMyString& other) const
 {
-	return m_len == other.GetLength() && std::strcmp(m_str, other.GetStringData()) == 0;
+	return m_length == other.GetLength() && std::strcmp(m_str, other.GetStringData()) == 0;
 }
 
 bool CMyString::operator!=(const CMyString& other) const
@@ -143,7 +143,7 @@ bool CMyString::operator<=(const CMyString& other) const
 
 const char& CMyString::operator[](size_t index) const
 {
-	if (index > m_len)
+	if (index > m_length)
 	{
 		throw std::out_of_range("Out of range.");
 	}
@@ -152,7 +152,7 @@ const char& CMyString::operator[](size_t index) const
 
 char& CMyString::operator[](size_t index)
 {
-	if (index > m_len)
+	if (index > m_length)
 	{
 		throw std::out_of_range("Out of range.");
 	}
@@ -173,22 +173,22 @@ std::ostream& operator<<(std::ostream& ostream, const CMyString& myString)
 	return ostream;
 }
 
-CMyString::iterator CMyString::begin()
+CMyString::Iterator CMyString::begin()
 {
-	return iterator(m_str);
+	return { m_str, m_length, 0 };
 }
 
-CMyString::iterator CMyString::end()
+CMyString::Iterator CMyString::end()
 {
-	return iterator(m_str + m_len);
+	return { m_str + m_length, m_length, m_length };
 }
 
-CMyString::const_iterator CMyString::begin() const
+CMyString::ConstIterator CMyString::begin() const
 {
-	return const_iterator(m_str);
+	return { m_str, m_length, 0 };
 }
 
-CMyString::const_iterator CMyString::end() const
+CMyString::ConstIterator CMyString::end() const
 {
-	return const_iterator(m_str + m_len);
+	return { m_str + m_length, m_length, m_length };
 }

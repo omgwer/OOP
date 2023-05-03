@@ -1,5 +1,6 @@
 #pragma once
 #include "CMyStringIterator.h"
+#include "CMyStringReverseIterator.h"
 
 #include <cstdint>
 #include <string>
@@ -48,17 +49,19 @@ public:
 	bool operator<=(const CMyString& other) const;
 	const char& operator[](size_t index) const;
 	char& operator[](size_t index);
+	
 	// iterators
+	using Iterator = CMyStringIterator<char>;
+	using ConstIterator = CMyStringIterator<const char>;
+	using ReverseIterator = CMyStringReverseIterator<char>;
+	using ConstReverseIterator = CMyStringReverseIterator<const char>;
 
-	using iterator = CMyStringIterator<char>;
-	using const_iterator = CMyStringIterator<const char>;
-
-	iterator begin();
-	iterator end();
-	const_iterator begin() const;
-	const_iterator end() const;	
+	Iterator begin();
+	Iterator end();
+	ConstIterator begin() const;
+	ConstIterator end() const;	
 private:
-	size_t m_len;
+	size_t m_length;
 	char* m_str;
 	char m_endOfLineCh = 0;
 	friend std::istream& operator>>(std::istream& istream, CMyString& myString);

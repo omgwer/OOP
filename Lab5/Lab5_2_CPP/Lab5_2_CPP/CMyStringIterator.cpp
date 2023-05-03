@@ -1,14 +1,12 @@
 #include "headers/CMyStringIterator.h"
 
-#include <stdexcept>
-
-template <class T> CMyStringIterator<T>::CMyStringIterator(T* p)
-	: m_ch(p)
+template <class T> CMyStringIterator<T>::CMyStringIterator(T* p, size_t length, size_t index)
+	: m_ch(p), m_length(length), m_index(index)
 {
 }
 
 template <class T> CMyStringIterator<T>::CMyStringIterator(const CMyStringIterator& it)
-	: m_ch(it.m_ch)
+	: CMyStringIterator(it.m_ch, it.m_length, it.m_index)
 {
 }
 
@@ -39,11 +37,17 @@ template <typename T> CMyStringIterator<T>& CMyStringIterator<T>::operator--()
 	return *this;
 }
 
-template <typename T>
-CMyStringIterator<T> CMyStringIterator<T>::operator-(const CMyStringIterator& other)
+template <typename T> int CMyStringIterator<T>::operator-(const CMyStringIterator<T>& other) const
 {
-	int difference = m_index - other.m_index;
-	if (difference < 0)
-		throw std::out_of_range("Error! Right operator biggest left operator!");
-	return new CMyStringIterator(); // TODO: добпавить в конструктор 
+	return  m_ch - other.m_ch;
+}
+
+template <typename T> CMyStringIterator<T> CMyStringIterator<T>::operator+(const CMyStringIterator<T>& other)
+{
+	return {m_ch + other.m_ch, m_index + other.m_index, m_length + other.m_length};
+}
+
+template <typename T> CMyStringIterator<T> CMyStringIterator<T>::operator+(const size_t value)
+{
+	return {m_ch + value, m_index + value, m_length + value};
 }
