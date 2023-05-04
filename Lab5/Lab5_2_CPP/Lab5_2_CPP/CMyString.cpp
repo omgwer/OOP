@@ -3,6 +3,8 @@
 #include <iostream>
 #include <stdexcept>
 
+static constexpr char m_endOfLineCh = 0;  // TODO вынести в статическую переменную или константу
+
 CMyString::CMyString()
 {
 	m_length = 0;
@@ -51,7 +53,7 @@ size_t CMyString::GetLength() const
 	return m_length;
 }
 
-const char* CMyString::GetStringData() const
+const char* CMyString::GetStringData() const  // TODO: для перемещенных строрка возвращать указатель на символ (константнтый) с кодом 0;
 {
 	return m_str;
 }
@@ -62,6 +64,7 @@ CMyString CMyString::SubString(const size_t start, const size_t length) const
 	{
 		throw std::out_of_range("Out of range.");
 	}
+	// TODO: если m_str перемещена врозвразать указатель на символ с кодом 0 
 	return CMyString(m_str + start, std::min(m_length - start, length));
 }
 
@@ -69,8 +72,8 @@ void CMyString::Clear()
 {
 	delete[] m_str;
 	m_length = 0;
-	m_str = new char[m_length + 1];
-	m_str[m_length] = m_endOfLineCh;
+	m_str = new char[m_length + 1]; // обнулять длину, не выделяя новую память.
+	m_str[m_length] = m_endOfLineCh;  // TODO: если строка перемещена должна норм работать
 }
 
 CMyString& CMyString::operator=(const CMyString& other)
@@ -84,6 +87,18 @@ CMyString& CMyString::operator=(const CMyString& other)
 	return *this;
 }
 
+CMyString& CMyString::operator=(CMyString&& other)
+{
+	if (this != &other)
+	{
+		m_str = const_cast<char*>(other.GetStringData());
+		m_length = other.GetLength();
+		other.m_str = nullptr;
+		other.m_length = 0;
+	}
+	return *this;
+}
+
 CMyString CMyString::operator+(const CMyString& other) const
 {
 	const size_t length = m_length + other.GetLength();
@@ -91,7 +106,7 @@ CMyString CMyString::operator+(const CMyString& other) const
 	std::memcpy(pString, m_str, m_length);
 	std::memcpy(pString + m_length, other.GetStringData(), other.GetLength());
 	pString[length] = m_endOfLineCh;
-	CMyString newString(pString, length);
+	CMyString newString(pString, length);  // TODO: Добавить перегрузку конструктора с bool(выделили память или нет) со ссылкой на уже выделенную память
 	delete[] pString;
 	return newString;
 }
@@ -104,6 +119,7 @@ CMyString& CMyString::operator+=(const CMyString& other)
 
 bool CMyString::operator==(const CMyString& other) const
 {
+	// TODO: Неорретно работает с строками с нулевым кодом в середине 
 	return m_length == other.GetLength() && std::strcmp(m_str, other.GetStringData()) == 0;
 }
 
@@ -114,6 +130,7 @@ bool CMyString::operator!=(const CMyString& other) const
 
 bool CMyString::operator>(const CMyString& other) const
 {
+	// TODO: Некорректно работает со строками с нулевым колом.  //std::memcmp
 	if (std::strcmp(this->GetStringData(), other.GetStringData()) > 0)
 		return true;
 	return false;
@@ -121,6 +138,7 @@ bool CMyString::operator>(const CMyString& other) const
 
 bool CMyString::operator<(const CMyString& other) const
 {
+	// TODO: Некорректно работает со строками с нулевым колом.  //std::memcmp
 	if (std::strcmp(this->GetStringData(), other.GetStringData()) < 0)
 		return true;
 	return false;
@@ -128,6 +146,7 @@ bool CMyString::operator<(const CMyString& other) const
 
 bool CMyString::operator>=(const CMyString& other) const
 {
+	// TODO: Некорректно работает со строками с нулевым колом.  //std::memcmp
 	if (std::strcmp(this->GetStringData(), other.GetStringData()) >= 0)
 		return true;
 	return false;
@@ -135,6 +154,7 @@ bool CMyString::operator>=(const CMyString& other) const
 
 bool CMyString::operator<=(const CMyString& other) const
 {
+	// TODO: Некорректно работает со строками с нулевым колом.  //std::memcmp
 	if (std::strcmp(this->GetStringData(), other.GetStringData()) <= 0)
 		return true;
 	return false;
@@ -146,7 +166,7 @@ const char& CMyString::operator[](size_t index) const
 	{
 		throw std::out_of_range("Out of range.");
 	}
-	return m_str[index];
+	return m_str[index];  // TODO: некорректная работа с move string
 }
 
 char& CMyString::operator[](size_t index)

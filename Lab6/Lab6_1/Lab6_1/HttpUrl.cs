@@ -7,6 +7,11 @@ namespace Lab6_1;
 
 public class HttpUrl
 {
+    
+    // TODO: в имени домена точка не обязатель 
+    // TODO: приводить к lower case 
+    // TODO: добавить поддержку двоеточий
+    // TODO: добавить константные методы
     private static readonly string URL_REGEX = "^(?:(http|https)?://)?([^/@: ]+)(?::([0-9]{1,5}))?([^ ]*)?";
     private static readonly string DOMAIN_REGEX = "^([a-zA-Z0-9-]{1,63}\\.)+[a-zA-Z]{2,63}$";
     private static readonly string DOCUMENT_REGEX = @"^/?([\w-]+\/)?[\w-]+\.\w+$";
@@ -174,7 +179,7 @@ public class HttpUrl
         var match = Regex.Match(document, DOCUMENT_REGEX);
         if (!match.Success)
         {
-            throw new UrlParseError($"{document} - Is invalid domain name");
+            throw new UrlParseError($"{document} - Is invalid document name");  // TODO: rename
         }
        
         if (document.First() == delimiter)

@@ -4,8 +4,8 @@ namespace Lab6_1.Infrastructure;
 
 public class HttpUrlHandler
 {
-    private TextReader _streamReader;
-    private TextWriter _streamWriter;
+    private readonly TextReader _streamReader;
+    private readonly TextWriter _streamWriter;
     private bool _isRun;
     public bool IsRun => _isRun;
 

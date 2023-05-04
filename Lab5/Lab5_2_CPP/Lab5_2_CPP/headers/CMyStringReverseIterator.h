@@ -1,10 +1,9 @@
 #pragma once
 #include <iterator>
 
-template<typename T>
+template<typename T>  //  TODO: add reverse iterator
 class CMyStringReverseIterator : public std::iterator<std::input_iterator_tag, T>
 {
-	friend class CMyString;
 public:
 	CMyStringReverseIterator(T* p, size_t length, size_t index)
 	: m_ch(p), m_length(length), m_index(index)
@@ -18,7 +17,7 @@ public:
 	bool operator!=(CMyStringReverseIterator<T> const& other) const;
 	bool operator==(CMyStringReverseIterator<T> const& other) const;
 	T& operator*() const;
-	CMyStringReverseIterator& operator++();   // prefixVers &
+	CMyStringReverseIterator& operator++();   // TODO: prefixVers &
 	CMyStringReverseIterator& operator--();
 	int operator-(const CMyStringReverseIterator& other)const;
 	CMyStringReverseIterator operator+(const CMyStringReverseIterator& other);

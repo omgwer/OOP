@@ -1,15 +1,16 @@
 #include <vector>
 
-template <typename T>
-bool FindMaxEx(std::vector<T> const& array, T& maxValue, std::less<T> const& less)
+// добавить less компаратор 
+template <typename T, typename Comp>
+bool FindMaxEx(std::vector<T> const& array, T& maxValue, Comp comp)
 {
 	if (array.empty())
 		return false;
 
-	T varMax = array[0];
+	T& varMax = array[0]; // хранить ссылку 
 	for (T element : array)
 	{
-		if (less(varMax, element))
+		if (comp(varMax, element))
 		{
 			varMax = element;
 		}

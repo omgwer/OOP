@@ -38,7 +38,8 @@ public:
 	// очистка строки (строка становится снова нулевой длины)
 	void Clear();
 	// overload
-	CMyString& operator=(const CMyString& other);
+	CMyString& operator=(const CMyString& other); // TODO: добавить перемещающий оператор присваивания  --сделано
+	CMyString& operator=(CMyString&& other);
 	CMyString operator+(const CMyString& other) const;
 	CMyString& operator+=(const CMyString& other);
 	bool operator==(const CMyString& other) const;
@@ -56,21 +57,21 @@ public:
 	using ReverseIterator = CMyStringReverseIterator<char>;
 	using ConstReverseIterator = CMyStringReverseIterator<const char>;
 
-	Iterator begin();
+	Iterator begin();  // TODO: преобразовывать итератор(обычный) к  итератору константтому
 	Iterator end();
-	ConstIterator begin() const;
+	ConstIterator begin() const; 
 	ConstIterator end() const;
 	ReverseIterator rbegin();
 	ReverseIterator rend();
 	ConstReverseIterator rbegin() const;
 	ConstReverseIterator rend() const;
+	
+	friend std::istream& operator>>(std::istream& istream, CMyString& myString);
+	friend std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);
 
 private:
 	size_t m_length;
-	char* m_str;
-	char m_endOfLineCh = 0;
-	friend std::istream& operator>>(std::istream& istream, CMyString& myString);
-	friend std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);
+	char* m_str;	
 };
 std::istream& operator>>(std::istream& istream, CMyString& myString);
 std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);
