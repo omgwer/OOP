@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-static constexpr char m_endOfLineCh = 0;  // TODO вынести в статическую переменную или константу
+static constexpr char m_endOfLineCh = 0;  // TODO вынести в статическую переменную или константу -- сделано
 
 CMyString::CMyString()
 {

@@ -21,9 +21,10 @@ public:
 	CMyStringIterator& operator++(); // prefixVers &
 	//CMyStringIterator operator++(); // prefixVers &  // TODO: добавить постфиксную версию
 	CMyStringIterator& operator--();
-	int operator-(const CMyStringIterator& other) const; //  TODO: добавить ptrdifft
+	ptrdiff_t operator-(const CMyStringIterator& other) const; //  TODO: добавить ptrdifft -- сделано
 	CMyStringIterator operator+(const CMyStringIterator& other);
 	CMyStringIterator operator+(size_t value);
+	CMyStringIterator& operator[](size_t index);
 
 private:
 	T* m_ch;

@@ -28,7 +28,7 @@ template <typename T> CMyStringIterator<T>& CMyStringIterator<T>::operator--()
 	return *this;
 }
 
-template <typename T> int CMyStringIterator<T>::operator-(const CMyStringIterator<T>& other) const
+template <typename T> ptrdiff_t CMyStringIterator<T>::operator-(const CMyStringIterator<T>& other) const
 {
 	assert(0 < m_ch - other.m_ch && "Iterator out of range!"); 
 	return  m_ch - other.m_ch;
