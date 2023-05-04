@@ -160,9 +160,6 @@
   <ItemGroup>
     <ClInclude Include="headers\StringList.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="exceptions" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
