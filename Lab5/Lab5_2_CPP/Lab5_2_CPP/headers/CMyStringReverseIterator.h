@@ -11,12 +11,12 @@ public:
 	{
 	}
 	CMyStringReverseIterator(const CMyStringReverseIterator &it)
-	: CMyStringReverseIterator(it.m_ch, it.m_length, it.m_index)
+	: m_ch(it.m_ch), m_length(it.m_length), m_index(it.m_index)
 	{
 	}
 	
-	bool operator!=(CMyStringReverseIterator const& other) const;
-	bool operator==(CMyStringReverseIterator const& other) const;
+	bool operator!=(CMyStringReverseIterator<T> const& other) const;
+	bool operator==(CMyStringReverseIterator<T> const& other) const;
 	typename CMyStringReverseIterator<T>::reference operator*() const;
 	CMyStringReverseIterator& operator++();   // prefixVers &
 	CMyStringReverseIterator& operator--();

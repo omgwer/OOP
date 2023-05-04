@@ -37,6 +37,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="CMyStringIteratorTests.cpp" />
+    <ClCompile Include="MyStringReverseIteratorTests.cpp" />
     <ClCompile Include="СMyStringOverloadTests.cpp" />
     <ClCompile Include="СMyStringTests.cpp" />
   </ItemGroup>

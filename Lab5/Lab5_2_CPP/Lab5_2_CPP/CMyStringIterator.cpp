@@ -1,11 +1,11 @@
 #include "headers/CMyStringIterator.h"
 
-template <typename T> bool CMyStringIterator<T>::operator!=(CMyStringIterator const& other) const
+template <typename T> bool CMyStringIterator<T>::operator!=(CMyStringIterator<T> const& other) const
 {
 	return m_ch != other.m_ch;
 }
 
-template <typename T> bool CMyStringIterator<T>::operator==(CMyStringIterator const& other) const
+template <typename T> bool CMyStringIterator<T>::operator==(CMyStringIterator<T> const& other) const
 {
 	return m_ch == other.m_ch;
 }

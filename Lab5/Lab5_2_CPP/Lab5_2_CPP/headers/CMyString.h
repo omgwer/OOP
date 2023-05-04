@@ -1,5 +1,4 @@
 #pragma once
-
 #include "CMyStringIterator.h"
 #include "CMyStringReverseIterator.h"
 
@@ -73,6 +72,5 @@ private:
 	friend std::istream& operator>>(std::istream& istream, CMyString& myString);
 	friend std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);
 };
-
 std::istream& operator>>(std::istream& istream, CMyString& myString);
 std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);

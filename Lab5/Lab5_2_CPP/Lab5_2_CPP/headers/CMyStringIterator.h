@@ -4,7 +4,6 @@
 template <typename T> class CMyStringIterator : public std::iterator<std::input_iterator_tag, T>
 {
 	friend class CMyString;
-
 public:
 	CMyStringIterator(T* p, size_t length, size_t index)
 		: m_ch(p), m_length(length), m_index(index)
@@ -12,7 +11,7 @@ public:
 	}
 
 	CMyStringIterator(const CMyStringIterator& it)
-		: CMyStringIterator(it.m_ch, it.m_length, it.m_index)
+	: m_ch(it.m_ch), m_length(it.m_length), m_index(it.m_index)
 	{
 	}
 	

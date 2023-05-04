@@ -3,6 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab5_2_CPP", "Lab5_2_CPP\Lab5_2_CPP.vcxproj", "{DFE6716E-C59B-41A2-BEA8-55938FAD5DC9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab5_2_CPP.Tests", "Lab5_2_CPP.Tests\Lab5_2_CPP.Tests.vcxproj", "{4A7C2752-EFD1-4652-B19E-9DA681EA8FF2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DFE6716E-C59B-41A2-BEA8-55938FAD5DC9} = {DFE6716E-C59B-41A2-BEA8-55938FAD5DC9}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
