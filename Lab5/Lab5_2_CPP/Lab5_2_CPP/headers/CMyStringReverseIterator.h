@@ -17,7 +17,7 @@ public:
 	
 	bool operator!=(CMyStringReverseIterator<T> const& other) const;
 	bool operator==(CMyStringReverseIterator<T> const& other) const;
-	typename CMyStringReverseIterator<T>::reference operator*() const;
+	T& operator*() const;
 	CMyStringReverseIterator& operator++();   // prefixVers &
 	CMyStringReverseIterator& operator--();
 	int operator-(const CMyStringReverseIterator& other)const;

@@ -1,8 +1,30 @@
+#include "../Lab5_2_CPP/CMyStringReverseIterator.cpp"
 #include "../Lab5_2_CPP/headers/CMyString.h"
 
 #include <gtest/gtest.h>
 
-TEST(CMyStringReverseIteratorTest, TestStart) {
-	CMyString str("someone");
-	//auto iter = str.rbegin();
+TEST(CMyStringReverseIteratorTest, TestDereferenceOperator) {
+	CMyString str("hello");
+	auto reverseIterator = str.rbegin();	
+	ASSERT_EQ(*reverseIterator, '\0');
+	ASSERT_EQ(*(++reverseIterator), 'o');	
+}
+
+TEST(CMyStringReverseIteratorTest, TestAdditionOperator) {
+	CMyString str("abcd");
+	auto first =  str.rbegin();
+	auto second = str.rend();
+	while (first != second)
+	{
+		++first;
+		--second;
+	}	
+	ASSERT_EQ(*first, 'c');
+}
+
+TEST(CMyStringReverseIteratorTest, TestEqualityOperator) {
+	CMyString str("hello");
+	CMyStringReverseIterator<char> reverseIterator(&str[0], str.GetLength(), 4);
+	CMyStringReverseIterator<char> newIterator(&str[0], str.GetLength(), 4);
+	ASSERT_TRUE(reverseIterator == newIterator);
 }

@@ -58,22 +58,3 @@ int main(int argc, char* argv[])
 	TestReverseIterators();
 	return 0;
 }
-
-
-// #include <cassert>
-//
-// class MyIterator {
-// public:
-// 	// Конструкторы, методы и т.д.
-//
-// 	// Перегрузка префиксной версии оператора ++
-// 	MyIterator& operator++() {
-// 		assert(ptr_ < end_ && "Iterator out of range!"); // проверка границ
-// 		++ptr_;
-// 		return *this;
-// 	}
-//
-// private:
-// 	int* ptr_; // Указатель на элемент в массиве
-// 	int* end_; // Указатель на конец массива
-// };

@@ -1,5 +1,5 @@
 #include "headers/CMyStringIterator.h"
-
+#include <cassert>
 template <typename T> bool CMyStringIterator<T>::operator!=(CMyStringIterator<T> const& other) const
 {
 	return m_ch != other.m_ch;
@@ -17,18 +17,20 @@ template <typename T> T& CMyStringIterator<T>::operator*() const
 
 template <typename T> CMyStringIterator<T>& CMyStringIterator<T>::operator++()
 {
-	++m_ch;
+	assert(m_length < m_index + 1 && "Iterator out of range!");
 	return *this;
 }
 
 template <typename T> CMyStringIterator<T>& CMyStringIterator<T>::operator--()
 {
+	assert(0 < m_index - 1 && "Iterator out of range!"); 
 	--m_ch;
 	return *this;
 }
 
 template <typename T> int CMyStringIterator<T>::operator-(const CMyStringIterator<T>& other) const
 {
+	assert(0 < m_ch - other.m_ch && "Iterator out of range!"); 
 	return  m_ch - other.m_ch;
 }
 
