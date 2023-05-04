@@ -1,46 +1,59 @@
-#include "headers/CMyString.h"
-#include "headers/CMyStringIterator.h"
-#include "CMyStringIterator.cpp"
+
 #include <iostream>
 
 // range based for
-int RangeBasedFor()   // TODO: посмотреть на работу с итераторами .begin() .end()
-{
-	CMyString str("Hello, world!");
-    
-	// range-based for loop
-	for (const auto ch : str)
-	{
-		std::cout << ch << " ";
-	}
-	
-	std::cout << std::endl;
-	return 0;
-}
-
-void TestFuct()
-{
-	CMyString str("Hello, world!");
-
-	auto bgn = str.begin();
-	auto en = str.end();
-
-	auto test = bgn + 3;
-
-	while (test != en)
-	{
-		std::cout << *(test) << " ";
-		++test;
-	}	
-}
+// int RangeBasedFor()
+// {
+// 	CMyString str("Hello, world!");
+//
+// 	// range-based for loop
+// 	for (const auto ch : str)
+// 	{
+// 		std::cout << ch << " ";
+// 	}
+//
+// 	std::cout << std::endl;
+// 	return 0;
+// }
+//
+// void TestForwardIterators()
+// {
+// 	CMyString str("Hello, world!");
+//
+// 	auto bgn = str.begin();
+// 	auto en = str.end();
+//
+// 	auto test = bgn + 3;
+//
+// 	while (test != en)
+// 	{
+// 		std::cout << *(test) << " ";
+// 		++test;
+// 	}
+// }
+//
+// void TestReverseIterators()
+// {
+// 	CMyString str("Hello, world!");
+//
+// 	auto bgn = str.rbegin();
+// 	//auto en = str.rend();
+// 	//
+// 	// auto test = bgn + 3;
+// 	//
+// 	// while (test != en)
+// 	// {
+// 	// 	std::cout << *(test) << " ";
+// 	// 	++test;
+// 	// }	
+// }
 
 int main(int argc, char* argv[])
 {
-	TestFuct();
+	//TestForwardIterators();
 	//RangeBasedFor();
 	return 0;
 }
-
 
 
 // #include <cassert>
@@ -60,6 +73,3 @@ int main(int argc, char* argv[])
 // 	int* ptr_; // Указатель на элемент в массиве
 // 	int* end_; // Указатель на конец массива
 // };
-
-
-

@@ -1,6 +1,4 @@
 #include "headers/CMyString.h"
-#include "CMyStringIterator.cpp"
-#include "CMyStringReverseIterator.cpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -176,7 +174,7 @@ std::ostream& operator<<(std::ostream& ostream, const CMyString& myString)
 
 CMyString::Iterator CMyString::begin()
 {
-	return { m_str, m_length, 0 };
+	return { m_str, m_length, static_cast<size_t>(0) };
 }
 
 CMyString::Iterator CMyString::end()
