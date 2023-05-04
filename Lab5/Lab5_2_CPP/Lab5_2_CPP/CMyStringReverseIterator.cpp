@@ -1,6 +1,6 @@
 #include "headers/CMyStringReverseIterator.h"
 
-template <class T> CMyStringReverseIterator<T>::CMyStringReverseIterator(T* p, size_t length, size_t index)
+template <typename  T> CMyStringReverseIterator<T>::CMyStringReverseIterator(T* p, size_t length, size_t index)
 	: m_ch(p), m_length(length), m_index(index)
 {
 }

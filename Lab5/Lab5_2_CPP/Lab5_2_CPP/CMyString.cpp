@@ -1,5 +1,6 @@
 #include "headers/CMyString.h"
 #include "CMyStringIterator.cpp"
+#include "CMyStringReverseIterator.cpp"
 
 #include <iostream>
 #include <stdexcept>

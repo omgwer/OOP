@@ -49,7 +49,7 @@ public:
 	bool operator<=(const CMyString& other) const;
 	const char& operator[](size_t index) const;
 	char& operator[](size_t index);
-	
+
 	// iterators
 	using Iterator = CMyStringIterator<char>;
 	using ConstIterator = CMyStringIterator<const char>;
@@ -63,7 +63,8 @@ public:
 	ReverseIterator rbegin();
 	ReverseIterator rend();
 	ConstReverseIterator rbegin() const;
-	ConstReverseIterator rend() const;	
+	ConstReverseIterator rend() const;
+
 private:
 	size_t m_length;
 	char* m_str;
