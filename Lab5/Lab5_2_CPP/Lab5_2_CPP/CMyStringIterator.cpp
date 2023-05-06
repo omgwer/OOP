@@ -18,6 +18,7 @@ template <typename T> T& CMyStringIterator<T>::operator*() const
 template <typename T> CMyStringIterator<T>& CMyStringIterator<T>::operator++()
 {
 	assert(m_length < m_index + 1 && "Iterator out of range!");
+	++m_ch;
 	return *this;
 }
 
@@ -26,6 +27,22 @@ template <typename T> CMyStringIterator<T>& CMyStringIterator<T>::operator--()
 	assert(0 < m_index - 1 && "Iterator out of range!"); 
 	--m_ch;
 	return *this;
+}
+
+template <typename T> CMyStringIterator<T> CMyStringIterator<T>::operator++(const int ch)
+{
+	assert(m_length < m_index + 1 && "Iterator out of range!");
+	CMyStringIterator<T> copy = {*this};
+	++m_ch;
+	return copy;
+}
+
+template <typename T> CMyStringIterator<T> CMyStringIterator<T>::operator--(const int ch)
+{
+	assert(0 < m_index - 1 && "Iterator out of range!");
+	CMyStringIterator<T> copy = {*this};
+	--m_ch;
+	return copy;
 }
 
 template <typename T> ptrdiff_t CMyStringIterator<T>::operator-(const CMyStringIterator<T>& other) const

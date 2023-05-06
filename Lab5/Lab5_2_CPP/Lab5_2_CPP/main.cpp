@@ -28,7 +28,7 @@ void TestForwardIterators()
 	while (test != en)
 	{
 		std::cout << *(test) << " ";
-		++test;
+		test++;
 	}
 	std::cout << *(test) << " ";
 	std::cout << std::endl;
@@ -53,8 +53,8 @@ void TestReverseIterators()
 
 int main(int argc, char* argv[])
 {
-	RangeBasedFor();
+	//RangeBasedFor();
 	TestForwardIterators();
-	TestReverseIterators();
+	//TestReverseIterators();
 	return 0;
 }
