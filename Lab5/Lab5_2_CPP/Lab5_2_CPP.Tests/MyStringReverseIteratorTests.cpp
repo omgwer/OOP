@@ -6,8 +6,8 @@
 TEST(CMyStringReverseIteratorTest, TestDereferenceOperator) {
 	CMyString str("hello");
 	auto reverseIterator = str.rbegin();	
-	ASSERT_EQ(*reverseIterator, '\0');
-	ASSERT_EQ(*(++reverseIterator), 'o');	
+	ASSERT_EQ(*reverseIterator, 'o');
+	ASSERT_EQ(*(++reverseIterator), 'l');	
 }
 
 TEST(CMyStringReverseIteratorTest, TestAdditionOperator) {

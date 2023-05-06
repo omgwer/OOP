@@ -15,11 +15,13 @@ public: //TODO: добавить random access iterator , не наследло�
 	{
 	}
 
-	CMyStringIterator(const CMyStringIterator& it)
+	CMyStringIterator(const CMyStringIterator<T>& it)
 	: m_ch(it.m_ch), m_length(it.m_length), m_index(it.m_index)
 	{
 	}
-	
+
+	~CMyStringIterator() = default;
+
 	bool operator!=(CMyStringIterator const& other) const;  
 	bool operator==(CMyStringIterator const& other) const;
 	T& operator*() const;

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-static constexpr char m_endOfLineCh = 0; // TODO вынести в статическую переменную или константу -- сделано
+static constexpr char m_endOfLineCh = '\0'; // TODO вынести в статическую переменную или константу -- сделано
 
 CMyString::CMyString()
 {
@@ -178,6 +178,17 @@ char& CMyString::operator[](size_t index)
 	return m_str[index];
 }
 
+CMyString::ConstIterator CMyString::ToConst(const Iterator& iterator) const
+{
+	return {&*iterator, m_length ,m_length - *iterator };
+}
+
+CMyString::ConstReverseIterator CMyString::ToConst(const ReverseIterator& iterator) const
+{
+	const auto baseIt = ToConst(iterator.base());	
+	return std::make_reverse_iterator(baseIt);
+}
+
 std::istream& operator>>(std::istream& istream, CMyString& myString)
 {
 	std::string varString;
@@ -202,12 +213,12 @@ CMyString::Iterator CMyString::end()
 	return { m_str + m_length, m_length, m_length };
 }
 
-CMyString::ConstIterator CMyString::begin() const
+CMyString::ConstIterator CMyString::сbegin() const
 {
 	return { m_str, m_length, 0 };
 }
 
-CMyString::ConstIterator CMyString::end() const
+CMyString::ConstIterator CMyString::сend() const
 {
 	return { m_str + m_length, m_length, m_length };
 }
@@ -222,12 +233,12 @@ CMyString::ReverseIterator CMyString::rend()
 	return std::make_reverse_iterator(this->begin());
 }
 
-CMyString::ConstReverseIterator CMyString::rbegin() const
+CMyString::ConstReverseIterator CMyString::rсbegin() const
 {
-	return std::make_reverse_iterator(this->end());
+	return std::make_reverse_iterator(this->сend());
 }
 
-CMyString::ConstReverseIterator CMyString::rend() const
+CMyString::ConstReverseIterator CMyString::rсend() const
 {
-	return std::make_reverse_iterator(this->begin());
+	return std::make_reverse_iterator(this->сbegin());
 }

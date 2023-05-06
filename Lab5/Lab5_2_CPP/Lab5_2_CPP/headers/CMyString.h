@@ -56,14 +56,16 @@ public:
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator =  std::reverse_iterator<ConstIterator>;
 
-	Iterator begin();  // TODO: преобразовывать итератор(обычный) к  итератору константтому
+	ConstIterator ToConst(const Iterator& iterator) const;
+	ConstReverseIterator ToConst(const ReverseIterator& iterator) const;
+	Iterator begin();  // TODO: преобразовывать итератор(обычный) к  итератору константтому -- добавил
 	Iterator end();
-	ConstIterator begin() const; 
-	ConstIterator end() const;
+	ConstIterator сbegin() const; 
+	ConstIterator сend() const;
 	ReverseIterator rbegin();
 	ReverseIterator rend();
-	ConstReverseIterator rbegin() const;
-	ConstReverseIterator rend() const;
+	ConstReverseIterator rсbegin() const;
+	ConstReverseIterator rсend() const;	
 	
 	friend std::istream& operator>>(std::istream& istream, CMyString& myString);
 	friend std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);
