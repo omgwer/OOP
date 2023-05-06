@@ -2,17 +2,17 @@
 
 StringList::StringList() = default;
 
-StringList::StringList(const StringList& stringList)
+StringList::StringList(const StringList& stringList) // копируем данные, создаем новые указатели
 {
 	// for (const auto& str : stringList) {
 	// 	PushBack(str);
 	// }
 }
 
-StringList::StringList(StringList&& stringList)
+StringList::StringList(StringList&& stringList) // копируем указатели на начало и конец, забираем value у исходного файла удаляем начало и конец.
 {
-	m_first = std::move(stringList.m_first);
-	m_last = std::move(stringList.m_last);
+	m_first = stringList.m_first;
+	m_last = stringList.m_last;
 	m_length = stringList.m_length;
 
 	stringList.m_first = nullptr;
@@ -22,29 +22,28 @@ StringList::StringList(StringList&& stringList)
 
 StringList::~StringList()
 {
-	//Clear();
-	m_first = nullptr;
-	m_last = nullptr;
-	m_length = 0;
+	Clear();
+	delete m_first;
+	delete m_last;
 }
 
 void StringList::PushBack(const std::string& value)
 {
 	if (m_first == nullptr)
 	{
-		m_first = std::make_shared<ListElement>();
+		m_first = new ListElement;
 		m_first->value = value;
 	}
 	else if (m_last == nullptr) // значит элемент второй
 	{
-		m_last = std::make_shared<ListElement>();
+		m_last = new ListElement;
 		m_last->value = value;
 		m_last->prev = m_first;
 		m_last->prev->next = m_last;
 	}
 	else
 	{
-		auto lastElement = std::make_shared<ListElement>();
+		auto lastElement = new ListElement;
 		lastElement->value = value;
 		lastElement->prev = m_last;
 		lastElement->prev->next = lastElement;
@@ -57,12 +56,12 @@ void StringList::PushFront(const std::string& value)
 {
 	if (m_first == nullptr)
 	{
-		m_first = std::make_shared<ListElement>();
+		m_first = new ListElement;
 		m_first->value = value;
 	}
 	else if (m_last == nullptr)
 	{
-		auto firstElement = std::make_shared<ListElement>();
+		auto firstElement = new ListElement;
 		firstElement->value = value;
 		firstElement->next = m_first;
 		m_last = m_first;
@@ -71,7 +70,7 @@ void StringList::PushFront(const std::string& value)
 	}
 	else
 	{
-		auto firstElement = std::make_shared<ListElement>();
+		auto firstElement = new ListElement;
 		firstElement->value = value;
 		m_first->prev = firstElement;
 		firstElement->next = m_first;
@@ -90,14 +89,22 @@ bool StringList::IsEmpty() const
 	return m_length == 0;
 }
 
-void Clear()
+void StringList::Clear()
 {
-	// auto current = std::move(m_first); // переместить указатель на первый элемент в переменную current
-	// while (current) { // пока указатель на текущий элемент не станет нулевым
-	// 	auto next = std::move(current->next); // переместить указатель на следующий элемент в переменную next
-	// 	current.reset(); // удалить текущий элемент
-	// 	current = std::move(next); // переместить указатель на следующий элемент в переменную current
-	// }
-	// m_last.reset(); // удалить указатель на последний элемент
-}
+	if (m_first == nullptr)
+		return;
 
+	auto varPtr = m_first;
+	ListElement* swap;
+	while (varPtr != nullptr)
+	{
+		varPtr->value.clear();
+		varPtr->prev = nullptr;
+		swap = varPtr;
+		varPtr = varPtr->next;
+		delete swap;
+	}
+	m_first = nullptr;
+	m_last = nullptr;
+	m_length = 0;
+}

@@ -9,7 +9,8 @@ int main(int argc, char* argv[])
 
 	test->PushBack("value");
 	test->PushBack("polina");
-	test->PushFront("test");
+	test->PushBack("test");
+	test->Clear();
 	std::cout <<  "test" << std::endl;
     return 0;
 }
