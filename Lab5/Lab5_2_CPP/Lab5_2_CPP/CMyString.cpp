@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-static constexpr char m_endOfLineCh = 0;  // TODO вынести в статическую переменную или константу -- сделано
+static constexpr char m_endOfLineCh = 0; // TODO вынести в статическую переменную или константу -- сделано
 
 CMyString::CMyString()
 {
@@ -53,7 +53,7 @@ size_t CMyString::GetLength() const
 	return m_length;
 }
 
-const char* CMyString::GetStringData() const  // TODO: для перемещенных строрка возвращать указатель на символ (константнтый) с кодом 0;
+const char* CMyString::GetStringData() const // TODO: для перемещенных строрка возвращать указатель на символ (константнтый) с кодом 0;
 {
 	return m_str;
 }
@@ -73,7 +73,7 @@ void CMyString::Clear()
 	delete[] m_str;
 	m_length = 0;
 	m_str = new char[m_length + 1]; // обнулять длину, не выделяя новую память.
-	m_str[m_length] = m_endOfLineCh;  // TODO: если строка перемещена должна норм работать
+	m_str[m_length] = m_endOfLineCh; // TODO: если строка перемещена должна норм работать
 }
 
 CMyString& CMyString::operator=(const CMyString& other)
@@ -106,7 +106,7 @@ CMyString CMyString::operator+(const CMyString& other) const
 	std::memcpy(pString, m_str, m_length);
 	std::memcpy(pString + m_length, other.GetStringData(), other.GetLength());
 	pString[length] = m_endOfLineCh;
-	CMyString newString(pString, length);  // TODO: Добавить перегрузку конструктора с bool(выделили память или нет) со ссылкой на уже выделенную память
+	CMyString newString(pString, length); // TODO: Добавить перегрузку конструктора с bool(выделили память или нет) со ссылкой на уже выделенную память
 	delete[] pString;
 	return newString;
 }
@@ -166,7 +166,7 @@ const char& CMyString::operator[](size_t index) const
 	{
 		throw std::out_of_range("Out of range.");
 	}
-	return m_str[index];  // TODO: некорректная работа с move string
+	return m_str[index]; // TODO: некорректная работа с move string
 }
 
 char& CMyString::operator[](size_t index)
@@ -194,7 +194,7 @@ std::ostream& operator<<(std::ostream& ostream, const CMyString& myString)
 
 CMyString::Iterator CMyString::begin()
 {
-	return { m_str, m_length, static_cast<size_t>(0) };
+	return { m_str, m_length, 0 };
 }
 
 CMyString::Iterator CMyString::end()
@@ -214,20 +214,20 @@ CMyString::ConstIterator CMyString::end() const
 
 CMyString::ReverseIterator CMyString::rbegin()
 {
-	return { m_str + m_length, m_length, 0 };
+	return std::make_reverse_iterator(this->end());
 }
 
 CMyString::ReverseIterator CMyString::rend()
 {
-	return { m_str, m_length, m_length };
+	return std::make_reverse_iterator(this->begin());
 }
 
 CMyString::ConstReverseIterator CMyString::rbegin() const
 {
-	return { m_str + m_length, m_length, 0 };
+	return std::make_reverse_iterator(this->end());
 }
 
 CMyString::ConstReverseIterator CMyString::rend() const
 {
-	return { m_str, m_length, m_length };
+	return std::make_reverse_iterator(this->begin());
 }

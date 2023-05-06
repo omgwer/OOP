@@ -1,6 +1,5 @@
 #pragma once
 #include "CMyStringIterator.h"
-#include "CMyStringReverseIterator.h"
 
 #include <cstdint>
 #include <string>
@@ -54,8 +53,8 @@ public:
 	// iterators
 	using Iterator = CMyStringIterator<char>;
 	using ConstIterator = CMyStringIterator<const char>;
-	using ReverseIterator = CMyStringReverseIterator<char>;
-	using ConstReverseIterator = CMyStringReverseIterator<const char>;
+	using ReverseIterator = std::reverse_iterator<Iterator>;
+	using ConstReverseIterator =  std::reverse_iterator<ConstIterator>;
 
 	Iterator begin();  // TODO: преобразовывать итератор(обычный) к  итератору константтому
 	Iterator end();

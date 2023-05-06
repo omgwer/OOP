@@ -1,7 +1,11 @@
 #include "CMyStringIterator.cpp"
-#include "CMyStringReverseIterator.cpp"
 #include "headers/CMyString.h"
 #include <iostream>
+
+using Iterator = CMyStringIterator<char>;
+using ConstIterator = CMyStringIterator<const char>;
+using ReverseIterator = std::reverse_iterator<Iterator>;
+using ConstReverseIterator =  std::reverse_iterator<ConstIterator>;
 
 int RangeBasedFor()
 {
@@ -38,23 +42,21 @@ void TestReverseIterators()
 {
 	CMyString str("Hello, world!");
 
-	auto bgn = str.rbegin();
-	auto en = str.rend();
-	
-	
-	 while (bgn != en)
+	ReverseIterator rbegin = str.rbegin();
+	ReverseIterator rend = str.rend();
+
+	 while (rbegin != rend)
 	 {
-	 	std::cout << *(bgn) << " ";
-	 	++bgn;
+	 	std::cout << *(rbegin) << " ";
+	 	++rbegin;
 	 }
-	std::cout << *(bgn) << " ";
 	std::cout << std::endl;
 }
 
 int main(int argc, char* argv[])
 {
-	//RangeBasedFor();
+	RangeBasedFor();
 	TestForwardIterators();
-	//TestReverseIterators();
+	TestReverseIterators();
 	return 0;
 }

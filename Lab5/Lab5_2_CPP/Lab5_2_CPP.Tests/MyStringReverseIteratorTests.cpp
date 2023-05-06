@@ -1,4 +1,4 @@
-#include "../Lab5_2_CPP/CMyStringReverseIterator.cpp"
+#include "../Lab5_2_CPP/CMyStringIterator.cpp"
 #include "../Lab5_2_CPP/headers/CMyString.h"
 
 #include <gtest/gtest.h>
@@ -20,11 +20,4 @@ TEST(CMyStringReverseIteratorTest, TestAdditionOperator) {
 		--second;
 	}	
 	ASSERT_EQ(*first, 'c');
-}
-
-TEST(CMyStringReverseIteratorTest, TestEqualityOperator) {
-	CMyString str("hello");
-	CMyStringReverseIterator<char> reverseIterator(&str[0], str.GetLength(), 4);
-	CMyStringReverseIterator<char> newIterator(&str[0], str.GetLength(), 4);
-	ASSERT_TRUE(reverseIterator == newIterator);
 }
