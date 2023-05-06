@@ -54,25 +54,28 @@ public:
 	using Iterator = CMyStringIterator<char>;
 	using ConstIterator = CMyStringIterator<const char>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
-	using ConstReverseIterator =  std::reverse_iterator<ConstIterator>;
+	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 
 	ConstIterator ToConst(const Iterator& iterator) const;
 	ConstReverseIterator ToConst(const ReverseIterator& iterator) const;
-	Iterator begin();  // TODO: преобразовывать итератор(обычный) к  итератору константтому -- добавил
+	Iterator begin(); // TODO: преобразовывать итератор(обычный) к  итератору константтому -- сделано
 	Iterator end();
-	ConstIterator сbegin() const; 
+	ConstIterator сbegin() const;
 	ConstIterator сend() const;
 	ReverseIterator rbegin();
 	ReverseIterator rend();
 	ConstReverseIterator rсbegin() const;
-	ConstReverseIterator rсend() const;	
-	
+	ConstReverseIterator rсend() const;
+
 	friend std::istream& operator>>(std::istream& istream, CMyString& myString);
 	friend std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);
 
 private:
+	CMyString(const char* pString, size_t length, bool isAllocatedMemory);
 	size_t m_length;
-	char* m_str;	
+	char* m_str;
+	int CompareStrings(const CMyString& other) const;
 };
+
 std::istream& operator>>(std::istream& istream, CMyString& myString);
 std::ostream& operator<<(std::ostream& ostream, const CMyString& myString);

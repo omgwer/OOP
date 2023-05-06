@@ -56,7 +56,7 @@ void TestReverseIterators()
 int main(int argc, char* argv[])
 {
 	//RangeBasedFor();
-	TestForwardIterators();
+//	TestForwardIterators();
 	//TestReverseIterators();
 	return 0;
 }

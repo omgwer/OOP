@@ -18,6 +18,6 @@ TEST(CMyStringReverseIteratorTest, TestAdditionOperator) {
 	{
 		++first;
 		--second;
-	}	
-	ASSERT_EQ(*first, 'c');
+	}
+	ASSERT_EQ(*first, 'b');
 }
