@@ -66,3 +66,80 @@ TEST(StringListTest, NotEmpty) {
 	}
 	ASSERT_EQ("worldhello", ss.str());
 }
+
+TEST(StringListTest, InsertTest) {
+	StringList list;
+	list.PushFront("world");
+	list.PushFront("hello");
+
+	auto it = list.begin();
+
+	list.Insert(it, "some");
+	
+	std::stringstream ss;
+	for (const ListElement& listElement : list)
+	{
+		ss << listElement.value;
+	}
+	ASSERT_EQ("somehelloworld", ss.str());
+}
+
+TEST(StringListTest, InsertTestEmptyList) {
+	StringList list;
+	
+	auto it = list.begin();
+
+	list.Insert(it, "some");
+	
+	std::stringstream ss;
+	for (const ListElement& listElement : list)
+	{
+		ss << listElement.value;
+	}
+	ASSERT_EQ("some", ss.str());
+}
+
+TEST(StringListTest, CopyEqualsOperator) {
+	StringList list;
+	list.PushBack("some");
+	list.PushBack("one");
+	list.PushBack("kek");
+
+	StringList list2 = list;
+	
+	std::stringstream ss1;
+	for (const ListElement& listElement : list)
+	{
+		ss1 << listElement.value;
+	}
+
+	std::stringstream ss2;
+	for (const ListElement& listElement : list2)
+	{
+		ss2 << listElement.value;
+	}
+	ASSERT_EQ(ss2.str(), ss1.str());
+}
+
+TEST(StringListTest, MoveEqualOperator) {
+	StringList list;
+	list.PushBack("some");
+	list.PushBack("one");
+	list.PushBack("kek");
+
+	StringList list2 = std::move(list);
+	
+	std::stringstream ss1;
+	for (const ListElement& listElement : list)
+	{
+		ss1 << listElement.value;
+	}
+
+	std::stringstream ss2;
+	for (const ListElement& listElement : list2)
+	{
+		ss2 << listElement.value;
+	}
+	ASSERT_EQ("", ss1.str());
+	ASSERT_EQ("someonekek", ss2.str());
+}

@@ -37,7 +37,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="CMyIteratorTests.cpp" />
-    <ClCompile Include="StringList.cpp" />
+    <ClCompile Include="StringListTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

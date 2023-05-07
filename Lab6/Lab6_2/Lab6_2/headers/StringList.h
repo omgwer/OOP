@@ -12,23 +12,28 @@ struct ListElement
 class StringList  // TODO: подумать над проблемами перемещающего конструктора как в лабе 5.2
 {
 public:
+	using Iterator = CMyIterator<ListElement>;
+	using ConstIterator = CMyIterator<const ListElement>;
+	using ReverseIterator = std::reverse_iterator<Iterator>;
+	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
+	
 	StringList();
 	StringList(const StringList& stringList);
 	StringList(StringList&& stringList);
 	~StringList();
+
+	StringList& operator=(const StringList& copy);
+	StringList& operator=(StringList&& move);
 
 	void PushBack(const std::string& value);
 	void PushFront(const std::string& value);
 	size_t GetLength() const;
 	bool IsEmpty() const;
 	void Clear();	
-//	void Insert(Iterator);
+	void Insert(const Iterator&,const std::string& value);
 //	void Erase();
 
-	using Iterator = CMyIterator<ListElement>;
-	using ConstIterator = CMyIterator<const ListElement>;
-	using ReverseIterator = std::reverse_iterator<Iterator>;
-	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
+	
 
 	// ConstIterator ToConst(const Iterator& iterator) const;
 	// ConstReverseIterator ToConst(const ReverseIterator& iterator) const;

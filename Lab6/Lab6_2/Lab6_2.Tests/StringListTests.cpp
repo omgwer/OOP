@@ -35,3 +35,25 @@ TEST(StringListTest, ClearTest) {
 	ASSERT_EQ(list.GetLength(), 0);
 	ASSERT_TRUE(list.IsEmpty());
 }
+
+TEST(StringListTest, CopyConstructor) {
+	StringList list;
+	list.PushBack("hello");
+	list.PushBack("world");
+
+	StringList newList(list);
+
+	ASSERT_EQ(list.GetLength(), 2);
+	ASSERT_EQ(newList.GetLength(), 2);
+}
+
+TEST(StringListTest, MoveConstructor) {
+	StringList list;
+	list.PushBack("hello");
+	list.PushBack("world");
+
+	StringList newList(std::move(list));
+
+	ASSERT_EQ(list.GetLength(), 0);
+	ASSERT_EQ(newList.GetLength(), 2);
+}
