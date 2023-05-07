@@ -86,7 +86,7 @@ size_t StringList::GetLength() const
 
 bool StringList::IsEmpty() const
 {
-	return m_length == 0;
+	return m_length == 0 && m_first == nullptr && m_last == nullptr;
 }
 
 void StringList::Clear()
