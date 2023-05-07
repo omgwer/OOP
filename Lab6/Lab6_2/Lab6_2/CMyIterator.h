@@ -15,21 +15,24 @@ public:
 	{
 	}
 
-	//CMyIterator(const T* other) : m_data(other->m_element), m_length(0), m_index(0){}
+	CMyIterator(T* p)
+		: m_data(p), m_length(0), m_index(0)
+	{
+	}
 
-	~CMyIterator();
+	~CMyIterator() = default;
 
 	bool operator !=(CMyIterator const& other) const;
 	bool operator ==(CMyIterator const& other) const;
 	T& operator*() const;
-	CMyIterator& operator++();  // prefix
+	CMyIterator& operator++(); // prefix
 	CMyIterator operator++(int); // postfix
 	CMyIterator& operator--();
 	CMyIterator operator--(int);
 	ptrdiff_t operator-(const CMyIterator& other) const;
+
 private:
 	T* m_data;
 	size_t m_length;
 	size_t m_index;
 };
-

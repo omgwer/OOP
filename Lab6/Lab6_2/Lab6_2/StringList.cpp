@@ -1,4 +1,4 @@
-#include "CMyIterator.cpp"
+//#include "CMyIterator.cpp"
 #include "headers/StringList.h"
 
 StringList::StringList() = default;
@@ -117,10 +117,5 @@ StringList::Iterator StringList::begin()
 
 StringList::Iterator StringList::end()
 {
-	ListElement listElement;
-	listElement.value = std::string("");
-	listElement.prev = m_last;
-	listElement.next = nullptr;
-	auto it = Iterator(&listElement, m_length,m_length + 1);
-	return it;
+	return {nullptr};
 }
