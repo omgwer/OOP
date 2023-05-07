@@ -108,3 +108,13 @@ void StringList::Clear()
 	m_last = nullptr;
 	m_length = 0;
 }
+
+StringList::Iterator StringList::begin()
+{
+	return {m_first, m_length,0};
+}
+
+StringList::Iterator StringList::end()
+{
+	return {m_last, m_length,m_length};
+}
