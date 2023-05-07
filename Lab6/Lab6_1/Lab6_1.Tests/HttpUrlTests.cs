@@ -6,7 +6,9 @@ namespace Lab6_1.Tests;
 public class HttpUrlTests
 {
     [TestCase("http://google.com", Protocol.HTTP, "google.com", (ushort)80, "/", "http://google.com/")]
-    [TestCase("https://google.com/", Protocol.HTTPS, "google.com", (ushort)443, "/", "https://google.com/")]
+    [TestCase("http://google", Protocol.HTTP, "google", (ushort)80, "/", "http://google/")]
+    [TestCase("hTTp://google.com", Protocol.HTTP, "google.com", (ushort)80, "/", "http://google.com/")]
+    [TestCase("https://goOGLe.com/", Protocol.HTTPS, "google.com", (ushort)443, "/", "https://google.com/")]
     [TestCase("https://google.com:800", Protocol.HTTPS, "google.com", (ushort)800, "/", "https://google.com:800/")]
     [TestCase("https://hello-world.com:800/file.jpg", Protocol.HTTPS, "hello-world.com", (ushort)800, "/file.jpg",
         "https://hello-world.com:800/file.jpg")]
@@ -83,7 +85,6 @@ public class HttpUrlTests
     [TestCase("http:google.com")]
     [TestCase("http:/google.com")]
     [TestCase("http//google.com")]
-    [TestCase("http://google")]
     [TestCase("http://google.")]
     [TestCase("http://google.с")]
     [TestCase("http://.com")]
