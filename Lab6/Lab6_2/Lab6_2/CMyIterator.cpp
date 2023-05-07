@@ -1,6 +1,9 @@
 #include "CMyIterator.h"
 #include <stdexcept>
 
+template <typename T> CMyIterator<T>::~CMyIterator()
+= default;
+
 template <typename T> bool CMyIterator<T>::operator!=(CMyIterator const& other) const
 {
 	return m_data != other.m_data;
@@ -12,27 +15,26 @@ template <typename T> bool CMyIterator<T>::operator==(CMyIterator const& other) 
 }
 
 template <typename T> T& CMyIterator<T>::operator*() const
-{
-	return m_data;
+{	
+	return *m_data;
 }
 
 template <typename T> CMyIterator<T>& CMyIterator<T>::operator++()
 {
-	if (m_data->next == nullptr)
-		throw std::out_of_range("Operation cannot be performed, out of range!");
-
-	*this = m_data->next;
+	// if (m_data->next == nullptr)
+	// 	throw std::out_of_range("Operation cannot be performed, out of range!");
+	m_data = m_data->next;
 	m_index++;
 	return *this;
 }
 
 template <typename T> CMyIterator<T> CMyIterator<T>::operator++(const int ch)
 {
-	if (m_data->next == nullptr)
-		throw std::out_of_range("Operation cannot be performed, out of range!");
-	
+	// if (m_data->next == nullptr)
+	// 	throw std::out_of_range("Operation cannot be performed, out of range!");
+	//
 	CMyIterator<T> copy = {*this};	
-	*this = m_data->next;
+	m_data = m_data->next;
 	m_index++;
 	
 	return copy;
@@ -40,10 +42,10 @@ template <typename T> CMyIterator<T> CMyIterator<T>::operator++(const int ch)
 
 template <typename T> CMyIterator<T>& CMyIterator<T>::operator--()
 {
-	if (m_data->prev == nullptr)
-		throw std::out_of_range("Operation cannot be performed, out of range!");
+	// if (m_data->prev == nullptr)
+	// 	throw std::out_of_range("Operation cannot be performed, out of range!");
 
-	*this = m_data->prev;
+	m_data = m_data->prev;
 	m_index--;
 	return *this;
 }
@@ -54,7 +56,7 @@ template <typename T> CMyIterator<T> CMyIterator<T>::operator--(const int ch)
 		throw std::out_of_range("Operation cannot be performed, out of range!");
 	
 	CMyIterator<T> copy = {*this};	
-	*this = m_data->prev;
+	m_data = m_data->prev;
 	m_index--;	
 	return copy;
 }

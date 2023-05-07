@@ -1,3 +1,4 @@
+#include "CMyIterator.cpp"
 #include "headers/StringList.h"
 
 StringList::StringList() = default;
@@ -5,7 +6,7 @@ StringList::StringList() = default;
 StringList::StringList(const StringList& stringList) // копируем данные, создаем новые указатели
 {
 	// for (const auto& str : stringList) {
-	// 	PushBack(str);
+	// 	PushBack(str.value);
 	// }
 }
 
@@ -116,5 +117,10 @@ StringList::Iterator StringList::begin()
 
 StringList::Iterator StringList::end()
 {
-	return {m_last, m_length,m_length};
+	ListElement listElement;
+	listElement.value = std::string("");
+	listElement.prev = m_last;
+	listElement.next = nullptr;
+	auto it = Iterator(&listElement, m_length,m_length + 1);
+	return it;
 }
