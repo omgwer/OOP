@@ -32,8 +32,8 @@ public: //TODO: добавить random access iterator , не наследло�
 	ptrdiff_t operator-(const CMyStringIterator& other) const; //  TODO: добавить ptrdifft -- сделано
 	CMyStringIterator operator+(const CMyStringIterator& other);
 	CMyStringIterator operator+(size_t value);
-	//CMyStringIterator& operator[](size_t index);
-
+	T& operator[](size_t index);   // TODO: добавить индексированный доступ
+	T& operator[](size_t index) const;  
 private:
 	T* m_ch;
 	size_t m_length;

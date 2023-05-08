@@ -32,9 +32,7 @@ public:
 	void Clear();	
 	void Insert(const Iterator&,const std::string& value);
 	void Erase(Iterator&);
-
-	// ConstIterator ToConst(const Iterator& iterator) const;
-	// ConstReverseIterator ToConst(const ReverseIterator& iterator) const;
+	
 	Iterator begin();
 	Iterator end();
 	ConstIterator begin() const;

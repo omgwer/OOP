@@ -47,3 +47,11 @@ TEST(CMyStringIteratorTest, TestDereference)
 	++iter;
 	ASSERT_EQ(*iter, 'o');
 }
+
+TEST(CMyStringIteratorTest, TestIndex)
+{
+	CMyString str("hello");
+	auto iter = str.begin();
+	auto test = iter[1];	
+	ASSERT_EQ(test, 'e');
+}
