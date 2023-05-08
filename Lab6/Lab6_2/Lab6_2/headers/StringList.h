@@ -31,7 +31,7 @@ public:
 	bool IsEmpty() const;
 	void Clear();	
 	void Insert(const Iterator&,const std::string& value);
-//	void Erase();
+	void Erase(const Iterator&);
 
 	
 

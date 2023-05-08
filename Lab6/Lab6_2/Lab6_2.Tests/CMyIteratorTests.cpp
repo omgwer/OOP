@@ -143,3 +143,81 @@ TEST(StringListTest, MoveEqualOperator) {
 	ASSERT_EQ("", ss1.str());
 	ASSERT_EQ("someonekek", ss2.str());
 }
+
+
+TEST(StringListTest, EraseFirstElement) {
+	StringList list;
+	list.PushBack("some");	
+
+	list.Erase(list.begin());	
+	
+	std::stringstream ss;
+	for (const ListElement& listElement : list)
+	{
+		ss << listElement.value;
+	}
+	ASSERT_EQ("", ss.str());
+	ASSERT_EQ(0, list.GetLength());
+}
+
+TEST(StringListTest, EraseEmptyList) {
+	StringList list;
+
+	list.Erase(list.begin());	
+	
+	std::stringstream ss;
+	for (const ListElement& listElement : list)
+	{
+		ss << listElement.value;
+	}
+	ASSERT_EQ("", ss.str());
+}
+
+TEST(StringListTest, TwoElements) {
+	StringList list;
+	list.PushBack("some");	
+	list.PushBack("one");	
+
+	list.Erase(list.begin());	
+	
+	std::stringstream ss;
+	for (const ListElement& listElement : list)
+	{
+		ss << listElement.value;
+	}
+	ASSERT_EQ("one", ss.str());
+	ASSERT_EQ(1, list.GetLength());
+}
+
+TEST(StringListTest, TwoElements_DeleteLast) {
+	StringList list;
+	list.PushBack("some");	
+	list.PushBack("one");	
+
+	list.Erase(++list.begin());	
+	
+	std::stringstream ss;
+	for (const ListElement& listElement : list)
+	{
+		ss << listElement.value;
+	}
+	ASSERT_EQ("some", ss.str());
+	ASSERT_EQ(1, list.GetLength());
+}
+
+TEST(StringListTest, ThreeElements_DeleteLast) {
+	StringList list;
+	list.PushBack("some");	
+	list.PushBack("one");	
+	list.PushBack("cat");	
+
+	list.Erase(++list.begin());	
+	
+	std::stringstream ss;
+	for (const ListElement& listElement : list)
+	{
+		ss << listElement.value;
+	}
+	ASSERT_EQ("somecat", ss.str());
+	ASSERT_EQ(2, list.GetLength());
+}

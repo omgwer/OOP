@@ -1,6 +1,7 @@
 #include "CMyIterator.cpp"
 #include "headers/StringList.h"
 #include <iostream>
+#include <list>
 
 // TODO: Для лабы 7 некоторые типы не имеют конструкторы по умолчанию
 int main(int argc, char* argv[])
@@ -23,7 +24,8 @@ int main(int argc, char* argv[])
 	// for (const ListElement& listElement : test)
 	// {
 	// 	std::cout << listElement.value << std::endl;
-	// }
+	// }s
+
 
 	return 0;
 }
