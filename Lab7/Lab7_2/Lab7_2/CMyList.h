@@ -239,7 +239,7 @@ template <typename T> void CMyList<T>::Erase(Iterator& it)
 
 template <typename T> typename CMyList<T>::Iterator CMyList<T>::begin()
 {
-	return Iterator();
+	return { m_first, m_length, 0 };
 }
 
 template <typename T> typename CMyList<T>::Iterator CMyList<T>::end()
