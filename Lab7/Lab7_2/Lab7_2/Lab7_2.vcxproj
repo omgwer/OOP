@@ -127,8 +127,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CMyIterator.cpp" />
-    <ClCompile Include="CMyList.cpp" />
     <ClCompile Include="Lab7_2.cpp" />
   </ItemGroup>
   <ItemGroup>
