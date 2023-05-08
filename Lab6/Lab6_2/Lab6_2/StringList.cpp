@@ -147,7 +147,7 @@ void StringList::Insert(const Iterator& it, const std::string& value)
 	const auto newElement = new ListElement;
 	newElement->value = value;
 	newElement->next = &*it;
-	
+
 	if (currentIterator.prev != nullptr)
 	{
 		currentIterator.prev->next = newElement;
@@ -162,8 +162,8 @@ void StringList::Insert(const Iterator& it, const std::string& value)
 }
 
 void StringList::Erase(Iterator& it)
-{	
-	if (m_first == nullptr ||  it.m_data == nullptr) // TODO: пока костыль, обдумать выбрасывание ошибок
+{
+	if (m_first == nullptr || it.m_data == nullptr) // TODO: пока костыль, обдумать выбрасывание ошибок
 	{
 		return;
 	}
@@ -197,16 +197,11 @@ StringList::Iterator StringList::begin()
 
 StringList::Iterator StringList::end()
 {
-	// ListElement li;
-	// li.next = nullptr;
-	// li.prev = m_last;
-	// Iterator it(&li);	
 	return { nullptr };
-	//return  it;
 }
 
 StringList::ConstIterator StringList::begin() const
-{	
+{
 	return { m_first, m_length, 0 };
 }
 
@@ -217,7 +212,10 @@ StringList::ConstIterator StringList::end() const
 
 StringList::ReverseIterator StringList::rbegin()
 {
-	return std::make_reverse_iterator(this->end());
+	auto li = new ListElement;
+	li->prev = m_last;
+	Iterator it(li, m_length, 0);
+	return std::make_reverse_iterator(it);
 }
 
 StringList::ReverseIterator StringList::rend()

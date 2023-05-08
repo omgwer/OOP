@@ -221,3 +221,28 @@ TEST(StringListTest, ThreeElements_DeleteLast) {
 	ASSERT_EQ("somecat", ss.str());
 	ASSERT_EQ(2, list.GetLength());
 }
+
+TEST(StringListTest, ReverseIteratorTest) {
+	StringList test;
+	test.PushBack("value");
+	test.PushBack("efim");
+	test.PushBack("test");
+	
+	auto rbegin = test.rbegin();
+	auto rend = test.rend();
+	
+	std::stringstream ss;
+	while (rbegin != rend)
+	{
+		ss << (*rbegin).value;
+		++rbegin;
+	}	
+	ASSERT_EQ("testefimvalue", ss.str());
+}
+
+
+
+
+
+
+	
