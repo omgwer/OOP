@@ -2,6 +2,18 @@
 #include "../Lab7_2/CMyList.h"
 
 
+class MyChar
+{
+public:
+	MyChar() = delete;
+
+	explicit MyChar(const char ch)
+	{
+		classChar = ch;
+	}
+	char classChar;
+};
+
 TEST(CMyListTest, BeginEndIterators) {
 	CMyList<std::string> list;
 	list.PushBack("hello");
@@ -238,4 +250,3 @@ TEST(CMyListTest, ReverseIteratorTest) {
 	}	
 	ASSERT_EQ("testefimvalue", ss.str());
 }
-

@@ -172,7 +172,6 @@ template <typename T> void CMyList<T>::Clear()
 	ListElement* swap;
 	while (varPtr != nullptr)
 	{
-		varPtr->value.clear();
 		varPtr->prev = nullptr;
 		swap = varPtr;
 		varPtr = varPtr->next;
