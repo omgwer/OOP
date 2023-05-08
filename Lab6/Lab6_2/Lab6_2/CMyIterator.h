@@ -24,7 +24,11 @@ public:
 
 	bool operator !=(CMyIterator const& other) const;
 	bool operator ==(CMyIterator const& other) const;
-	T& operator*() const;
+	//T& operator*() const;
+	T& operator*() const
+	{
+		return *m_data;
+	}
 	CMyIterator& operator++(); // prefix
 	CMyIterator operator++(int); // postfix
 	CMyIterator& operator--();

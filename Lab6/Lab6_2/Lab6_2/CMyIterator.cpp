@@ -11,10 +11,6 @@ template <typename T> bool CMyIterator<T>::operator==(CMyIterator const& other) 
 	return m_data == other.m_data;
 }
 
-template <typename T> T& CMyIterator<T>::operator*() const
-{
-	return *m_data;
-}
 
 template <typename T> CMyIterator<T>& CMyIterator<T>::operator++()
 {

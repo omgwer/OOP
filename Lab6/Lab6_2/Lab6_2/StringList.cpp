@@ -138,56 +138,56 @@ void StringList::Clear()
 
 void StringList::Insert(const Iterator& it, const std::string& value)
 {
-	// if (m_first == nullptr)
-	// {
-	// 	PushBack(value);
-	// 	return;
-	// }
-	// auto currentIterator = *it;
-	// const auto newElement = new ListElement;
-	// newElement->value = value;
-	// newElement->next = &*it;
-	//
-	// if (currentIterator.prev != nullptr)
-	// {
-	// 	currentIterator.prev->next = newElement;
-	// 	newElement->prev = (*it).prev;
-	// }
-	// else // значит, что этот элемент первый в списке
-	// {
-	// 	m_first = newElement;
-	// }
-	// currentIterator.prev = newElement;
-	// m_length++;
+	if (m_first == nullptr)
+	{
+		PushBack(value);
+		return;
+	}
+	auto currentIterator = *it;
+	const auto newElement = new ListElement;
+	newElement->value = value;
+	newElement->next = &*it;
+	
+	if (currentIterator.prev != nullptr)
+	{
+		currentIterator.prev->next = newElement;
+		newElement->prev = (*it).prev;
+	}
+	else // значит, что этот элемент первый в списке
+	{
+		m_first = newElement;
+	}
+	currentIterator.prev = newElement;
+	m_length++;
 }
 
-void StringList::Erase(const Iterator& it)
-{
-	// if (m_first == nullptr ||  &*it == nullptr) // TODO: пока костыль, обдумать выбрасывание ошибок
-	// {
-	// 	return;
-	// }
-	// auto prev = (*it).prev;
-	// auto next = (*it).next;
-	// ListElement* toDelete = it.m_data;
-	// if (it.m_data == m_first) // it means first element
-	// {
-	// 	m_first = m_first->next;
-	// 	if (m_first != nullptr)
-	// 		m_first->prev = nullptr; // если список не стал пустым
-	// 	else
-	// 		m_last = nullptr; // если список стал пустым
-	// }
-	// else
-	// {
-	// 	toDelete->prev->next = toDelete->next;
-	// 	if (toDelete->next != nullptr)
-	// 		toDelete->next->prev = toDelete->prev;
-	// 	else
-	// 		m_last = toDelete->prev; // если удаляем последний элемент
-	// }
-	// delete toDelete;
-	// --m_length;
+void StringList::Erase(Iterator& it)
+{	
+	if (m_first == nullptr ||  it.m_data == nullptr) // TODO: пока костыль, обдумать выбрасывание ошибок
+	{
+		return;
+	}
+	auto prev = (*it).prev;
+	auto next = (*it).next;
+	ListElement* toDelete = it.m_data;
+	if (it.m_data == m_first) // it means first element
+	{
+		m_first = m_first->next;
+		if (m_first != nullptr)
+			m_first->prev = nullptr; // если список не стал пустым
+		else
+			m_last = nullptr; // если список стал пустым
+	}
+	else
+	{
+		toDelete->prev->next = toDelete->next;
+		if (toDelete->next != nullptr)
+			toDelete->next->prev = toDelete->prev;
+		else
+			m_last = toDelete->prev; // если удаляем последний элемент
+	}
+	delete toDelete;
+	--m_length;
 }
 
 StringList::Iterator StringList::begin()

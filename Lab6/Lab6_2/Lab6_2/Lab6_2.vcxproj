@@ -154,13 +154,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CMyIterator.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="StringList.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CMyIterator.h" />
     <ClInclude Include="StringList.h" />
+    <ClCompile Include="CMyIterator.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="StringList.cpp" />    
+  </ItemGroup>
+  <ItemGroup>   
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
