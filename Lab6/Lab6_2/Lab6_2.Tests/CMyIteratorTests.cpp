@@ -1,7 +1,7 @@
  #include "../Lab6_2/StringList.cpp"
 #include "../Lab6_2/CMyIterator.cpp"
  #include "gtest/gtest.h"
- #include "../Lab6_2/headers/StringList.h"
+ #include "../Lab6_2/StringList.h"
 
 TEST(StringListTest, BeginEndIterators) {
 	StringList list;

@@ -1,5 +1,5 @@
 #pragma once
-#include "../CMyIterator.h"
+#include "CMyIterator.h"
 #include <string>
 
 struct ListElement
@@ -33,18 +33,16 @@ public:
 	void Insert(const Iterator&,const std::string& value);
 	void Erase(const Iterator&);
 
-	
-
 	// ConstIterator ToConst(const Iterator& iterator) const;
 	// ConstReverseIterator ToConst(const ReverseIterator& iterator) const;
 	Iterator begin();
 	Iterator end();
-	// ConstIterator сbegin() const;
-	// ConstIterator сend() const;
-	// ReverseIterator rbegin();
-	// ReverseIterator rend();
-	// ConstReverseIterator rсbegin() const;
-	// ConstReverseIterator rсend() const;
+	ConstIterator begin() const;
+	ConstIterator end() const;
+	ReverseIterator rbegin();
+	ReverseIterator rend();
+	ConstReverseIterator rсbegin() const;
+	ConstReverseIterator rсend() const;
 	
 private:  // TODO: убрать умные указатели	
 	ListElement* m_first = nullptr;

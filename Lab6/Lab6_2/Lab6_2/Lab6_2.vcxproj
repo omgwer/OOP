@@ -160,7 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMyIterator.h" />
-    <ClInclude Include="headers\StringList.h" />
+    <ClInclude Include="StringList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

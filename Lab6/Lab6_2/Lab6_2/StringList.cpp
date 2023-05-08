@@ -1,4 +1,4 @@
-#include "headers/StringList.h"
+#include "StringList.h"
 
 StringList::StringList() = default;
 
@@ -138,67 +138,56 @@ void StringList::Clear()
 
 void StringList::Insert(const Iterator& it, const std::string& value)
 {
-	if (m_first == nullptr)
-	{
-		PushBack(value);
-		return;
-	}
-	auto currentIterator = *it;
-	const auto newElement = new ListElement;
-	newElement->value = value;
-	newElement->next = &*it;
-
-	if (currentIterator.prev != nullptr)
-	{
-		currentIterator.prev->next = newElement;
-		newElement->prev = (*it).prev;
-	}
-	else // значит, что этот элемент первый в списке
-	{
-		m_first = newElement;
-	}
-	currentIterator.prev = newElement;
-	m_length++;
+	// if (m_first == nullptr)
+	// {
+	// 	PushBack(value);
+	// 	return;
+	// }
+	// auto currentIterator = *it;
+	// const auto newElement = new ListElement;
+	// newElement->value = value;
+	// newElement->next = &*it;
+	//
+	// if (currentIterator.prev != nullptr)
+	// {
+	// 	currentIterator.prev->next = newElement;
+	// 	newElement->prev = (*it).prev;
+	// }
+	// else // значит, что этот элемент первый в списке
+	// {
+	// 	m_first = newElement;
+	// }
+	// currentIterator.prev = newElement;
+	// m_length++;
 }
 
 void StringList::Erase(const Iterator& it)
 {
-	if (m_first == nullptr || &*it == nullptr) // TODO: пока костыль, обдумать выбрасывание ошибок
-	{
-		return;
-	}
-	auto prev = (*it).prev;
-	auto next = (*it).next;
-
-	if (it.m_data == m_first) // it means first element
-	{
-		ListElement* toDelete = m_first;
-		m_first = m_first->next;
-		if (m_first != nullptr)
-		{
-			m_first->prev = nullptr; // если список не стал пустым
-		}
-		else
-		{
-			m_last = nullptr; // если список стал пустым
-		}
-		delete toDelete;
-	}
-	else
-	{
-		ListElement* toDelete = it.m_data;
-		toDelete->prev->next = toDelete->next;
-		if (toDelete->next != nullptr)
-		{
-			toDelete->next->prev = toDelete->prev;
-		}
-		else
-		{
-			m_last = toDelete->prev; // если удаляем последний элемент
-		}
-		delete toDelete;
-	}
-	--m_length;
+	// if (m_first == nullptr ||  &*it == nullptr) // TODO: пока костыль, обдумать выбрасывание ошибок
+	// {
+	// 	return;
+	// }
+	// auto prev = (*it).prev;
+	// auto next = (*it).next;
+	// ListElement* toDelete = it.m_data;
+	// if (it.m_data == m_first) // it means first element
+	// {
+	// 	m_first = m_first->next;
+	// 	if (m_first != nullptr)
+	// 		m_first->prev = nullptr; // если список не стал пустым
+	// 	else
+	// 		m_last = nullptr; // если список стал пустым
+	// }
+	// else
+	// {
+	// 	toDelete->prev->next = toDelete->next;
+	// 	if (toDelete->next != nullptr)
+	// 		toDelete->next->prev = toDelete->prev;
+	// 	else
+	// 		m_last = toDelete->prev; // если удаляем последний элемент
+	// }
+	// delete toDelete;
+	// --m_length;
 }
 
 StringList::Iterator StringList::begin()
@@ -208,5 +197,40 @@ StringList::Iterator StringList::begin()
 
 StringList::Iterator StringList::end()
 {
+	// ListElement li;
+	// li.next = nullptr;
+	// li.prev = m_last;
+	// Iterator it(&li);	
 	return { nullptr };
+	//return  it;
+}
+
+StringList::ConstIterator StringList::begin() const
+{	
+	return { m_first, m_length, 0 };
+}
+
+StringList::ConstIterator StringList::end() const
+{
+	return { nullptr };
+}
+
+StringList::ReverseIterator StringList::rbegin()
+{
+	return std::make_reverse_iterator(this->end());
+}
+
+StringList::ReverseIterator StringList::rend()
+{
+	return std::make_reverse_iterator(this->begin());
+}
+
+StringList::ConstReverseIterator StringList::rсbegin() const
+{
+	return std::make_reverse_iterator(this->end());
+}
+
+StringList::ConstReverseIterator StringList::rсend() const
+{
+	return std::make_reverse_iterator(this->begin());
 }

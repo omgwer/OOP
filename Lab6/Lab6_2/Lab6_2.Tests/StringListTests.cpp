@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "../Lab6_2/headers/StringList.h"
+#include "../Lab6_2/StringList.h"
 
 TEST(StringListTest, PushBackTest) {
 	StringList list;
