@@ -155,17 +155,36 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Lab7_3.cpp" />
+    <ClCompile Include="People\CPerson.cpp" />
+    <ClCompile Include="People\CPoliceMan.cpp" />
+    <ClCompile Include="People\CRacer.cpp" />
+    <ClCompile Include="Vehicles\CBus.cpp" />
+    <ClCompile Include="Vehicles\CPoliceCar.cpp" />
+    <ClCompile Include="Vehicles\CRacingCar.cpp" />
+    <ClCompile Include="Vehicles\CTaxi.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="People" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="Dictionary\CarBrand.h" />
+    <ClInclude Include="Implementation\CCarImpl.h" />
+    <ClInclude Include="Implementation\CPersonImpl.h" />
+    <ClInclude Include="Implementation\CVehicleImpl.h" />
+    <ClInclude Include="People\CPerson.h" />
+    <ClInclude Include="People\CPoliceMan.h" />
+    <ClInclude Include="People\CRacer.h" />
     <ClInclude Include="People\Interfaces\IPerson.h" />
     <ClInclude Include="People\Interfaces\IPoliceMan.h" />
     <ClInclude Include="People\Interfaces\IRacer.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Vehicles\Interfaces\.gitkeep" />
+    <ClInclude Include="Vehicles\CBus.h" />
+    <ClInclude Include="Vehicles\CPoliceCar.h" />
+    <ClInclude Include="Vehicles\CRacingCar.h" />
+    <ClInclude Include="Vehicles\CTaxi.h" />
+    <ClInclude Include="Vehicles\Interfaces\IBasicVehicle.h" />
+    <ClInclude Include="Vehicles\Interfaces\IBus.h" />
+    <ClInclude Include="Vehicles\Interfaces\ICar.h" />
+    <ClInclude Include="Vehicles\Interfaces\IPoliceCar.h" />
+    <ClInclude Include="Vehicles\Interfaces\IRacingCar.h" />
+    <ClInclude Include="Vehicles\Interfaces\ITaxi.h" />
+    <ClInclude Include="Vehicles\Interfaces\IVehicle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
