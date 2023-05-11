@@ -61,7 +61,7 @@ template <typename T> CMyStringIterator<T> CMyStringIterator<T>::operator+(const
 	return {m_ch + value, m_index + value, m_length};
 }
 
-template <typename T> T& CMyStringIterator<T>::operator[](size_t index)
+template <typename T> T& CMyStringIterator<T>::operator[](size_t index) // TODO: добавить ptrdiff_t
 {
 	auto link = m_ch + index;
 	return *link;

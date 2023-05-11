@@ -34,7 +34,7 @@ CMyString::CMyString(CMyString&& other)
 {
 	m_str = const_cast<char*>(other.GetStringData());
 	m_length = other.GetLength();	
-	other = CMyString();
+	other = CMyString(); // TODO: при перемещении возвращать ссылку на строку  с символом \0
 }
 
 CMyString::CMyString(const char* pString, const size_t length, const bool isAllocatedMemory)
@@ -46,7 +46,7 @@ CMyString::CMyString(const char* pString, const size_t length, const bool isAllo
 	}
 	else
 	{
-		*this = CMyString(pString, length);
+		*this = CMyString(pString, length);  // TODO: убрать конструктор, добавить нормальную инициализацию
 	}
 }
 
@@ -102,6 +102,7 @@ CMyString& CMyString::operator=(CMyString&& other)
 {
 	if (this != &other)
 	{
+		// очищать обьект перед записью . можно использовать swap
 		m_str = const_cast<char*>(other.GetStringData());
 		m_length = other.GetLength();
 		other.m_str = nullptr;

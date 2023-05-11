@@ -4,12 +4,19 @@
 
 struct ListElement
 {
+	ListElement(const std::string& inputString = "", ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr)
+	{
+		value = inputString;
+		prev = prevPtr;
+		next = nextPtr;
+	}
+	
 	std::string value;
-	ListElement* prev = nullptr;
-	ListElement* next = nullptr;
+	ListElement* prev;
+	ListElement* next;
 };
 
-class StringList  // TODO: подумать над проблемами перемещающего конструктора как в лабе 5.2
+class StringList
 {
 public:
 	using Iterator = CMyIterator<ListElement>;
@@ -29,8 +36,11 @@ public:
 	void PushFront(const std::string& value);
 	size_t GetLength() const;
 	bool IsEmpty() const;
-	void Clear();	
+	void Clear();
+	// TODO: Insert для insert использовать constIterator , возвращает новый итератор
+	// Iterator Insert()
 	void Insert(const Iterator&,const std::string& value);
+	// TODO: Erase возвращает новый итератор указывающий на следующий элемент после удаленного либо end
 	void Erase(Iterator&);
 	
 	Iterator begin();
@@ -42,7 +52,8 @@ public:
 	ConstReverseIterator rсbegin() const;
 	ConstReverseIterator rсend() const;
 	
-private:  // TODO: убрать умные указатели	
+private:  // TODO: убрать умные указатели
+	ListElement* m_end = nullptr;
 	ListElement* m_first = nullptr;
 	ListElement* m_last = nullptr;
 	size_t m_length = 0;

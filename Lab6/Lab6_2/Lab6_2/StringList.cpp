@@ -1,6 +1,11 @@
 #include "StringList.h"
 
-StringList::StringList() = default;
+StringList::StringList()
+{
+	m_end = new ListElement();
+	m_end->prev = m_last;
+	m_end->next = m_first;
+};
 
 StringList::StringList(const StringList& stringList) // копируем данные, создаем новые указатели
 {
@@ -8,8 +13,12 @@ StringList::StringList(const StringList& stringList) // копируем дан�
 	while (varPtr != nullptr)
 	{
 		PushBack(varPtr->value);
+		m_last = varPtr;
 		varPtr = varPtr->next;
 	}
+	m_end = new ListElement();
+	m_end->prev = m_last;
+	m_end->next = m_first;
 }
 
 StringList::StringList(StringList&& stringList) // копируем указатели на начало и конец, забираем value у исходного файла удаляем начало и конец.
@@ -21,6 +30,10 @@ StringList::StringList(StringList&& stringList) // копируем указат
 	stringList.m_first = nullptr;
 	stringList.m_last = nullptr;
 	stringList.m_length = 0;
+
+	m_end = new ListElement();
+	m_end->prev = m_last;
+	m_end->next = m_first;
 }
 
 StringList::~StringList()
@@ -28,6 +41,7 @@ StringList::~StringList()
 	Clear();
 	delete m_first;
 	delete m_last;
+	delete m_end;
 }
 
 StringList& StringList::operator=(const StringList& copy)
@@ -38,12 +52,15 @@ StringList& StringList::operator=(const StringList& copy)
 		std::swap(m_first, tmp.m_first);
 		std::swap(m_last, tmp.m_last);
 		std::swap(m_length, tmp.m_length);
+		std::swap(m_end, tmp.m_end);
 	}
 	return *this;
 }
 
 StringList& StringList::operator=(StringList&& move)
 {
+	// TODO: удалиьь данные перед записью  - сделано
+	Clear();
 	m_first = move.m_first;
 	m_last = move.m_last;
 	m_length = move.m_length;
@@ -58,50 +75,48 @@ void StringList::PushBack(const std::string& value)
 {
 	if (m_first == nullptr)
 	{
-		m_first = new ListElement;
-		m_first->value = value;
-	}
-	else if (m_last == nullptr) // значит элемент второй
-	{
-		m_last = new ListElement;
-		m_last->value = value;
-		m_last->prev = m_first;
-		m_last->prev->next = m_last;
+		m_first = new ListElement(value); // TODO: добавить конструктор для ListElement
+		m_last = m_first;
+		m_end->prev = m_last;
 	}
 	else
 	{
-		auto lastElement = new ListElement;
-		lastElement->value = value;
-		lastElement->prev = m_last;
-		lastElement->prev->next = lastElement;
-		m_last = lastElement;
+		auto lastElement = new ListElement(value);
+
+		if (m_first->next == nullptr) // это значит второй элемент отсутсвует
+		{
+			m_first->next = lastElement;
+			lastElement->prev = m_first;
+			m_last = lastElement;
+			m_end->prev = m_last;
+		}
+		else
+		{
+			m_last->next = lastElement;
+			lastElement->prev = m_last;
+			m_last = lastElement;
+			m_end->prev = m_last;
+		}
 	}
 	m_length++;
 }
 
 void StringList::PushFront(const std::string& value)
 {
-	if (m_first == nullptr)
+	if (m_first == nullptr) // TODO: m_last должен указыать на последний - сделано
 	{
-		m_first = new ListElement;
-		m_first->value = value;
-	}
-	else if (m_last == nullptr)
-	{
-		auto firstElement = new ListElement;
-		firstElement->value = value;
-		firstElement->next = m_first;
+		m_first = new ListElement(value);
 		m_last = m_first;
-		m_last->prev = firstElement;
-		m_first = firstElement;
+		m_end->prev = m_last;
+		m_end->next = m_first;
 	}
 	else
 	{
-		auto firstElement = new ListElement;
-		firstElement->value = value;
-		m_first->prev = firstElement;
-		firstElement->next = m_first;
-		m_first = firstElement;
+		auto lastElement = new ListElement(value);
+		lastElement->next = m_first;
+		m_first->prev = lastElement;
+		m_first = lastElement;
+		m_end->next = m_first;
 	}
 	m_length++;
 }
@@ -122,30 +137,27 @@ void StringList::Clear()
 		return;
 
 	auto varPtr = m_first;
-	ListElement* swap;
 	while (varPtr != nullptr)
 	{
-		varPtr->value.clear();
-		varPtr->prev = nullptr;
-		swap = varPtr;
+		const ListElement* elementToDelete = varPtr; // TODO: rename item to delte and join
 		varPtr = varPtr->next;
-		delete swap;
+		delete elementToDelete;
 	}
 	m_first = nullptr;
 	m_last = nullptr;
-	m_length = 0;
+	m_end = m_first;
+	m_length = 0;	
 }
 
 void StringList::Insert(const Iterator& it, const std::string& value)
 {
 	if (m_first == nullptr)
 	{
-		PushBack(value);
+		PushBack(value);		
 		return;
 	}
 	auto currentIterator = *it;
-	const auto newElement = new ListElement;
-	newElement->value = value;
+	const auto newElement = new ListElement(value);
 	newElement->next = &*it;
 
 	if (currentIterator.prev != nullptr)
@@ -163,7 +175,7 @@ void StringList::Insert(const Iterator& it, const std::string& value)
 
 void StringList::Erase(Iterator& it)
 {
-	if (m_first == nullptr || it.m_data == nullptr) // TODO: пока костыль, обдумать выбрасывание ошибок
+	if (m_first == nullptr || it.m_data == nullptr)
 	{
 		return;
 	}
@@ -197,7 +209,7 @@ StringList::Iterator StringList::begin()
 
 StringList::Iterator StringList::end()
 {
-	return { nullptr };
+	return { m_end };
 }
 
 StringList::ConstIterator StringList::begin() const
@@ -207,15 +219,12 @@ StringList::ConstIterator StringList::begin() const
 
 StringList::ConstIterator StringList::end() const
 {
-	return { nullptr };
+	return { m_end };
 }
 
 StringList::ReverseIterator StringList::rbegin()
-{
-	auto li = new ListElement;
-	li->prev = m_last;
-	Iterator it(li, m_length, 0);
-	return std::make_reverse_iterator(it);
+{	
+	return std::make_reverse_iterator(this->end());
 }
 
 StringList::ReverseIterator StringList::rend()

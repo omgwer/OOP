@@ -36,6 +36,6 @@ public: //TODO: добавить random access iterator , не наследло�
 	T& operator[](size_t index) const;  
 private:
 	T* m_ch;
-	size_t m_length;
-	size_t m_index;
+	size_t m_length; // TODO: удалить
+	size_t m_index;  // TODO: удалить 
 };

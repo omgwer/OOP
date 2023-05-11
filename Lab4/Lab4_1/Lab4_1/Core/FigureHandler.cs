@@ -7,8 +7,6 @@ namespace Lab4_1.Core;
 
 public class FigureHandler
 {
-    // TODO: добавить схему отношений между связями
-    // TODO: add readonly
     private readonly List<IShape> _figureList = new();
     private readonly StreamWorker _streamWorker;
     private readonly CommandHandler _commandHandler;
