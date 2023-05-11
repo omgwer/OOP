@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	try
 	{
 		taxi.AddPassenger(std::make_shared<CPerson>(taxiDriver));
-	} catch (std::logic_error& ex)
+	} catch (std::logic_error& error)
 	{
 		std::cout << "Car driver cant get into a car. Car is full" << std::endl;
 	}
