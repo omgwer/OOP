@@ -6,8 +6,8 @@ template <typename T>
 class CPersonImpl : public T
 {
 public:
-	std::string GetName() const noexcept final;
-	void Speak(const std::string& phrase, std::ostream& os = std::cout) const override;
+	std::string GetName() const final;
+	void Speak(const std::string& phrase, std::ostream& os = std::cout) const;
 protected:
 	CPersonImpl(const std::string& name);
 	std::string m_name;
@@ -26,7 +26,7 @@ void CPersonImpl<T>::Speak(const std::string& phrase, std::ostream& os) const
 }
 
 template<typename T>
-std::string CPersonImpl<T>::GetName() const noexcept
+std::string CPersonImpl<T>::GetName() const 
 {
 	return m_name;
 }

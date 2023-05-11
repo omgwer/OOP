@@ -7,6 +7,7 @@ template <typename Passenger>
 class IVehicle : public  IBasicVehicle
 {
 public:
+	using PassengerType = Passenger;
 	// добавить пассажира на борт
 	// т.к. пассажир может быть полиморфным типом, принимаем его по умному указателю
 	// Если нет места, выбрасывается исключение std::logic_error
@@ -14,7 +15,7 @@ public:
 
 	// Получить ссылку на пассажира с заданным индексом
 	// выбрасывает исключение std::out_of_range в случае недопустимого индекса
-	virtual Passenger const& GetPassenger(size_t index)const = 0;
+	virtual const Passenger& GetPassenger(size_t index)const = 0;
 
 	// убрать пассажира с заданным индексом
 	// выбрасывает исключение std::out_of_range в случае недопустимого индекса

@@ -1,12 +1,13 @@
 #pragma once
 #include "IVehicle.h"
+#include "../../Dictionary/CarBrand.h"
 
 // автомобиль, перевозящий заданный тип пассажиров
-template <typename Passenger>
-class ICar : public IVehicle<Passenger>
+template <typename T>
+class ICar : public IVehicle<T>
 {
 public:
-	virtual MakeOfTheCar GetMakeOfTheCar()const = 0;
+	virtual CarBrand GetCarBrand()const = 0;
 };
 
 

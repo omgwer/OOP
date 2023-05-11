@@ -3,10 +3,11 @@
 #include "CVehicleImpl.h"
 
 template <typename T>
-class CCarImpl : public T
+class CCarImpl : public CVehicleImpl<T>
 {
 public:
 	using PassengerType = typename T::PassengerType;
+	
 	CarBrand GetCarBrand() const noexcept override;
 
 protected:
@@ -14,7 +15,6 @@ protected:
 private:
 	CarBrand m_carBrand;
 };
-
 
 template <typename T>
 CCarImpl<T>::CCarImpl(size_t placeCount, const CarBrand carBrand)

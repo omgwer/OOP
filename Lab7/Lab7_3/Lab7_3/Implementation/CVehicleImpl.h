@@ -2,14 +2,16 @@
 #include <memory>
 #include <stdexcept>
 #include <vector>
+#include "../Vehicles/Interfaces/IVehicle.h"
 
-template <typename T> class CVehicleImpl : public T
+template <typename T>
+class CVehicleImpl : public T
 {
 public:
 	using PassengerType = typename T::PassengerType;
 
 	void AddPassenger(std::shared_ptr<PassengerType> passenger) final;
-	const PassengerType& GetPassengerType(size_t index) const final;
+	const PassengerType& GetPassenger(size_t index) const final;
 	void RemovePassenger(size_t index) final;
 	void RemoveAllPassengers() final;
 	size_t GetPlaceCount() const final;
@@ -48,7 +50,7 @@ template <typename T> void CVehicleImpl<T>::AddPassenger(std::shared_ptr<typenam
 }
 
 template <typename T> const typename CVehicleImpl<T>::PassengerType&
-CVehicleImpl<T>::GetPassengerType(size_t index) const
+CVehicleImpl<T>::GetPassenger(size_t index) const
 {
 	return *m_passengers.at(index);
 }
