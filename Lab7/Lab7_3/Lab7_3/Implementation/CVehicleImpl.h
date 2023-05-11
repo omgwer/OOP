@@ -2,7 +2,7 @@
 #include <memory>
 #include <stdexcept>
 #include <vector>
-#include "../Vehicles/Interfaces/IVehicle.h"
+//#include "../Vehicles/Interfaces/IVehicle.h"
 
 template <typename T>
 class CVehicleImpl : public T
@@ -40,9 +40,10 @@ template <typename T> CVehicleImpl<T>::CVehicleImpl(size_t placeCount)
 	}
 }
 
-template <typename T> void CVehicleImpl<T>::AddPassenger(std::shared_ptr<typename T::PassengerType> passenger)
+template <typename T>
+void CVehicleImpl<T>::AddPassenger(std::shared_ptr<typename T::PassengerType> passenger)
 {
-	if (!IsFull())
+	if (IsFull())
 	{
 		throw std::logic_error("No free seats");
 	}
@@ -61,7 +62,7 @@ template <typename T> void CVehicleImpl<T>::RemovePassenger(size_t index)
 	{
 		throw std::out_of_range("Index is out of range");
 	}
-
+	auto test = std::next(m_passengers.begin(), index);
 	m_passengers.erase(std::next(m_passengers.begin(), index));
 }
 

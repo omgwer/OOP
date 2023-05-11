@@ -9,7 +9,6 @@ public:
 	using PassengerType = typename T::PassengerType;
 	
 	CarBrand GetCarBrand() const noexcept override;
-
 protected:
 	CCarImpl(size_t placeCount, CarBrand carBrand);
 private:
