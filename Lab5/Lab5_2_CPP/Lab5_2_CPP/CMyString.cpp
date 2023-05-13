@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 
-static constexpr char m_endOfLineCh = '\0'; // TODO вынести в статическую переменную или константу -- сделано
+static char m_endOfLineCh = '\0'; // TODO вынести в статическую переменную или константу -- сделано
 
 CMyString::CMyString()
 {
@@ -33,8 +33,10 @@ CMyString::CMyString(CMyString const& other)
 CMyString::CMyString(CMyString&& other)
 {
 	m_str = const_cast<char*>(other.GetStringData());
-	m_length = other.GetLength();	
-	other = CMyString(); // TODO: при перемещении возвращать ссылку на строку  с символом \0
+	m_length = other.GetLength();
+	//other = CMyString(); // TODO: при перемещении возвращать ссылку на строку  с символом \0  -- сделано
+	other.m_length = 0;
+	other.m_str = &m_endOfLineCh;
 }
 
 CMyString::CMyString(const char* pString, const size_t length, const bool isAllocatedMemory)
@@ -46,7 +48,11 @@ CMyString::CMyString(const char* pString, const size_t length, const bool isAllo
 	}
 	else
 	{
-		*this = CMyString(pString, length);  // TODO: убрать конструктор, добавить нормальную инициализацию
+		//*this = CMyString(pString, length); // TODO: убрать конструктор, добавить нормальную инициализацию -- сделано
+		m_length = length;
+		m_str = new char[m_length + 1];
+		std::memcpy(m_str, pString, length);
+		m_str[m_length] = m_endOfLineCh;
 	}
 }
 
@@ -81,9 +87,9 @@ CMyString CMyString::SubString(const size_t start, const size_t length) const
 	return CMyString(m_str + start, std::min(m_length - start, length));
 }
 
-void CMyString::Clear() 
+void CMyString::Clear()
 {
-	this->m_length = 0; // обнулять длину, не выделяя новую память.
+	this->m_length = 0; // TODO: обнулять длину, не выделяя новую память. -- сделано
 	this->m_str[m_length] = m_endOfLineCh; // TODO: если строка перемещена должна норм работать -сделано.
 }
 
@@ -102,11 +108,15 @@ CMyString& CMyString::operator=(CMyString&& other)
 {
 	if (this != &other)
 	{
-		// очищать обьект перед записью . можно использовать swap
-		m_str = const_cast<char*>(other.GetStringData());
-		m_length = other.GetLength();
-		other.m_str = nullptr;
+		// TODO: очищать обьект перед записью . можно использовать swap -- сделано
+		// m_str = const_cast<char*>(other.GetStringData());
+		// m_length = other.GetLength();
+		// other.m_str = nullptr;
+		// other.m_length = 0;
+		std::swap(m_str, other.m_str);
+		std::swap(m_length, other.m_length);
 		other.m_length = 0;
+		other.m_str = &m_endOfLineCh;
 	}
 	return *this;
 }
@@ -183,7 +193,7 @@ char& CMyString::operator[](size_t index)
 
 CMyString::ConstIterator CMyString::ToConst(const Iterator& iterator) const
 {
-	return { &*iterator, m_length, m_length - *iterator };
+	return { &*iterator, m_str,  m_str + m_length };
 }
 
 CMyString::ConstReverseIterator CMyString::ToConst(const ReverseIterator& iterator) const
@@ -225,22 +235,22 @@ std::ostream& operator<<(std::ostream& ostream, const CMyString& myString)
 
 CMyString::Iterator CMyString::begin()
 {
-	return { m_str, m_length, 0 };
+	return { m_str, m_str, m_str + m_length };
 }
 
 CMyString::Iterator CMyString::end()
 {
-	return { m_str + m_length, m_length, m_length };
+	return { m_str + m_length, m_str, m_str + m_length };
 }
 
 CMyString::ConstIterator CMyString::сbegin() const
 {
-	return { m_str, m_length, 0 };
+	return { m_str, m_str, m_str + m_length };
 }
 
 CMyString::ConstIterator CMyString::сend() const
 {
-	return { m_str + m_length, m_length, m_length };
+	return {m_str + m_length, m_str, m_str + m_length  };
 }
 
 CMyString::ReverseIterator CMyString::rbegin()

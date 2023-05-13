@@ -1,4 +1,3 @@
-#include "CMyStringIterator.cpp"
 #include "headers/CMyString.h"
 #include <iostream>
 

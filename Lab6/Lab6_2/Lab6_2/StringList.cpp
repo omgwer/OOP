@@ -23,6 +23,7 @@ StringList::StringList(const StringList& stringList) // копируем дан�
 
 StringList::StringList(StringList&& stringList) // копируем указатели на начало и конец, забираем value у исходного файла удаляем начало и конец.
 {
+	// TODO : добавить проверку на move самого себя
 	m_first = stringList.m_first;
 	m_last = stringList.m_last;
 	m_length = stringList.m_length;

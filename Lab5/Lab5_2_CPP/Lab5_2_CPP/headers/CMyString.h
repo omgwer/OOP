@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-class CMyString  // TODO: добавить валидацию 
+class CMyString
 {
 public:
 	// конструктор по умолчанию
