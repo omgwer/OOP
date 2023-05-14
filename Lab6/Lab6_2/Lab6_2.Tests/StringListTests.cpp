@@ -43,6 +43,9 @@ TEST(StringListTest, CopyConstructor) {
 
 	StringList newList(list);
 
+	auto list1 = list.GetLength();
+	auto list2 = newList.GetLength();
+
 	ASSERT_EQ(list.GetLength(), 2);
 	ASSERT_EQ(newList.GetLength(), 2);
 }
@@ -53,6 +56,9 @@ TEST(StringListTest, MoveConstructor) {
 	list.PushBack("world");
 
 	StringList newList(std::move(list));
+
+	auto list1 = list.GetLength();
+	auto list2 = newList.GetLength();
 
 	ASSERT_EQ(list.GetLength(), 0);
 	ASSERT_EQ(newList.GetLength(), 2);

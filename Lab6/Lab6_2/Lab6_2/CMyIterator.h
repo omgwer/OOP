@@ -31,7 +31,6 @@ public:
 	CMyIterator operator--(int);
 	ptrdiff_t operator-(const CMyIterator& other) const;
 	T* m_data;
-
 private:
 	size_t m_length;
 	size_t m_index;

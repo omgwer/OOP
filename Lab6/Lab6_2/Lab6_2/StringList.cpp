@@ -4,21 +4,20 @@ StringList::StringList()
 {
 	m_end = new ListElement();
 	m_end->prev = m_last;
-	m_end->next = m_first;
+	m_end->next = nullptr;
 };
 
 StringList::StringList(const StringList& stringList) // копируем данные, создаем новые указатели
 {
+	m_end = new ListElement();
 	auto varPtr = stringList.m_first;
-	while (varPtr != nullptr)
+	while (varPtr != stringList.m_end)
 	{
 		PushBack(varPtr->value);
-		m_last = varPtr;
 		varPtr = varPtr->next;
 	}
-	m_end = new ListElement();
 	m_end->prev = m_last;
-	m_end->next = m_first;
+	m_end->next = nullptr;
 	m_last->next = m_end;
 }
 
@@ -34,13 +33,13 @@ StringList::StringList(StringList&& stringList) // копируем указат
 
 	m_end = new ListElement();
 	m_end->prev = m_last;
-	m_end->next = m_first;
+	m_end->next = nullptr;
 	m_last->next = m_end;
 }
 
 StringList::~StringList()
 {
-	Clear();	
+	Clear();
 }
 
 StringList& StringList::operator=(const StringList& copy)
@@ -103,7 +102,7 @@ void StringList::PushFront(const std::string& value)
 		m_first->prev = lastElement;
 		m_first = lastElement;
 	}
-	m_end->next = m_first;
+	m_end->next = nullptr;
 	m_length++;
 }
 
@@ -132,32 +131,30 @@ void StringList::Clear()
 	m_first = nullptr;
 	m_last = nullptr;
 	m_end->prev = m_first;
-	m_end->next = m_first;
+	m_end->next = nullptr;
 	m_length = 0;
 }
 
-void StringList::Insert(const Iterator& it, const std::string& value)
+// возвращает новый итератор указывающий на добавленный объект
+StringList::Iterator StringList::Insert(const Iterator& it, const std::string& value)
 {
-	if (m_first == nullptr)
+	if (it == this->begin())
 	{
-		PushBack(value);
-		return;
+		PushFront(value);
+		return this->begin();
 	}
-	auto currentIterator = *it;
+	if (it == this->end())
+	{
+		PushBack(value);		
+		return { m_last, m_length, m_length };
+	}
+	const auto currentIterator = *it;
 	const auto newElement = new ListElement(value);
+	currentIterator.prev->next = newElement;
 	newElement->next = &*it;
-
-	if (currentIterator.prev != nullptr)
-	{
-		currentIterator.prev->next = newElement;
-		newElement->prev = (*it).prev;
-	}
-	else // значит, что этот элемент первый в списке
-	{
-		m_first = newElement;
-	}
-	currentIterator.prev = newElement;
+	newElement->prev = currentIterator.prev;
 	m_length++;
+	return {newElement, m_length, m_length}; // TODO: доработать работу с индексами	
 }
 
 void StringList::Erase(Iterator& it)
@@ -191,6 +188,10 @@ void StringList::Erase(Iterator& it)
 
 StringList::Iterator StringList::begin()
 {
+	if (m_first == nullptr)
+	{
+		return {m_end, 0,0};
+	}
 	return { m_first, m_length, 0 };
 }
 
