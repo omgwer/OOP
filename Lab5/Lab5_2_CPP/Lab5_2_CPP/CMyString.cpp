@@ -63,7 +63,8 @@ CMyString::CMyString(std::string const& stlString)
 
 CMyString::~CMyString()
 {
-	delete[] m_str;
+	if (m_str != &m_endOfLineCh)
+		delete[] m_str;
 }
 
 size_t CMyString::GetLength() const
@@ -71,7 +72,7 @@ size_t CMyString::GetLength() const
 	return m_length;
 }
 
-const char* CMyString::GetStringData() const // TODO: для перемещенных строрка возвращать указатель на символ (константнтый) с кодом 0 -- сделано
+const char* CMyString::GetStringData() const // TODO: для перемещенных сторка возвращать указатель на символ (константнтый) с кодом 0 -- сделано
 {
 	return m_str;
 }
@@ -193,7 +194,7 @@ char& CMyString::operator[](size_t index)
 
 CMyString::ConstIterator CMyString::ToConst(const Iterator& iterator) const
 {
-	return { &*iterator, m_str,  m_str + m_length };
+	return { &*iterator, m_str, m_str + m_length };
 }
 
 CMyString::ConstReverseIterator CMyString::ToConst(const ReverseIterator& iterator) const
@@ -250,7 +251,7 @@ CMyString::ConstIterator CMyString::сbegin() const
 
 CMyString::ConstIterator CMyString::сend() const
 {
-	return {m_str + m_length, m_str, m_str + m_length  };
+	return { m_str + m_length, m_str, m_str + m_length };
 }
 
 CMyString::ReverseIterator CMyString::rbegin()
