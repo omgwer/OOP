@@ -1,5 +1,4 @@
  #include "../Lab6_2/StringList.cpp"
-#include "../Lab6_2/CMyIterator.cpp"
  #include "gtest/gtest.h"
  #include "../Lab6_2/StringList.h"
 

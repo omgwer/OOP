@@ -19,6 +19,11 @@ CMyString::CMyString(const char* pString)
 
 CMyString::CMyString(const char* pString, const size_t length)
 {
+	if (!pString)
+	{
+		throw std::invalid_argument("Null pointer");
+	}
+	
 	m_length = length;
 	m_str = new char[m_length + 1];
 	std::memcpy(m_str, pString, length);
@@ -31,7 +36,7 @@ CMyString::CMyString(CMyString const& other)
 }
 
 CMyString::CMyString(CMyString&& other)
-{
+{	
 	m_str = const_cast<char*>(other.GetStringData());
 	m_length = other.GetLength();
 	//other = CMyString(); // TODO: при перемещении возвращать ссылку на строку  с символом \0  -- сделано

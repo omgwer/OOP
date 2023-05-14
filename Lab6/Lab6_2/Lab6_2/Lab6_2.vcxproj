@@ -156,7 +156,6 @@
   <ItemGroup>
     <ClInclude Include="CMyIterator.h" />
     <ClInclude Include="StringList.h" />
-    <ClCompile Include="CMyIterator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="StringList.cpp" />    
   </ItemGroup>
