@@ -38,10 +38,9 @@ public:
 	bool IsEmpty() const;
 	void Clear();
 	// TODO: Insert для insert использовать constIterator , возвращает новый итератор
-	// Iterator Insert()
 	Iterator Insert(const Iterator& it,const std::string& value);
 	// TODO: Erase возвращает новый итератор указывающий на следующий элемент после удаленного либо end
-	void Erase(Iterator&);
+	Iterator Erase(Iterator&);
 	
 	Iterator begin();
 	Iterator end();

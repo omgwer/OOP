@@ -153,11 +153,11 @@ StringList::Iterator StringList::Insert(const Iterator& it, const std::string& v
 	currentIterator.prev->next = newElement;
 	newElement->next = &*it;
 	newElement->prev = currentIterator.prev;
-	m_length++;
+	++m_length;
 	return {newElement, m_length, m_length}; // TODO: доработать работу с индексами	
 }
 
-void StringList::Erase(Iterator& it)
+StringList::Iterator StringList::Erase(Iterator& it)
 {
 	if (m_first == nullptr || it.m_data == nullptr)
 	{
@@ -166,6 +166,7 @@ void StringList::Erase(Iterator& it)
 	auto prev = (*it).prev;
 	auto next = (*it).next;
 	ListElement* toDelete = it.m_data;
+	Iterator newIterator(toDelete->next, m_length, end() - it);  // TODO: допилить оператор erase!
 	if (it.m_data == m_first) // it means first element
 	{
 		m_first = m_first->next;
@@ -184,6 +185,7 @@ void StringList::Erase(Iterator& it)
 	}
 	delete toDelete;
 	--m_length;
+	return newIterator;
 }
 
 StringList::Iterator StringList::begin()
@@ -207,7 +209,7 @@ StringList::ConstIterator StringList::begin() const
 
 StringList::ConstIterator StringList::end() const
 {
-	return { m_end };
+	return { m_end,  m_length, m_length };
 }
 
 StringList::ReverseIterator StringList::rbegin()
