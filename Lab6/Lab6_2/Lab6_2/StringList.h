@@ -52,7 +52,7 @@ public:
 	ConstReverseIterator rсend() const;
 	
 private:  // TODO: убрать умные указатели
-	ListElement* m_end = nullptr;  // TODO: подуматьь, можно обойтись без m_end 
+	//ListElement* m_end = nullptr;  // TODO: подуматьь, можно обойтись без m_end 
 	ListElement* m_first = nullptr;
 	ListElement* m_last = nullptr;
 	size_t m_length = 0;

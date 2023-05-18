@@ -37,13 +37,14 @@ CMyString::CMyString(CMyString const& other)
 
 CMyString::CMyString(CMyString&& other)
 {	
-	m_str = const_cast<char*>(other.GetStringData());
+	m_str = const_cast<char*>(other.GetStringData());  // TODO : заменить на обращение к приватному полю
 	m_length = other.GetLength();
 	//other = CMyString(); // TODO: при перемещении возвращать ссылку на строку  с символом \0  -- сделано
 	other.m_length = 0;
 	other.m_str = &m_endOfLineCh;
 }
 
+//TODO убрать const из параметров
 CMyString::CMyString(const char* pString, const size_t length, const bool isAllocatedMemory)
 {
 	if (isAllocatedMemory)
@@ -121,6 +122,8 @@ CMyString& CMyString::operator=(CMyString&& other)
 		// other.m_length = 0;
 		std::swap(m_str, other.m_str);
 		std::swap(m_length, other.m_length);
+
+		// TODO: удалить  
 		other.m_length = 0;
 		other.m_str = &m_endOfLineCh;
 	}
@@ -146,6 +149,7 @@ CMyString& CMyString::operator+=(const CMyString& other)
 
 bool CMyString::operator==(const CMyString& other) const
 {
+	// TODO: если строки разной длины false
 	// TODO: Неорретно работает с строками с нулевым кодом в середине -- поправил
 	return CompareStrings(other) == 0;
 }

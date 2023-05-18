@@ -5,4 +5,5 @@ class IRacer : public IPerson
 {
 public:
 	virtual size_t GetAwardsCount()const = 0;
+	virtual ~IRacer() = default; 
 };

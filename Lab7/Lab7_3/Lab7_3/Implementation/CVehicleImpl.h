@@ -25,7 +25,6 @@ protected:
 	std::vector<std::shared_ptr<PassengerType>> m_passengers;
 };
 
-
 template <typename T> CVehicleImpl<T>::CVehicleImpl(size_t placeCount)
 	: m_placeCount(placeCount)
 {

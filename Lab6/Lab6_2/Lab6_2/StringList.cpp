@@ -1,28 +1,31 @@
 #include "StringList.h"
 
+#include <list>
+
 StringList::StringList()
 {
-	m_end = new ListElement();
-	m_end->prev = m_last;
-	m_end->next = nullptr;
+	// m_end = new ListElement();
+	// m_end->prev = m_last;
+	// m_end->next = nullptr;
 };
 
 StringList::StringList(const StringList& stringList) // копируем данные, создаем новые указатели
 {
-	m_end = new ListElement(); // TODO: если в pushBack exc -> m_end dont delete 
-	auto varPtr = stringList.m_first;
-	while (varPtr != stringList.m_end)
+//	m_end = new ListElement(); // TODO: если в pushBack exc -> m_end dont delete
+	std::list<std::string> test;
+	auto currentNode = stringList.m_first;
+	while (currentNode != stringList.m_end)
 	{
 		try
 		{
-			PushBack(varPtr->value);
+			PushBack(currentNode->value);
 
 		} catch (const std::bad_alloc& e)
 		{
 			delete m_end;
 			return;
 		}
-		varPtr = varPtr->next;
+		currentNode = currentNode->next;
 	}
 	m_end->prev = m_last;
 	m_end->next = nullptr;

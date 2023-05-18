@@ -3,6 +3,7 @@
 
 #include <memory>
 
+// TODO: добавить виртуальные деструкторы ( выяснить зачем )
 template <typename Passenger>
 class IVehicle : public  IBasicVehicle
 {
@@ -20,4 +21,6 @@ public:
 	// убрать пассажира с заданным индексом
 	// выбрасывает исключение std::out_of_range в случае недопустимого индекса
 	virtual void RemovePassenger(size_t index) = 0;
+
+	virtual ~IVehicle() = default;
 };
