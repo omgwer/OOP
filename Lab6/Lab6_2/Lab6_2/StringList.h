@@ -38,21 +38,21 @@ public:
 	bool IsEmpty() const;
 	void Clear();
 	// TODO: Insert для insert использовать constIterator , возвращает новый итератор
-	Iterator Insert(const Iterator& it,const std::string& value);
+	Iterator Insert(const ConstIterator& it,const std::string& value);
 	// TODO: Erase возвращает новый итератор указывающий на следующий элемент после удаленного либо end
-	Iterator Erase(Iterator&);
+	Iterator Erase(const Iterator&);
 	
 	Iterator begin();
 	Iterator end();
-	ConstIterator begin() const;
-	ConstIterator end() const;
+	ConstIterator cbegin() const;
+	ConstIterator cend() const;
 	ReverseIterator rbegin();
 	ReverseIterator rend();
 	ConstReverseIterator rсbegin() const;
 	ConstReverseIterator rсend() const;
 	
 private:  // TODO: убрать умные указатели
-	ListElement* m_end = nullptr;
+	ListElement* m_end = nullptr;  // TODO: подуматьь, можно обойтись без m_end 
 	ListElement* m_first = nullptr;
 	ListElement* m_last = nullptr;
 	size_t m_length = 0;
