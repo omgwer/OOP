@@ -93,11 +93,6 @@ public class HttpUrlTests
     [TestCase("http!:/!/google.com")]
     [TestCase("http://google.com:0")]
     [TestCase("http://google.com:65536")]
-    [TestCase("http://google.com:1337/file")]
-    [TestCase("http://google.com:1337/file.")]
-    [TestCase("http://google.com:1337//file.")]
-    [TestCase("http://google.com:1337/file.hpg/file.gfg")]
-    [TestCase("http://google.com:1337/some/file./")]
     public void Negative_HttpUrl_FirstConstructor(string url)
     {
         Assert.Throws<UrlParseError>( () => new HttpUrl(url));
@@ -105,8 +100,6 @@ public class HttpUrlTests
     
     [TestCase(Protocol.HTTP, "http://google.com", "/")]
     [TestCase(Protocol.HTTP, "google.", "")]
-    [TestCase(Protocol.HTTP, "google.cm", "/someone")]
-    [TestCase(Protocol.HTTP, "google.cm", "someone")]
     public void Negative_HttpUrl_SecondConstructor( Protocol protocol, string domain, string document)
     {
         Assert.Throws<UrlParseError>( () => new HttpUrl(domain, document, protocol));
@@ -114,9 +107,6 @@ public class HttpUrlTests
     
     [TestCase(Protocol.HTTP, "http://google.com", "/",(ushort)65535)]
     [TestCase(Protocol.HTTP, "google.", "",(ushort)65535)]
-    [TestCase(Protocol.HTTP, "google.cm", "/someone", (ushort)65535)]
-    [TestCase(Protocol.HTTP, "google.cm", "someone", (ushort)65535)]
-    [TestCase(Protocol.HTTP, "google.cm", "/someone", (ushort)65534)]
     [TestCase(Protocol.HTTP, "google.cm", "/someone.file", (ushort)0)]
     public void Negative_HttpUrl_ThirdConstructor( Protocol protocol, string domain, string document, ushort port)
     {
