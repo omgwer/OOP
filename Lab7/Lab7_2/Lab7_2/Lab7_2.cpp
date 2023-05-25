@@ -10,13 +10,13 @@ int main()
 	test.PushFront("grumpy");
 	
 
-	auto rbegin = test.begin();
-	auto rend = test.end();
+	auto rbegin = test.cbegin();
+	auto rend = test.cend();
 
 	auto rer = test.Insert(rbegin, "some");
 	auto rer1 = test.Insert(rend, "kek");
-	rbegin = test.begin();
-	rend = test.end();
+	rbegin = test.cbegin();
+	rend = test.cend();
 	while (rbegin != rend)
 	{
 		std::cout << (*rbegin).value << std::endl;

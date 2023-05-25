@@ -16,7 +16,7 @@ public:
 	{
 	}
 
-	~CMyIterator();
+	~CMyIterator()  = default;;
 
 	bool operator !=(CMyIterator const& other) const;
 	bool operator ==(CMyIterator const& other) const;
@@ -29,7 +29,6 @@ public:
 	T* m_root;
 };
 
-template <typename T> CMyIterator<T>::~CMyIterator() = default;
 
 template <typename T> bool CMyIterator<T>::operator!=(CMyIterator const& other) const
 {

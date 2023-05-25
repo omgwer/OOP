@@ -41,20 +41,6 @@ TEST(CMyListTest, BeginIterator) {
 	ASSERT_EQ("hello", (*itBegin).value);
 }
 
-TEST(CMyListTest, ReverseDifference) {
-	CMyList<std::string> list;
-	list.PushBack("hello");
-	list.PushBack("world");
-	list.PushBack("efim");
-	list.PushBack("test");
-	
-	auto itBegin = list.begin();
-	auto itEnd = list.end();
-	ASSERT_EQ(0, itBegin - itEnd);
-	ASSERT_EQ(0, itBegin - itBegin);
-	ASSERT_EQ(0, itEnd - itEnd);
-}
-
 // range-based for
 TEST(CMyListTest, RangeBasedForEmptyList) {
 	CMyList<std::string> list;
@@ -83,7 +69,7 @@ TEST(CMyListTest, InsertTest) {
 	list.PushFront("world");
 	list.PushFront("hello");
 
-	auto it = list.begin();
+	auto it = list.cbegin();
 
 	list.Insert(it, "some");
 	
@@ -98,7 +84,7 @@ TEST(CMyListTest, InsertTest) {
 TEST(CMyListTest, InsertTestEmptyList) {
 	CMyList<std::string> list;
 	
-	auto it = list.begin();
+	auto it = list.cbegin();
 
 	list.Insert(it, "some");
 	
@@ -174,7 +160,6 @@ TEST(CMyListTest, EraseFirstElement) {
 TEST(CMyListTest, EraseEmptyList) {
 	CMyList<std::string> list;
 
-	list.Erase(list.begin());	
 	
 	std::stringstream ss;
 	for (const auto& listElement : list)
@@ -182,6 +167,7 @@ TEST(CMyListTest, EraseEmptyList) {
 		ss << listElement.value;
 	}
 	ASSERT_EQ("", ss.str());
+	ASSERT_THROW(list.Erase(list.begin()), std::exception, "Exception dont throw!");
 }
 
 TEST(CMyListTest, TwoElements) {

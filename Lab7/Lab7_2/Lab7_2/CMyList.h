@@ -29,7 +29,7 @@ public:
 
 	CMyList();
 	CMyList(const CMyList& copy);
-	CMyList(CMyList&& move);
+	CMyList(CMyList&& move) noexcept;
 	~CMyList();
 
 	CMyList& operator=(const CMyList& copy);
@@ -40,74 +40,90 @@ public:
 	size_t GetLength() const;
 	bool IsEmpty() const;
 	void Clear();
-	Iterator Insert(const Iterator&, const T& value);
+	Iterator Insert(const ConstIterator&, const T& value);
 	Iterator Erase(Iterator&);
 
 	Iterator begin();
 	Iterator end();
-	ConstIterator begin() const;
-	ConstIterator end() const;
+	ConstIterator cbegin() const;
+	ConstIterator cend() const;
 	ReverseIterator rbegin();
 	ReverseIterator rend();
 	ConstReverseIterator rсbegin() const;
 	ConstReverseIterator rсend() const;
 
 private:
-	ListElement* m_end = nullptr;
-	ListElement* m_first = nullptr;
-	ListElement* m_last = nullptr;
+	/**
+	 * @param next - (first element)
+	 * @param last - (last element) 
+	 */
+	ListElement* m_root = nullptr;
 	size_t m_length = 0;
 };
 
 template <typename T> CMyList<T>::CMyList()
 {
-	m_end = new ListElement();
-	m_end->prev = m_last;
-	m_end->next = nullptr;
+	m_root = new ListElement();
+	m_root->next = m_root;
+	m_root->prev = m_root;
 }
 
-template <typename T> CMyList<T>::CMyList(const CMyList& other) // копируем данные, создаем новые указатели
+template <typename T> CMyList<T>::CMyList(const CMyList& copy) // копируем данные, создаем новые указатели
 {
-	m_end = new ListElement();
-	auto varPtr = other.m_first;
-	while (varPtr != other.m_end)
+	m_root = new ListElement();
+	m_root->next = m_root;
+	m_root->prev = m_root;
+	if (copy.m_length == 0)
 	{
-		PushBack(varPtr->value);
-		varPtr = varPtr->next;
+		return;
 	}
-	m_end->prev = m_last;
-	m_end->next = nullptr;
-	m_last->next = m_end;
+	auto currentNode = copy.m_root->next;
+	while (currentNode != copy.m_root)
+	{
+		try
+		{
+			PushBack(currentNode->value);
+		}
+		catch (const std::bad_alloc& e)
+		{
+			delete m_root;
+			return;
+		}
+		currentNode = currentNode->next;
+	}
 }
 
-template <typename T> CMyList<T>::CMyList(CMyList&& other) // копируем указатели на начало и конец, забираем value у исходного файла удаляем начало и конец.
+template <typename T> CMyList<T>::CMyList(CMyList&& other) noexcept
+// копируем указатели на начало и конец, забираем value у исходного файла удаляем начало и конец.
 {
-	m_first = other.m_first;
-	m_last = other.m_last;
+	ListElement* newRootElement = new ListElement();
+	if (other.m_length == 0)
+	{
+		m_root->next = m_root;
+		m_root->prev = m_root;
+		return;
+	}
+	m_root = other.m_root;
 	m_length = other.m_length;
 
-	other.m_first = nullptr;
-	other.m_last = nullptr;
+	other.m_root = newRootElement;
+	other.m_root->next = newRootElement;
+	other.m_root->prev = newRootElement;
 	other.m_length = 0;
-
-	m_end = new ListElement();
-	m_end->prev = m_last;
-	m_end->next = nullptr;
-	m_last->next = m_end;
 }
 
 template <typename T> CMyList<T>::~CMyList()
 {
-	Clear();	
+	Clear();
+	delete m_root;	
 }
 
 template <typename T> CMyList<T>& CMyList<T>::operator=(const CMyList& copy)
 {
 	if (this != &copy)
 	{
-		CMyList tmp(copy);
-		std::swap(m_first, tmp.m_first);
-		std::swap(m_last, tmp.m_last);
+		T tmp(copy);
+		std::swap(m_root, tmp.m_root);
 		std::swap(m_length, tmp.m_length);
 	}
 	return *this;
@@ -117,50 +133,49 @@ template <typename T> CMyList<T>& CMyList<T>::operator=(CMyList&& move)
 {
 	if (this != &move)
 	{
-		std::swap(m_first, move.m_first);
-		std::swap(m_last, move.m_last);
+		std::swap(m_root, move.m_root);
 		std::swap(m_length, move.m_length);
-		std::swap(m_end, move.m_end);
 	}
 	return *this;
 }
 
 template <typename T> void CMyList<T>::PushBack(const T& value)
 {
-	if (m_first == nullptr)
-	{
-		m_first = new ListElement(value); // TODO: добавить конструктор для ListElement -- сделано
-		m_last = m_first;
-	}
+	auto lastElement = new ListElement(value);
+	if (m_root == m_root->next) // значит элемент первый
+		{
+		m_root->next = lastElement;
+		m_root->prev = lastElement;
+		lastElement->next = m_root;
+		lastElement->prev = m_root;
+		}
 	else
 	{
-		auto lastElement = new ListElement(value);
-		m_last->next = lastElement;
-		lastElement->prev = m_last;
-		m_last = lastElement;
+		m_root->prev->next = lastElement;
+		lastElement->prev = m_root->prev;
+		m_root->prev = lastElement;
+		lastElement->next = m_root;
 	}
-	m_end->prev = m_last;
-	m_last->next = m_end;
 	m_length++;
 }
 
 template <typename T> void CMyList<T>::PushFront(const T& value)
 {
-	if (m_first == nullptr) // TODO: m_last должен указыать на последний - сделано
+	auto firstElement = new ListElement(value);
+	if (m_root->next == m_root) // значит элeмент первый
 		{
-		m_first = new ListElement(value);
-		m_last = m_first;
-		m_end->prev = m_last;
-		m_last->next = m_end;
+		m_root->next = firstElement;
+		m_root->prev = firstElement;
+		firstElement->next = m_root;
+		firstElement->prev = m_root;
 		}
 	else
-	{
-		auto lastElement = new ListElement(value);
-		lastElement->next = m_first;
-		m_first->prev = lastElement;
-		m_first = lastElement;
+	{		
+		firstElement->next = m_root->next;
+		firstElement->prev = m_root;
+		m_root->next->prev = firstElement;
+		m_root->next = firstElement;
 	}
-	m_end->next = nullptr;
 	m_length++;
 }
 
@@ -171,75 +186,62 @@ template <typename T> size_t CMyList<T>::GetLength() const
 
 template <typename T> bool CMyList<T>::IsEmpty() const
 {
-	return m_length == 0 && m_first == nullptr && m_last == nullptr;
+	return m_length == 0;
 }
 
 template <typename T> void CMyList<T>::Clear()
 {
-	if (m_first == nullptr)
+	if (m_root->next == m_root)
 		return;
 
-	auto varPtr = m_first;
-	while (varPtr != m_end)
+	auto currentNode = m_root->next;
+	while (currentNode != m_root)
 	{
-		const ListElement* elementToDelete = varPtr; // TODO: rename item to delte and join -- сделано		
-		varPtr = varPtr->next;
+		const ListElement* elementToDelete = currentNode;
+		currentNode = currentNode->next;
 		delete elementToDelete;
 	}
-	m_first = nullptr;
-	m_last = nullptr;
-	m_end->prev = m_first;
-	m_end->next = nullptr;
+	m_root->next = m_root;
+	m_root->prev = m_root;
 	m_length = 0;
 }
 
-template <typename T> typename CMyList<T>::Iterator CMyList<T>::Insert(const Iterator& it, const T& value)
+template <typename T> typename CMyList<T>::Iterator CMyList<T>::Insert(const ConstIterator& it, const T& value)
 {
-	if (it == this->begin())
+	if (it == cbegin())
 	{
 		PushFront(value);
-		return this->begin();
+		return begin();
 	}
-	if (it == this->end())
+	if (it == cend())
 	{
-		PushBack(value);		
-		return { m_last, m_length, m_length };
+		PushBack(value);
+		return end();
 	}
 	const auto currentIterator = *it;
 	const auto newElement = new ListElement(value);
 	currentIterator.prev->next = newElement;
-	newElement->next = &*it;
+	newElement->next = const_cast<ListElement*>(&*it);
 	newElement->prev = currentIterator.prev;
 	++m_length;
-	return {newElement, m_length, static_cast<size_t>(end() - it)};
+	return { newElement , m_root};
 }
 
 template <typename T> typename CMyList<T>::Iterator CMyList<T>::Erase(Iterator& it)
 {
-	if (m_first == nullptr || it.m_data == nullptr)
+	if (m_length == 0)
 	{
 		throw std::exception("List is empty!");
 	}
-	auto prev = (*it).prev;
-	auto next = (*it).next;
-	ListElement* toDelete = it.m_data;
-	Iterator newIterator(toDelete->next, m_length, end() - it);  // TODO: допилить оператор erase!
-	if (it.m_data == m_first) // it means first element
-		{
-		m_first = m_first->next;
-		if (m_first != nullptr)
-			m_first->prev = nullptr; // если список не стал пустым
-		else
-			m_last = nullptr; // если список стал пустым
-		}
-	else
+	if (it == end())
 	{
-		toDelete->prev->next = toDelete->next;
-		if (toDelete->next != nullptr)
-			toDelete->next->prev = toDelete->prev;
-		else
-			m_last = toDelete->prev; // если удаляем последний элемент
+		throw std::exception("Cant delete root element");
 	}
+	
+	ListElement* toDelete = it.m_data;
+	Iterator newIterator(toDelete->next, m_root);
+	toDelete->next->prev = toDelete->prev;
+	toDelete->prev->next = toDelete->next;	
 	delete toDelete;
 	--m_length;
 	return newIterator;
@@ -247,26 +249,22 @@ template <typename T> typename CMyList<T>::Iterator CMyList<T>::Erase(Iterator& 
 
 template <typename T> typename CMyList<T>::Iterator CMyList<T>::begin()
 {
-	if (m_first == nullptr)
-	{
-		return {m_end, 0,0};
-	}
-	return { m_first, m_length, 0 };
+	return { m_root->next, m_root };
 }
 
 template <typename T> typename CMyList<T>::Iterator CMyList<T>::end()
 {
-	return { m_end, m_length, m_length };
+	return { m_root, m_root };
 }
 
-template <typename T> typename CMyList<T>::ConstIterator CMyList<T>::begin() const
+template <typename T> typename CMyList<T>::ConstIterator CMyList<T>::cbegin() const
 {
-	return { m_first, m_length, 0 };
+	return { m_root->next, m_root };
 }
 
-template <typename T> typename CMyList<T>::ConstIterator CMyList<T>::end() const
+template <typename T> typename CMyList<T>::ConstIterator CMyList<T>::cend() const
 {
-	return { m_end,  m_length, m_length };
+	return { m_root, m_root };
 }
 
 template <typename T> typename CMyList<T>::ReverseIterator CMyList<T>::rbegin()
@@ -281,10 +279,10 @@ template <typename T> typename CMyList<T>::ReverseIterator CMyList<T>::rend()
 
 template <typename T> typename CMyList<T>::ConstReverseIterator CMyList<T>::rсbegin() const
 {
-	return std::make_reverse_iterator(this->end());
+	return std::make_reverse_iterator(this->cend());
 }
 
 template <typename T> typename CMyList<T>::ConstReverseIterator CMyList<T>::rсend() const
 {
-	return std::make_reverse_iterator(this->begin());
+	return std::make_reverse_iterator(this->cbegin());
 }
