@@ -45,7 +45,7 @@ CMyString::CMyString(CMyString&& other)
 }
 
 //TODO убрать const из параметров
-CMyString::CMyString(const char* pString, size_t length, DontAllocate dontAllocate)
+CMyString::CMyString(char* pString, size_t length, DontAllocate)
 {
 	m_str = const_cast<char*>(pString);
 	m_length = length;

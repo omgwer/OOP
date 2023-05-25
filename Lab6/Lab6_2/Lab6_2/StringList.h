@@ -15,6 +15,47 @@ struct ListElement
 	ListElement* next;
 };
 
+namespace detail
+{
+struct ListData
+{
+	// TODO: добавить конструктор перемещения, деструктор, дефолтный конструктор
+	// Проверить операции присваивания при приватном наследовании
+	ListElement* m_root = nullptr;
+	size_t m_length = 0;
+
+	ListData()
+	{
+		m_root = new ListElement();
+		m_root->next = m_root;
+		m_root->prev = m_root;
+	}
+	
+	ListData(ListData&& move)
+	{
+		ListData* newRootElement = new ListData();
+		if (move.m_length == 0)
+		{
+			m_root->prev = m_root;
+			m_root->next = m_root;			
+		}
+
+		m_root = move.m_root;
+		m_length = move.m_length;
+		move.m_root = newRootElement;
+		move.m_root->next = newRootElement;
+		move.m_root->prev = newRootElement;
+		move.m_length = 0;
+	}
+
+	~ListData()
+	{
+		
+	}
+};
+
+}
+
 class StringList
 {
 public:
@@ -25,7 +66,7 @@ public:
 	
 	StringList();
 	StringList(const StringList& stringList);
-	StringList(StringList&& stringList) noexcept;
+	StringList(StringList&& stringList) noexcept(false);
 	~StringList();
 
 	StringList& operator=(const StringList& copy);

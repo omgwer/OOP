@@ -75,7 +75,7 @@ private:
 	{
 		explicit DontAllocate() = default;
 	};
-	CMyString(const char* pString, size_t length, DontAllocate) noexcept;
+	CMyString(char* pString, size_t length, DontAllocate) noexcept;
 	size_t m_length;
 	char* m_str;
 	int CompareStrings(const CMyString& other) const;

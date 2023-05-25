@@ -27,14 +27,15 @@ StringList::StringList(const StringList& stringList)
 		}
 		catch (const std::bad_alloc& e)
 		{
+			Clear();
 			delete m_root;
-			return;
+			throw;
 		}
 		currentNode = currentNode->next;
 	}
 }
 
-StringList::StringList(StringList&& stringList) noexcept
+StringList::StringList(StringList&& stringList) noexcept(false)
 {
 	ListElement* newRootElement = new ListElement();
 	if (stringList.m_length == 0)
@@ -177,6 +178,7 @@ StringList::Iterator StringList::Erase(const Iterator& it)
 	}
 	if (it == end())
 	{
+		// TODO: заменить logic_error
 		throw std::exception("Cant delete root element");
 	}
 	

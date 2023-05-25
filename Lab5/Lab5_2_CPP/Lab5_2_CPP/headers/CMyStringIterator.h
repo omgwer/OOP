@@ -23,6 +23,11 @@ public: //TODO: добавить random access iterator , не наследло�
 
 	~CMyStringIterator();
 
+	// TODO: добавить неявное преобразование типов,
+	// сделать так, чтобы в CMyStringIterator<const char> не было оператора преобразования в самого себя
+	// используйте std::enable_if
+	// SFINAE
+
 	bool operator!=(CMyStringIterator const& other) const;
 	bool operator==(CMyStringIterator const& other) const;
 	T& operator*() const;

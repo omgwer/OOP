@@ -150,7 +150,7 @@ public class HttpUrl
         throw new UrlParseError($"{value} - Is invalid domain name");
     }
 
-    private ushort ParsePort(in string value,in Protocol protocol)
+    private ushort ParsePort(in string value, in Protocol protocol)
     {
         if (value.Length == 0)
         {

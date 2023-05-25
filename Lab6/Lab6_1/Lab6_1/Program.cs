@@ -2,11 +2,11 @@
 using Lab6_1.Infrastructure;
 
 var handler = new HttpUrlHandler(Console.In, Console.Out);
-//
-// while (handler.IsRun)
-// {
-//     handler.HandleInput();
-// }
+
+while (handler.IsRun)
+{
+    handler.HandleInput();
+}
 
 
 string test = "someone";
