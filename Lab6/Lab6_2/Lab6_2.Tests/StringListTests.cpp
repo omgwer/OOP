@@ -62,4 +62,5 @@ TEST(StringListTest, MoveConstructor) {
 
 	ASSERT_EQ(list.GetLength(), 0);
 	ASSERT_EQ(newList.GetLength(), 2);
+	
 }

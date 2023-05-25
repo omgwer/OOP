@@ -147,8 +147,6 @@ TEST(StringListTest, EraseFirstElement) {
 
 TEST(StringListTest, EraseEmptyList) {
 	StringList list;
-
-	list.Erase(list.begin());	
 	
 	std::stringstream ss;
 	for (const ListElement& listElement : list)
@@ -156,6 +154,7 @@ TEST(StringListTest, EraseEmptyList) {
 		ss << listElement.value;
 	}
 	ASSERT_EQ("", ss.str());
+	ASSERT_THROW(list.Erase(list.begin()), std::exception, "Exception dont throw!");
 }
 
 TEST(StringListTest, TwoElements) {

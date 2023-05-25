@@ -36,19 +36,19 @@ StringList::StringList(const StringList& stringList)
 
 StringList::StringList(StringList&& stringList) noexcept
 {
-	m_root = new ListElement();
+	ListElement* newRootElement = new ListElement();
 	if (stringList.m_length == 0)
 	{
 		m_root->next = m_root;
 		m_root->prev = m_root;
 		return;
 	}
-	m_root->next = stringList.m_root->next;
-	m_root->prev = stringList.m_root->prev;
+	m_root = stringList.m_root;
 	m_length = stringList.m_length;
 
-	stringList.m_root->next = stringList.m_root;
-	stringList.m_root->prev = stringList.m_root;
+	stringList.m_root = newRootElement;
+	stringList.m_root->next = newRootElement;
+	stringList.m_root->prev = newRootElement;
 	stringList.m_length = 0;
 }
 

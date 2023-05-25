@@ -1,7 +1,7 @@
 #pragma once
 #include <iterator>
 
-template <typename T> class CMyIterator // TODO: добавить const iterator
+template <typename T> class CMyIterator
 {
 public:
 	using value_type = T;
