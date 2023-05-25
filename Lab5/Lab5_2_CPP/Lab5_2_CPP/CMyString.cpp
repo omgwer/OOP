@@ -23,7 +23,7 @@ CMyString::CMyString(const char* pString, const size_t length)
 	{
 		throw std::invalid_argument("Null pointer");
 	}
-	
+
 	m_length = length;
 	m_str = new char[m_length + 1];
 	std::memcpy(m_str, pString, length);
@@ -36,30 +36,19 @@ CMyString::CMyString(CMyString const& other)
 }
 
 CMyString::CMyString(CMyString&& other)
-{	
-	m_str = const_cast<char*>(other.GetStringData());  // TODO : заменить на обращение к приватному полю
-	m_length = other.GetLength();
+{
+	m_str = other.m_str; // TODO : заменить на обращение к приватному полю
+	m_length = other.m_length;
 	//other = CMyString(); // TODO: при перемещении возвращать ссылку на строку  с символом \0  -- сделано
 	other.m_length = 0;
 	other.m_str = &m_endOfLineCh;
 }
 
 //TODO убрать const из параметров
-CMyString::CMyString(const char* pString, const size_t length, const bool isAllocatedMemory)
+CMyString::CMyString(const char* pString, size_t length, DontAllocate dontAllocate)
 {
-	if (isAllocatedMemory)
-	{
-		m_str = const_cast<char*>(pString);
-		m_length = length;
-	}
-	else
-	{
-		//*this = CMyString(pString, length); // TODO: убрать конструктор, добавить нормальную инициализацию -- сделано
-		m_length = length;
-		m_str = new char[m_length + 1];
-		std::memcpy(m_str, pString, length);
-		m_str[m_length] = m_endOfLineCh;
-	}
+	m_str = const_cast<char*>(pString);
+	m_length = length;
 }
 
 CMyString::CMyString(std::string const& stlString)
@@ -115,17 +104,9 @@ CMyString& CMyString::operator=(CMyString&& other)
 {
 	if (this != &other)
 	{
-		// TODO: очищать обьект перед записью . можно использовать swap -- сделано
-		// m_str = const_cast<char*>(other.GetStringData());
-		// m_length = other.GetLength();
-		// other.m_str = nullptr;
-		// other.m_length = 0;
+		// TODO: очищать обьект перед записью . можно использовать swap -- сделано		
 		std::swap(m_str, other.m_str);
 		std::swap(m_length, other.m_length);
-
-		// TODO: удалить  
-		other.m_length = 0;
-		other.m_str = &m_endOfLineCh;
 	}
 	return *this;
 }
@@ -137,7 +118,7 @@ CMyString CMyString::operator+(const CMyString& other) const
 	std::memcpy(pString, m_str, m_length);
 	std::memcpy(pString + m_length, other.GetStringData(), other.GetLength());
 	pString[length] = m_endOfLineCh;
-	CMyString newString(pString, length, true); // TODO: Добавить перегрузку конструктора с bool(выделили память или нет) со ссылкой на уже выделенную память -- сделано
+	CMyString newString(pString, length, DontAllocate{}); // TODO: Добавить перегрузку конструктора с bool(выделили память или нет) со ссылкой на уже выделенную память -- сделано
 	return newString;
 }
 
@@ -150,6 +131,8 @@ CMyString& CMyString::operator+=(const CMyString& other)
 bool CMyString::operator==(const CMyString& other) const
 {
 	// TODO: если строки разной длины false
+	if (m_length != other.m_length)
+		return false;
 	// TODO: Неорретно работает с строками с нулевым кодом в середине -- поправил
 	return CompareStrings(other) == 0;
 }

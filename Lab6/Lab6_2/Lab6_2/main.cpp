@@ -2,7 +2,6 @@
 #include <iostream>
 #include <list>
 //
-// // TODO: Для лабы 7 некоторые типы не имеют конструкторы по умолчанию
 int main(int argc, char* argv[])
 {
 	StringList test2;
@@ -14,7 +13,7 @@ int main(int argc, char* argv[])
 	StringList test(test2);
 
 //	StringList test;
-	// test.PushFront("albina");
+	// test.PushFront("jerry");
 	// test.PushFront("mouse");
 	// test.PushFront("someone");
 	
