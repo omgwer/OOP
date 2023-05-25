@@ -109,7 +109,7 @@ public class Canvas : ICanvas
         _shapes.Clear();
     }
 
-    public void Draw()
+    public void Draw(Mutex mutex)
     {
         if (_isRun)
             return;
@@ -133,11 +133,13 @@ public class Canvas : ICanvas
                 // Clear screen
                 _window.Clear(windowColor);
 
+                mutex.WaitOne();
                 var shapes = new List<Shape>(_shapes);
                 foreach (var shape in shapes)
                 {
                     _window.Draw(shape);
                 }
+                mutex.ReleaseMutex();
 
 
                 _window.Display();

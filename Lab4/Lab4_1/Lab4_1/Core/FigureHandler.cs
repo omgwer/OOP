@@ -12,6 +12,7 @@ public class FigureHandler
     private readonly CommandHandler _commandHandler;
     private bool _isRun;
     private readonly ICanvas _canvas;
+    Mutex mutexObj = new();
 
     public FigureHandler(TextReader textReader, TextWriter textWriter, uint canvasWidth, uint canvasHeight)
     {
@@ -94,6 +95,7 @@ public class FigureHandler
                 {
                     _streamWorker.WriteLine(ex.Message);
                 }
+
                 break;
         }
     }
@@ -113,12 +115,13 @@ public class FigureHandler
     {
         if (_figureList.Count == 0)
             _streamWorker.WriteLine("Nothing to draw, figure list is empty!");
+        mutexObj.WaitOne();
         foreach (var shape in _figureList)
         {
             shape.Draw(_canvas);
         }
-
-        _canvas.Draw();
+        mutexObj.ReleaseMutex();
+        _canvas.Draw(mutexObj);
     }
 
     private void Clear()

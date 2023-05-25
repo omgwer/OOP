@@ -14,5 +14,5 @@ public interface ICanvas
 
     void Clear();
     // void
-    void Draw();
+    void Draw(Mutex mutex);
 }
