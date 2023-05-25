@@ -8,7 +8,6 @@ int main(int argc, char* argv[])
 	 test2.PushBack("cat");
 	 test2.PushBack("efim");
 	 test2.PushBack("grumpy");
-	
 
 	StringList test(test2);
 
@@ -22,6 +21,10 @@ int main(int argc, char* argv[])
 	
 	auto rer = test.Insert(begin, "some");
 	auto lol = test.Insert(end, "end_cat");
+
+	auto some1 = test.end();
+	std::cout << (*some1).value << std::endl;
+	
 	begin = test.cbegin();
 	end = test.cend();
  	while ( begin != end)

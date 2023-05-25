@@ -1,4 +1,5 @@
 #pragma once
+#include <exception>
 #include <iterator>
 
 template <typename T> class CMyIterator
@@ -10,8 +11,8 @@ public:
 	using reference = T&;
 	using iterator_category = std::bidirectional_iterator_tag;   
 
-	CMyIterator(T* p)
-		: m_data(p)
+	CMyIterator(T* p, T* root)
+		: m_data(p), m_root(root)
 	{
 	}
 
@@ -25,6 +26,7 @@ public:
 	CMyIterator& operator--();
 	CMyIterator operator--(int);
 	T* m_data;
+	T* m_root;
 };
 
 template <typename T> CMyIterator<T>::~CMyIterator() = default;
@@ -41,6 +43,10 @@ template <typename T> bool CMyIterator<T>::operator==(CMyIterator const& other) 
 
 template <typename T> T& CMyIterator<T>::operator*() const
 {
+	if (m_data == m_root)
+	{
+		throw std::exception("Cant dereference end iterator!");
+	}
 	return *m_data;
 }
 

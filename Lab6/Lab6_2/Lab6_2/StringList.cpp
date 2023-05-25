@@ -165,7 +165,7 @@ StringList::Iterator StringList::Insert(const ConstIterator& it, const std::stri
 	newElement->next = const_cast<ListElement*>(&*it);
 	newElement->prev = currentIterator.prev;
 	++m_length;
-	return { newElement };
+	return { newElement , m_root};
 }
 
 
@@ -181,7 +181,7 @@ StringList::Iterator StringList::Erase(const Iterator& it)
 	}
 	
 	ListElement* toDelete = it.m_data;
-	Iterator newIterator(toDelete->next);
+	Iterator newIterator(toDelete->next, m_root);
 	toDelete->next->prev = toDelete->prev;
 	toDelete->prev->next = toDelete->next;	
 	delete toDelete;
@@ -191,22 +191,22 @@ StringList::Iterator StringList::Erase(const Iterator& it)
 
 StringList::Iterator StringList::begin() // TODO: попробовать обойтись без условия 
 {
-	return { m_root->next };
+	return { m_root->next, m_root };
 }
 
 StringList::Iterator StringList::end()
 {
-	return { m_root };
+	return { m_root, m_root };
 }
 
 StringList::ConstIterator StringList::cbegin() const
 {
-	return { m_root->next };
+	return { m_root->next, m_root };
 }
 
 StringList::ConstIterator StringList::cend() const
 {
-	return { m_root };
+	return { m_root, m_root };
 }
 
 StringList::ReverseIterator StringList::rbegin()
