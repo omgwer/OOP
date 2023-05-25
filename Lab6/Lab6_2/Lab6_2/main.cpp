@@ -5,28 +5,30 @@
 // // TODO: Для лабы 7 некоторые типы не имеют конструкторы по умолчанию
 int main(int argc, char* argv[])
 {
-	// StringList test;
-	// test.PushBack("cat");
-	// test.PushBack("efim");
-	// test.PushBack("grumpy");
-
-	StringList test;
-	test.PushFront("cat");
-	test.PushFront("efim");
-	test.PushFront("grumpy");
+	StringList test2;
+	 test2.PushBack("cat");
+	 test2.PushBack("efim");
+	 test2.PushBack("grumpy");
 	
 
-	auto rbegin = test.cbegin();
-	auto rend = test.cend();
+	StringList test(test2);
 
-	auto rer = test.Insert(rbegin, "some");
-	auto rer1 = test.Insert(rend, "kek");
-	rbegin = test.cbegin();
-	rend = test.cend();
- 	while (rbegin != rend)
+//	StringList test;
+	// test.PushFront("albina");
+	// test.PushFront("mouse");
+	// test.PushFront("someone");
+	
+	auto begin = test.cbegin();
+	auto end = test.cend();
+	
+	auto rer = test.Insert(begin, "some");
+	auto lol = test.Insert(end, "end_cat");
+	begin = test.cbegin();
+	end = test.cend();
+ 	while ( begin != end)
 	{
-		std::cout << (*rbegin).value << std::endl;
-		++rbegin;
+		std::cout << (*begin).value << std::endl;
+		++begin;
 	}
 
 	return 0;

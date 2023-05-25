@@ -10,7 +10,6 @@ struct ListElement
 		prev = prevPtr;
 		next = nextPtr;
 	}
-	
 	std::string value;
 	ListElement* prev;
 	ListElement* next;
@@ -26,11 +25,11 @@ public:
 	
 	StringList();
 	StringList(const StringList& stringList);
-	StringList(StringList&& stringList);
+	StringList(StringList&& stringList) noexcept;
 	~StringList();
 
 	StringList& operator=(const StringList& copy);
-	StringList& operator=(StringList&& move);
+	StringList& operator=(StringList&& move) noexcept;
 
 	void PushBack(const std::string& value);
 	void PushFront(const std::string& value);
@@ -51,9 +50,11 @@ public:
 	ConstReverseIterator rсbegin() const;
 	ConstReverseIterator rсend() const;
 	
-private:  // TODO: убрать умные указатели
-	//ListElement* m_end = nullptr;  // TODO: подуматьь, можно обойтись без m_end 
-	ListElement* m_first = nullptr;
-	ListElement* m_last = nullptr;
+private:
+	/**
+	 * @param next - (first element)
+	 * @param last - (last element) 
+	 */
+	ListElement* m_root = nullptr;
 	size_t m_length = 0;
 };

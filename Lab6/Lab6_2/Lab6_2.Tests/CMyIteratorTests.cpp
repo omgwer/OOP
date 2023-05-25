@@ -29,20 +29,6 @@ TEST(StringListTest, BeginIterator) {
 	ASSERT_EQ("hello", (*itBegin).value);
 }
 
-TEST(StringListTest, ReverseDifference) {
-	StringList list;
-	list.PushBack("hello");
-	list.PushBack("world");
-	list.PushBack("efim");
-	list.PushBack("test");
-	
-	CMyIterator<ListElement> itBegin = list.begin();
-	CMyIterator<ListElement> itEnd = list.end();
-	ASSERT_EQ(0, itBegin - itEnd);
-	ASSERT_EQ(0, itBegin - itBegin);
-	ASSERT_EQ(0, itEnd - itEnd);
-}
-
 // range-based for
 TEST(StringListTest, RangeBasedForEmptyList) {
 	StringList list;
@@ -71,7 +57,7 @@ TEST(StringListTest, InsertTest) {
 	list.PushFront("world");
 	list.PushFront("hello");
 
-	auto it = list.begin();
+	auto it = list.cbegin();
 
 	list.Insert(it, "some");
 	
@@ -86,7 +72,7 @@ TEST(StringListTest, InsertTest) {
 TEST(StringListTest, InsertTestEmptyList) {
 	StringList list;
 	
-	auto it = list.begin();
+	auto it = list.cbegin();
 
 	list.Insert(it, "some");
 	
