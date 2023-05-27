@@ -2,19 +2,7 @@
 #include "CMyIterator.h"
 #include <string>
 
-struct ListElement
-{
-	ListElement(const std::string& inputString = "", ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr)
-	{
-		value = inputString;
-		prev = prevPtr;
-		next = nextPtr;
-	}
 
-	std::string value;
-	ListElement* prev;
-	ListElement* next;
-};
 
 namespace detail
 {
@@ -71,7 +59,6 @@ public:
 	using ConstIterator = CMyIterator<const ListElement>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
-
 	StringList();
 	StringList(const StringList& stringList);
 	StringList(StringList&& stringList) noexcept(false);
