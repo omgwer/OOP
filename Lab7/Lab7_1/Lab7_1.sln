@@ -2,6 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab7_1", "Lab7_1\Lab7_1.vcxproj", "{D9C574EA-5ACA-4088-BEFE-94382D23BE99}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab7_1_Tests", "Lab7_1_Tests\Lab7_1_Tests.vcxproj", "{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D9C574EA-5ACA-4088-BEFE-94382D23BE99} = {D9C574EA-5ACA-4088-BEFE-94382D23BE99}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -18,5 +23,13 @@ Global
 		{D9C574EA-5ACA-4088-BEFE-94382D23BE99}.Release|Win32.Build.0 = Release|Win32
 		{D9C574EA-5ACA-4088-BEFE-94382D23BE99}.Release|x64.ActiveCfg = Release|x64
 		{D9C574EA-5ACA-4088-BEFE-94382D23BE99}.Release|x64.Build.0 = Release|x64
+		{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}.Debug|Win32.Build.0 = Debug|Win32
+		{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}.Debug|x64.ActiveCfg = Debug|x64
+		{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}.Debug|x64.Build.0 = Debug|x64
+		{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}.Release|Win32.ActiveCfg = Release|Win32
+		{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}.Release|Win32.Build.0 = Release|Win32
+		{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}.Release|x64.ActiveCfg = Release|x64
+		{F2E5552B-C5B6-457F-A814-4FDC6796E3CC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 EndGlobal
