@@ -45,7 +45,7 @@ public class MemoryService
     {
         AssertIdentifierIsBusy(identifier);
         _functions.Add(identifier, new FunctionArgument()
-            {FirstOperand = firstVariable, Operation = operation, SecondOperand = secondVariable});
+            { FirstOperand = firstVariable, Operation = operation, SecondOperand = secondVariable });
     }
 
     public double? Get(string identifier)
@@ -95,13 +95,13 @@ public class MemoryService
         return GetFunctionResultRecursive(identifier);
     }
 
-    private double? GetFunctionResultRecursive(string identifier)
+    private double? GetFunctionResultRecursive1(string identifier)
     {
         if (!HasIdentifierInMemory(identifier))
         {
             throw new ArgumentException($"Identifier - {identifier} is not found ");
         }
-    
+
         if (IsVariable(identifier))
             return _variables[identifier];
         if (IsFunction(identifier))
@@ -110,7 +110,7 @@ public class MemoryService
             var functionArgument = _functions[identifier];
             if (functionArgument.cacheResult != null)
                 return functionArgument.cacheResult;
-    
+
             var first = GetFunctionResultRecursive(functionArgument.FirstOperand);
             if (functionArgument.Operation != null & functionArgument.SecondOperand != null)
             {
@@ -122,78 +122,79 @@ public class MemoryService
             {
                 result = first;
             }
-    
+
             _cashe.CacheValue(functionArgument, result);
             return result;
         }
-    
+
         throw new Exception("Someone error");
     }
 
-    private double? GetFunctionResult(string identifier)
+    // private double? GetFunctionResultRecursive(string identifier)
+    private double? GetFunctionResultRecursive(string identifier)
     {
         if (!HasIdentifierInMemory(identifier))
         {
             throw new ArgumentException($"Identifier - {identifier} is not found");
         }
 
+        if (IsVariable(identifier))
+        {
+            return _variables[identifier];
+        }
+
         var stack = new Stack<string>();
         stack.Push(identifier);
+        var currentIdentifier = stack.Pop();
+        var functionArgument = _functions[currentIdentifier];
 
-        while (stack.Count > 0)
+        if (functionArgument.cacheResult != null)
         {
-            var currentIdentifier = stack.Pop();
-
-            if (IsVariable(currentIdentifier))
-            {
-                return _variables[currentIdentifier];
-            }
-
-            if (IsFunction(currentIdentifier))
-            {
-                var functionArgument = _functions[currentIdentifier];
-
-                if (functionArgument.cacheResult != null)
-                {
-                    return functionArgument.cacheResult;
-                }
-
-                var firstOperand = functionArgument.FirstOperand;
-                var secondOperand = functionArgument.SecondOperand;
-
-                if (firstOperand != null && !_functions.ContainsKey(firstOperand))
-                {
-                    stack.Push(firstOperand);
-                }
-
-                if (secondOperand != null && !_functions.ContainsKey(secondOperand))
-                {
-                    stack.Push(secondOperand);
-                }
-
-                if (firstOperand != null && secondOperand != null)
-                {
-                    var operation = functionArgument.Operation;
-                    var firstResult = _functions.ContainsKey(firstOperand)
-                        ? _functions[firstOperand].cacheResult
-                        : _variables[firstOperand];
-                    var secondResult = _functions.ContainsKey(secondOperand)
-                        ? _functions[secondOperand].cacheResult
-                        : _variables[secondOperand];
-                    var result = CalculateValue(firstResult, operation, secondResult);
-                    _cashe.CacheValue(functionArgument, result);
-                    return result;
-                }
-                else if (firstOperand != null)
-                {
-                    var result = _functions.ContainsKey(firstOperand)
-                        ? _functions[firstOperand].cacheResult
-                        : _variables[firstOperand];
-                    _cashe.CacheValue(functionArgument, result);
-                    return result;
-                }
-            }
+            return functionArgument.cacheResult;
         }
+
+        // // Значит у функции всего одна ссылка, а не две
+        //              if (functionArgument.Operation == null)
+        //              {
+        //                  
+        //              }
+
+        var firstOperand = functionArgument.FirstOperand;
+        var secondOperand = functionArgument.SecondOperand;
+
+        if (firstOperand != null && !_functions.ContainsKey(firstOperand))
+        {
+            stack.Push(firstOperand);
+        }
+
+        if (secondOperand != null && !_functions.ContainsKey(secondOperand))
+        {
+            stack.Push(secondOperand);
+        }
+
+        if (firstOperand != null && secondOperand != null)
+        {
+            var operation = functionArgument.Operation;
+            var firstResult = _functions.ContainsKey(firstOperand)
+                ? _functions[firstOperand].cacheResult
+                : _variables[firstOperand];
+            var secondResult = _functions.ContainsKey(secondOperand)
+                ? _functions[secondOperand].cacheResult
+                : _variables[secondOperand];
+            var result = CalculateValue(firstResult, operation, secondResult);
+            _cashe.CacheValue(functionArgument, result);
+            return result;
+        }
+
+        if (firstOperand != null)
+        {
+            var result = _functions.ContainsKey(firstOperand)
+                ? _functions[firstOperand].cacheResult
+                : _variables[firstOperand];
+            _cashe.CacheValue(functionArgument, result);
+            return result;
+        }
+
 
         throw new Exception("Some error");
     }
