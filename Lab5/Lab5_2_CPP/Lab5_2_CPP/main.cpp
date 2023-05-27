@@ -1,10 +1,11 @@
 #include "headers/CMyString.h"
 #include <iostream>
 
+
 using Iterator = CMyStringIterator<char>;
 using ConstIterator = CMyStringIterator<const char>;
 using ReverseIterator = std::reverse_iterator<Iterator>;
-using ConstReverseIterator =  std::reverse_iterator<ConstIterator>;
+using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 
 int RangeBasedFor()
 {
@@ -26,7 +27,7 @@ void TestForwardIterators()
 	auto bgn = str.begin();
 	auto en = str.end();
 
-	auto test = bgn + 3;
+	CMyStringIterator<char> test = bgn + 3;
 
 	while (test != en)
 	{
@@ -44,30 +45,48 @@ void TestReverseIterators()
 	ReverseIterator rbegin = str.rbegin();
 	ReverseIterator rend = str.rend();
 
-	 while (rbegin != rend)
-	 {
-	 	std::cout << *(rbegin) << " ";
-	 	++rbegin;
-	 }
+	while (rbegin != rend)
+	{
+		std::cout << *(rbegin) << " ";
+		++rbegin;
+	}
 	std::cout << std::endl;
+}
+
+
+void Input(Iterator it)
+{
+	auto test = 5;
+}
+
+void InputConst(ConstIterator it)
+{
+	auto test = 5;
 }
 
 void TestOverloadCastIterators()
 {
-	// CMyString str("Hello, world!");
-	// Iterator cbegin = str.begin();
-	
+	CMyString str("Hello, world!");
+	Iterator iterator = str.begin();
+	ConstIterator constIterator = str.сbegin();
+	auto itToConst = static_cast<ConstIterator>(iterator);
+	auto itToIt = static_cast<Iterator>(iterator);
+	auto constToConst = static_cast<ConstIterator>(constIterator);
+	auto constToIt = static_cast<Iterator>(constIterator);
+
+	InputConst(iterator);
+	InputConst(constIterator);
+	Input(iterator);
+	Input(constIterator);
+
 }
 
 int main(int argc, char* argv[])
 {
-	TestOverloadCastIterators();	
+	TestOverloadCastIterators();
 	//RangeBasedFor();
 	//TestForwardIterators();
 	//TestReverseIterators();
 	return 0;
 
-	
 }
-
-

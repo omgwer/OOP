@@ -1,9 +1,16 @@
 #pragma once
 #include <iterator>
 #include <cassert>
+#include <iostream>
+
 
 template <typename T> class CMyStringIterator
 {
+	using Iterator = CMyStringIterator<char>;
+	using ConstIterator = CMyStringIterator<const char>;
+	using ReverseIterator = std::reverse_iterator<Iterator>;
+	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
+
 public: //TODO: добавить random access iterator , не наследловать от str::iterator  -- сделано
 	using value_type = T;
 	using difference_type = std::ptrdiff_t;
@@ -23,29 +30,26 @@ public: //TODO: добавить random access iterator , не наследло�
 
 	~CMyStringIterator();
 
-	// TODO: добавить неявное преобразование типов,
-	// сделать так, чтобы в CMyStringIterator<const char> не было оператора преобразования в самого себя
-	// используйте std::enable_if
 	// SFINAE (Substitution failure is not an error) - неудачная замена не является ошибкой
-	/*
-	 * Должно нормально выполняться -
-	 *   f(string::const_iterator it);
-	 *   string s;
-	 *   f(s.begin());
+
+	/**
+	 *  Если T != Iterator, то тип перегружаемого оператора ConstIterator
+	 *  Сначала проверяем тип шаблона(is_same), если он совпадает с Iterator, то false
 	 */
-
-	// operator std::enable_if_t<std::is_same<T, char>::value, const char>() const
-	// {
-	// 	auto test = 5;
-	// 	return this;
-	// }
-	//
-	// operator std::enable_if_t<std::is_same<T,const char>::value, char>() const
-	// {
-	// 	auto test = 5;
-	// 	return this;
-	// }
-
+	operator std::enable_if_t<!std::is_same<T, Iterator>::value, ConstIterator> ()
+	{
+		std::cout << "Iterator -> ConstIterator success" << std::endl;
+		return ConstIterator(m_ch, m_start, m_end );
+	}
+	
+	operator std::enable_if_t<!std::is_same<T, ConstIterator>::value, Iterator> ()
+	{
+		std::cout << "ConstIterator -> Iterator success" << std::endl;
+		auto ch = const_cast<char *>(m_ch);
+		auto start = const_cast<char *>(m_start);
+		auto end = const_cast<char *>(m_end);		
+		return Iterator(ch, start,end);
+	}
 
 	bool operator!=(CMyStringIterator const& other) const;
 	bool operator==(CMyStringIterator const& other) const;
@@ -134,7 +138,7 @@ template <typename T> CMyStringIterator<T> CMyStringIterator<T>::operator+(size_
 	return { m_ch + value, m_end, m_start };
 }
 
-template <typename T> T& CMyStringIterator<T>::operator[](ptrdiff_t index) // TODO: добавить ptrdiff_t - сделано
+template <typename T> T& CMyStringIterator<T>::operator[](ptrdiff_t index)
 {
 	assert(m_ch + index < m_end && "Iterator out of range!");
 	auto link = m_ch + index;
