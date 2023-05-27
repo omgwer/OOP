@@ -1,15 +1,16 @@
 #include "StringList.h"
 
 #include <list>
+#include <stdexcept>
 
-StringList::StringList()
+StringList::StringList() : ListData()
 {
-	m_root = new ListElement();
-	m_root->next = m_root;
-	m_root->prev = m_root;
+	// m_root = new ListElement();
+	// m_root->next = m_root;
+	// m_root->prev = m_root;
 };
 
-StringList::StringList(const StringList& stringList)
+StringList::StringList(const StringList& stringList) : ListData()
 {
 	m_root = new ListElement();
 	m_root->next = m_root;
@@ -21,21 +22,21 @@ StringList::StringList(const StringList& stringList)
 	auto currentNode = stringList.m_root->next;
 	while (currentNode != stringList.m_root)
 	{
-		try
-		{
+		// try
+		// {
 			PushBack(currentNode->value);
-		}
-		catch (const std::bad_alloc& e)
-		{
-			Clear();
-			delete m_root;
-			throw;
-		}
+		// }
+		// catch (const std::bad_alloc& e)
+		// {
+		// 	Clear();
+		// 	delete m_root;
+		// 	throw;
+		// }
 		currentNode = currentNode->next;
 	}
 }
 
-StringList::StringList(StringList&& stringList) noexcept(false)
+StringList::StringList(StringList&& stringList) : ListData()
 {
 	ListElement* newRootElement = new ListElement();
 	if (stringList.m_length == 0)
@@ -55,8 +56,8 @@ StringList::StringList(StringList&& stringList) noexcept(false)
 
 StringList::~StringList()
 {
-	Clear();
-	delete m_root;
+	// Clear();
+	// delete m_root;
 }
 
 StringList& StringList::operator=(const StringList& copy)
@@ -134,7 +135,7 @@ void StringList::Clear()
 {
 	if (m_root->next == m_root)
 		return;
-
+	
 	auto currentNode = m_root->next;
 	while (currentNode != m_root)
 	{
@@ -147,7 +148,6 @@ void StringList::Clear()
 	m_length = 0;
 }
 
-// возвращает новый итератор указывающий на добавленный объект 
 StringList::Iterator StringList::Insert(const ConstIterator& it, const std::string& value)
 {
 	if (it == cbegin())
@@ -174,12 +174,11 @@ StringList::Iterator StringList::Erase(const Iterator& it)
 {
 	if (m_length == 0)
 	{
-		throw std::exception("List is empty!");
+		throw std::logic_error("List is empty!");
 	}
 	if (it == end())
 	{
-		// TODO: заменить logic_error
-		throw std::exception("Cant delete root element");
+		throw std::logic_error("Cant delete root element");
 	}
 	
 	ListElement* toDelete = it.m_data;
@@ -191,7 +190,7 @@ StringList::Iterator StringList::Erase(const Iterator& it)
 	return newIterator;
 }
 
-StringList::Iterator StringList::begin() // TODO: попробовать обойтись без условия 
+StringList::Iterator StringList::begin()
 {
 	return { m_root->next, m_root };
 }

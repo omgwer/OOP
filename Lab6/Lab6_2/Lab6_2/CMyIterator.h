@@ -1,6 +1,7 @@
 #pragma once
 #include <exception>
 #include <iterator>
+#include <stdexcept>
 
 template <typename T> class CMyIterator
 {
@@ -44,7 +45,7 @@ template <typename T> T& CMyIterator<T>::operator*() const
 {
 	if (m_data == m_root)
 	{
-		throw std::exception("Cant dereference end iterator!");
+		throw std::logic_error("Cant dereference end iterator!");
 	}
 	return *m_data;
 }

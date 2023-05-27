@@ -154,7 +154,7 @@ TEST(StringListTest, EraseEmptyList) {
 		ss << listElement.value;
 	}
 	ASSERT_EQ("", ss.str());
-	ASSERT_THROW(list.Erase(list.begin()), std::exception, "Exception dont throw!");
+	ASSERT_THROW(list.Erase(list.begin()), std::logic_error, "Exception dont throw!");
 }
 
 TEST(StringListTest, TwoElements) {
