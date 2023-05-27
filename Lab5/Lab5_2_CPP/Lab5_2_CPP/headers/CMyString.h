@@ -51,13 +51,11 @@ public:
 	char& operator[](size_t index);
 
 	// iterators
-	using Iterator = CMyStringIterator<char>;  // Добавить наследование константного от неконстантного
+	using Iterator = CMyStringIterator<char>;
 	using ConstIterator = CMyStringIterator<const char>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 
-	ConstIterator ToConst(const Iterator& iterator) const;
-	ConstReverseIterator ToConst(const ReverseIterator& iterator) const;
 	Iterator begin(); // TODO: преобразовывать итератор(обычный) к  итератору константтому -- сделано
 	Iterator end();
 	ConstIterator сbegin() const;

@@ -52,10 +52,22 @@ void TestReverseIterators()
 	std::cout << std::endl;
 }
 
+void TestOverloadCastIterators()
+{
+	// CMyString str("Hello, world!");
+	// Iterator cbegin = str.begin();
+	
+}
+
 int main(int argc, char* argv[])
 {
+	TestOverloadCastIterators();	
 	//RangeBasedFor();
-//	TestForwardIterators();
+	//TestForwardIterators();
 	//TestReverseIterators();
 	return 0;
+
+	
 }
+
+

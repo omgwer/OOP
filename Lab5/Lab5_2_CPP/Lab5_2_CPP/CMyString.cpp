@@ -37,15 +37,13 @@ CMyString::CMyString(CMyString const& other)
 
 CMyString::CMyString(CMyString&& other)
 {
-	m_str = other.m_str; // TODO : заменить на обращение к приватному полю
+	m_str = other.m_str;
 	m_length = other.m_length;
-	//other = CMyString(); // TODO: при перемещении возвращать ссылку на строку  с символом \0  -- сделано
 	other.m_length = 0;
 	other.m_str = &m_endOfLineCh;
 }
 
-//TODO убрать const из параметров
-CMyString::CMyString(char* pString, size_t length, DontAllocate)
+CMyString::CMyString(char* pString, size_t length, DontAllocate) noexcept
 {
 	m_str = const_cast<char*>(pString);
 	m_length = length;
@@ -67,7 +65,7 @@ size_t CMyString::GetLength() const
 	return m_length;
 }
 
-const char* CMyString::GetStringData() const // TODO: для перемещенных сторка возвращать указатель на символ (константнтый) с кодом 0 -- сделано
+const char* CMyString::GetStringData() const 
 {
 	return m_str;
 }
@@ -182,17 +180,6 @@ char& CMyString::operator[](size_t index)
 		throw std::out_of_range("Out of range.");
 	}
 	return m_str[index];
-}
-
-CMyString::ConstIterator CMyString::ToConst(const Iterator& iterator) const
-{
-	return { &*iterator, m_str, m_str + m_length };
-}
-
-CMyString::ConstReverseIterator CMyString::ToConst(const ReverseIterator& iterator) const
-{
-	const auto baseIt = ToConst(iterator.base());
-	return std::make_reverse_iterator(baseIt);
 }
 
 int CMyString::CompareStrings(const CMyString& other) const

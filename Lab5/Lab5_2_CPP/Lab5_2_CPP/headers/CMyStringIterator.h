@@ -26,7 +26,26 @@ public: //TODO: добавить random access iterator , не наследло�
 	// TODO: добавить неявное преобразование типов,
 	// сделать так, чтобы в CMyStringIterator<const char> не было оператора преобразования в самого себя
 	// используйте std::enable_if
-	// SFINAE
+	// SFINAE (Substitution failure is not an error) - неудачная замена не является ошибкой
+	/*
+	 * Должно нормально выполняться -
+	 *   f(string::const_iterator it);
+	 *   string s;
+	 *   f(s.begin());
+	 */
+
+	// operator std::enable_if_t<std::is_same<T, char>::value, const char>() const
+	// {
+	// 	auto test = 5;
+	// 	return this;
+	// }
+	//
+	// operator std::enable_if_t<std::is_same<T,const char>::value, char>() const
+	// {
+	// 	auto test = 5;
+	// 	return this;
+	// }
+
 
 	bool operator!=(CMyStringIterator const& other) const;
 	bool operator==(CMyStringIterator const& other) const;
