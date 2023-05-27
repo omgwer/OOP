@@ -4,11 +4,11 @@ namespace Lab5_1.Service;
 
 public static class WeekDayService
 {
-    public static WeekDay GetWeekDay(uint timestamp)
+    public static WeekDay GetWeekDay(uint remainingValue)
     {
-        var year = YearService.ConvertTimestampToYear(ref timestamp);
-        var month = MonthService.ConvertMonthBegginingOfThisTimestamp(ref timestamp, year);
-        var day = timestamp + 1;
+        var year = YearService.ConvertTimestampToYear(ref remainingValue);
+        var month = MonthService.ConvertMonthBegginingOfThisTimestamp(ref remainingValue, year);
+        var day = remainingValue + 1;
         return GetWeekDay(day, month, year);
     }
 
