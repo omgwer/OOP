@@ -133,72 +133,47 @@ public class MemoryService
     // private double? GetFunctionResultRecursive(string identifier)
     private double? GetFunctionResultRecursive(string identifier)
     {
-        if (!HasIdentifierInMemory(identifier))
-        {
-            throw new ArgumentException($"Identifier - {identifier} is not found");
-        }
-
-        if (IsVariable(identifier))
-        {
-            return _variables[identifier];
-        }
-
+        double? result = null;
+        int stackDeep = 0;
+        // var переменные для вычисленных значений
+        double? varFirstValue = null, varSecondValue = null;
+        Operation? varOperation = null;
         var stack = new Stack<string>();
         stack.Push(identifier);
-        var currentIdentifier = stack.Pop();
-        var functionArgument = _functions[currentIdentifier];
-
-        if (functionArgument.cacheResult != null)
+        ++stackDeep;
+        while (stack.Count > 0)
         {
-            return functionArgument.cacheResult;
+            var variableIdentifier = stack.Pop();
+            --stackDeep;
+            if (!HasIdentifierInMemory(variableIdentifier))
+                throw new ArgumentException($"Identifier - {variableIdentifier} is not found");
+            if (IsVariable(variableIdentifier))
+            {
+                if (varFirstValue == null)
+                    varFirstValue = _variables[variableIdentifier];
+                else
+                    varSecondValue = _variables[variableIdentifier];
+                // TODO: выглядит будто тут хорошо бы вытащить элемент из стека
+                continue;
+            }
+    
+            var functionArgument = _functions[variableIdentifier]; // переменная точно функция
+            if (functionArgument.cacheResult != null)
+            {
+                if (varFirstValue == null)
+                    varFirstValue = _variables[variableIdentifier];
+                else
+                    varSecondValue = _variables[variableIdentifier];
+                continue;
+            }
         }
-
-        // // Значит у функции всего одна ссылка, а не две
-        //              if (functionArgument.Operation == null)
-        //              {
-        //                  
-        //              }
-
-        var firstOperand = functionArgument.FirstOperand;
-        var secondOperand = functionArgument.SecondOperand;
-
-        if (firstOperand != null && !_functions.ContainsKey(firstOperand))
-        {
-            stack.Push(firstOperand);
-        }
-
-        if (secondOperand != null && !_functions.ContainsKey(secondOperand))
-        {
-            stack.Push(secondOperand);
-        }
-
-        if (firstOperand != null && secondOperand != null)
-        {
-            var operation = functionArgument.Operation;
-            var firstResult = _functions.ContainsKey(firstOperand)
-                ? _functions[firstOperand].cacheResult
-                : _variables[firstOperand];
-            var secondResult = _functions.ContainsKey(secondOperand)
-                ? _functions[secondOperand].cacheResult
-                : _variables[secondOperand];
-            var result = CalculateValue(firstResult, operation, secondResult);
-            _cashe.CacheValue(functionArgument, result);
+    
+        if (stack.Count == 0)
             return result;
-        }
-
-        if (firstOperand != null)
-        {
-            var result = _functions.ContainsKey(firstOperand)
-                ? _functions[firstOperand].cacheResult
-                : _variables[firstOperand];
-            _cashe.CacheValue(functionArgument, result);
-            return result;
-        }
-
-
-        throw new Exception("Some error");
+    
+        throw new Exception("Stack is empty! Logic error");
     }
-
+    
     private void AssertIdentifierIsBusy(string identifier)
     {
         if (HasIdentifierInMemory(identifier))
