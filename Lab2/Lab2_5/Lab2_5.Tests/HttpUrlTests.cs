@@ -1,6 +1,5 @@
 using Lab2_5.Data;
 using Lab2_5.Exceptions;
-using Lab6_1;
 
 namespace Lab2_5.Tests;
 
@@ -82,7 +81,6 @@ public class HttpUrlTests
         });
     }
 
-    [TestCase("ftp://google.com")]
     [TestCase("http:google.com")]
     [TestCase("http:/google.com")]
     [TestCase("http//google.com")]

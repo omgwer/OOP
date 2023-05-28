@@ -1,5 +1,4 @@
 using Lab2_5.Exceptions;
-using Lab6_1;
 
 namespace Lab2_5.Infrastructure;
 

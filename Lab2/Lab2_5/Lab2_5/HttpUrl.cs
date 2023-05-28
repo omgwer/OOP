@@ -3,21 +3,18 @@ using System.Text.RegularExpressions;
 using Lab2_5.Data;
 using Lab2_5.Exceptions;
 
-namespace Lab6_1;
+namespace Lab2_5;
 
 public class HttpUrl
 {
-    // TODO: в имени домена точка не обязатель  -- сделано
-    // TODO: приводить к lower case -- сделано
-    // TODO: добавить поддержку двоеточий  -- сделано
-    // TODO: добавить константные методы   \\  in (C#) == final(java) == const(C++) -- сделано
-    private static readonly string URL_REGEX = "^(?i:(http|https)?://)?([^/@: ]+)(?::([0-9]{1,5}))?([^ ]*)?";
+    private static readonly string URL_REGEX = "^(?i:(http|https|ftp)?://)?([^/@: ]+)(?::([0-9]{1,5}))?([^ ]*)?";
     private static readonly string DOMAIN_REGEX = @"^([a-zA-Z0-9-]{1,63}.?)+[a-zA-Z]{2,63}$";
     //private static readonly string DOCUMENT_REGEX = @"^/?([\w-]+\/)?[\w-]+\.\w+$";
     
     private static readonly ushort
         DEFAULT_HTTP_PORT = 80,
-        DEFAULT_HTTPS_PORT = 443;
+        DEFAULT_HTTPS_PORT = 443,
+        DEFAULT_FTP_PORT = 21;
 
     private static readonly ushort
         MIN_PORT = 1,
@@ -75,7 +72,7 @@ public class HttpUrl
             .Append(delemiter)
             .Append(delemiter)
             .Append(_domain);
-        if (!(_protocol == Protocol.HTTP && _port == DEFAULT_HTTP_PORT || _protocol == Protocol.HTTPS && _port == DEFAULT_HTTPS_PORT))
+        if (!(_protocol == Protocol.HTTP && _port == DEFAULT_HTTP_PORT || _protocol == Protocol.HTTPS && _port == DEFAULT_HTTPS_PORT || _protocol == Protocol.FTP && _port == DEFAULT_FTP_PORT))
         {
             stringBuilder.Append(colon).Append(_port);
         }
