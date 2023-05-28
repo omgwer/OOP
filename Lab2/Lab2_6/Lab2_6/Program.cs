@@ -1,3 +1,92 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System.ComponentModel;
+using System.Text;
+using System.Text.RegularExpressions;
 
-Console.WriteLine("Hello, World!");
+namespace Lab2_6;
+
+class Program
+{
+    private const string FILE_NAME_REGEXP = @"^[A-Za-z]{1,8}\.[A-Za-z]{1,3}$";
+
+    struct Command
+    {
+        public string inputFileName;
+        public string outputFileName;
+        public Dictionary<string, string> dictionary;
+    }
+
+    public static int Main(string[] args)
+    {
+        Command command = ParseCommandLine(args);
+        return 0;
+    }
+
+    private string ExpandTemplate(string tpl, Dictionary<string, string> dictionary)
+    {
+        StringBuilder stringBuilder = new();
+        var bufferSize = dictionary.Keys.Max(key => key.Length);
+        var varIndex = 0;
+        var currentSubstring = string.Empty;
+        while (varIndex < tpl.Length)
+        {
+            // TODO записываем данные в буфер 
+        }
+
+
+        return "";
+    }
+
+    private static Command ParseCommandLine(string[] args)
+    {
+        if (args.Length < 2)
+        {
+            throw new ArgumentException("Not valid arguments count");
+        }
+        
+        if (args.Length % 2 != 0)
+        {
+            throw new ArgumentException("Not valid arguments count");
+        }
+
+        Command command = new Command();
+        command.inputFileName = ParseFileName(args[0]);
+        command.outputFileName = ParseFileName(args[1]);
+        command.dictionary = ConvertCommandArgsToDictionary(args);
+        return command;
+    }
+
+    private static string ParseFileName(string value)
+    {
+        if (!Regex.IsMatch(value, FILE_NAME_REGEXP))
+            throw new ArgumentException($"{value} - is not valid value for file name!");
+        return value;
+    }
+
+    private static Dictionary<string, string> ConvertCommandArgsToDictionary(string[] args)
+    {
+        Dictionary<string, string> dictionary = new();
+        var startIndex = 1;
+        string key = string.Empty;
+        string value = string.Empty;
+
+        while (startIndex + 1 < args.Length)
+        {
+            key = args[++startIndex];
+            value = args[++startIndex];
+            if (key == string.Empty)
+                continue;
+
+            if (dictionary.ContainsKey(key))
+            {
+                // Если значение в словаре меньше, чем значение в value , переопределяем значением из value
+                if (String.CompareOrdinal(dictionary[key], value) < 0)
+                    dictionary[key] = value;
+                continue;
+            }
+
+            dictionary.Add(key, value);
+        }
+
+        return dictionary;
+    }
+}
