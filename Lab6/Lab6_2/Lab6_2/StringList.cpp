@@ -12,9 +12,9 @@ StringList::StringList() : ListData()
 
 StringList::StringList(const StringList& stringList) : ListData()
 {
-	m_root = new ListElement();
-	m_root->next = m_root;
-	m_root->prev = m_root;
+	// m_root = new ListElement();
+	// m_root->next = m_root;
+	// m_root->prev = m_root;
 	if (stringList.m_length == 0)
 	{
 		return;

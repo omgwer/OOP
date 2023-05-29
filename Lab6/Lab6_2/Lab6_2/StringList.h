@@ -10,8 +10,7 @@ struct ListData
 {
 	// TODO: добавить конструктор перемещения, деструктор, дефолтный конструктор
 	// Проверить операции присваивания при приватном наследовании
-	ListElement* m_root = nullptr;
-	size_t m_length = 0;
+	
 	ListData()
 	{
 		m_root = new ListElement();
@@ -49,6 +48,9 @@ struct ListData
 		m_length = 0;
 		delete m_root;
 	}
+protected:
+	ListElement* m_root = nullptr;
+	size_t m_length = 0;
 };
 }
 
