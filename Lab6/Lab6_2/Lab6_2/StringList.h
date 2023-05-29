@@ -2,8 +2,6 @@
 #include "CMyIterator.h"
 #include <string>
 
-
-
 namespace detail
 {
 struct ListData

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Lab2_6;
@@ -17,23 +16,48 @@ class Program
 
     public static int Main(string[] args)
     {
-        Command command = ParseCommandLine(args);
+        //Command command = ParseCommandLine(args);
+        string testTpl = "Hello, %USER_NAME%. Today is {WEEK_DAY}.";
+        Dictionary<string, string> dictionary = new();
+        dictionary.Add("%USER_NAME%", "Ivan Petrov");
+        dictionary.Add("{WEEK_DAY}", "Friday");
+        var t = ExpandTemplate(testTpl, dictionary);
+        
         return 0;
     }
 
-    private string ExpandTemplate(string tpl, Dictionary<string, string> dictionary)
+    public static string ExpandTemplate(string tpl, Dictionary<string, string> dictionary)
     {
         StringBuilder stringBuilder = new();
-        var bufferSize = dictionary.Keys.Max(key => key.Length);
+        var bufferSize = dictionary.Keys.Max(key => key.Length);  // ищем самый длинный ключ
         var varIndex = 0;
-        var currentSubstring = string.Empty;
         while (varIndex < tpl.Length)
         {
-            // TODO записываем данные в буфер 
+            string varKey = string.Empty;
+            string varValue = string.Empty;
+            var currentSubstring = tpl.Substring(varIndex, varIndex + bufferSize);
+            foreach (var (key, value) in dictionary)
+            {
+                if (currentSubstring.Contains(key) && (String.CompareOrdinal(value, varValue) > 0))
+                {
+                    varKey = key;
+                    varValue = value;
+                }
+            }
+
+            if (varKey == string.Empty)
+            {
+                stringBuilder.Append(tpl[varIndex]);
+                varIndex += 1;
+                continue;
+            }
+            // Нужно заменить в исходной подстроке  значение, и сдвинуть индекс РОВНО до конца индекса
+            int indexOfStartKey = currentSubstring.IndexOf(varKey, StringComparison.Ordinal);
+            var test = currentSubstring.Remove(indexOfStartKey, varKey.Length).Insert(indexOfStartKey, varValue);
+            stringBuilder.Append(test);
+            varIndex += indexOfStartKey;
         }
-
-
-        return "";
+        return stringBuilder.ToString();
     }
 
     private static Command ParseCommandLine(string[] args)
