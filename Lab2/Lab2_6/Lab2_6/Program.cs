@@ -30,12 +30,14 @@ class Program
     {
         StringBuilder stringBuilder = new();
         var bufferSize = dictionary.Keys.Max(key => key.Length);  // ищем самый длинный ключ
-        var varIndex = 0;
-        while (varIndex < tpl.Length)
+        var substringStart = 0;
+        var stringLength = tpl.Length;
+        while (substringStart < tpl.Length)
         {
-            string varKey = string.Empty;
-            string varValue = string.Empty;
-            var currentSubstring = tpl.Substring(varIndex, varIndex + bufferSize);
+            var varKey = string.Empty;
+            var varValue = string.Empty;
+            int substringLength = substringStart + bufferSize > tpl.Length ? tpl.Length - substringStart : substringStart + bufferSize;
+            var currentSubstring = tpl.Substring(substringStart, substringLength);
             foreach (var (key, value) in dictionary)
             {
                 if (currentSubstring.Contains(key) && (String.CompareOrdinal(value, varValue) > 0))
@@ -47,15 +49,15 @@ class Program
 
             if (varKey == string.Empty)
             {
-                stringBuilder.Append(tpl[varIndex]);
-                varIndex += 1;
+                stringBuilder.Append(tpl[substringStart]);
+                substringStart += 1;
                 continue;
             }
             // Нужно заменить в исходной подстроке  значение, и сдвинуть индекс РОВНО до конца индекса
             int indexOfStartKey = currentSubstring.IndexOf(varKey, StringComparison.Ordinal);
             var test = currentSubstring.Remove(indexOfStartKey, varKey.Length).Insert(indexOfStartKey, varValue);
             stringBuilder.Append(test);
-            varIndex += indexOfStartKey;
+            substringStart += indexOfStartKey + varKey.Length;
         }
         return stringBuilder.ToString();
     }
