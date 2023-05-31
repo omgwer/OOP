@@ -19,9 +19,10 @@ class Program
         //Command command = ParseCommandLine(args);
         string testTpl = "Hello, %USER_NAME%. Today is {WEEK_DAY}.";
         Dictionary<string, string> dictionary = new();
-        dictionary.Add("%USER_NAME%", "Ivan Petrov");
-        dictionary.Add("{WEEK_DAY}", "Friday");
+       // dictionary.Add("%USER_NAME%", "Ivan Petrov");
+      //  dictionary.Add("{WEEK_DAY}", "Friday");
         var t = ExpandTemplate(testTpl, dictionary);
+        Console.Write(t);
         
         return 0;
     }
@@ -36,7 +37,7 @@ class Program
         {
             var varKey = string.Empty;
             var varValue = string.Empty;
-            int substringLength = substringStart + bufferSize > tpl.Length ? tpl.Length - substringStart : substringStart + bufferSize;
+            int substringLength = substringStart + bufferSize > tpl.Length ? tpl.Length - substringStart : bufferSize;
             var currentSubstring = tpl.Substring(substringStart, substringLength);
             foreach (var (key, value) in dictionary)
             {
