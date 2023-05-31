@@ -17,10 +17,19 @@ class Program
     public static int Main(string[] args)
     {
         //Command command = ParseCommandLine(args);
-        string testTpl = "Hello, %USER_NAME%. Today is {WEEK_DAY}.";
-        Dictionary<string, string> dictionary = new();
+       //  string testTpl = "Hello, %USER_NAME%. Today is {WEEK_DAY}.";
+       //  Dictionary<string, string> dictionary = new();
        // dictionary.Add("%USER_NAME%", "Ivan Petrov");
-      //  dictionary.Add("{WEEK_DAY}", "Friday");
+       // dictionary.Add("{WEEK_DAY}", "Friday");
+       string testTpl = "-AABBCCCCCABC+";
+       Dictionary<string, string> dictionary = new();
+       dictionary.Add("A", "[a]");
+       dictionary.Add("AA", "[aa]");
+       dictionary.Add("B", "[b]");
+       dictionary.Add("BB", "[bb]");
+       dictionary.Add("C", "[c]");
+       dictionary.Add("CC", "[cc]");
+       
         var t = ExpandTemplate(testTpl, dictionary);
         Console.Write(t);
         
