@@ -14,62 +14,92 @@ class Program
         public Dictionary<string, string> dictionary;
     }
 
+    public struct ReplaceContainer
+    {
+        public int startIndex = 0;
+        public string key = string.Empty;
+        public string value = string.Empty;
+
+        public ReplaceContainer(int startIndex, string key, string value)
+        {
+            this.startIndex = startIndex;
+            this.key = key;
+            this.value = value;
+        }
+    }
+
     public static int Main(string[] args)
     {
-        //Command command = ParseCommandLine(args);
-       //  string testTpl = "Hello, %USER_NAME%. Today is {WEEK_DAY}.";
-       //  Dictionary<string, string> dictionary = new();
-       // dictionary.Add("%USER_NAME%", "Ivan Petrov");
-       // dictionary.Add("{WEEK_DAY}", "Friday");
-       string testTpl = "-AABBCCCCCABC+";
-       Dictionary<string, string> dictionary = new();
-       dictionary.Add("A", "[a]");
-       dictionary.Add("AA", "[aa]");
-       dictionary.Add("B", "[b]");
-       dictionary.Add("BB", "[bb]");
-       dictionary.Add("C", "[c]");
-       dictionary.Add("CC", "[cc]");
-       
-        var t = ExpandTemplate(testTpl, dictionary);
-        Console.Write(t);
+       // Command command = ParseCommandLine(args);
+         //  string testTpl = "Hello, %USER_NAME%. Today is {WEEK_DAY}.";
+         //  Dictionary<string, string> dictionary = new();
+         // dictionary.Add("%USER_NAME%", "Ivan Petrov");
+         // dictionary.Add("{WEEK_DAY}", "Friday");
+        string testTpl = "-AABBCCCCCABC+";
+        Dictionary<string, string> dictionary = new();
+        dictionary.Add("A", "[a]");
+        dictionary.Add("AA", "[aa]");
+        dictionary.Add("B", "[b]");
+        dictionary.Add("BB", "[bb]");
+        dictionary.Add("C", "[c]");
+        dictionary.Add("CC", "[cc]");
         
+        string expandedTemplate = ExpandTemplate(testTpl, dictionary);
+        Console.WriteLine(expandedTemplate);
+
         return 0;
     }
 
     public static string ExpandTemplate(string tpl, Dictionary<string, string> dictionary)
     {
         StringBuilder stringBuilder = new();
-        var bufferSize = dictionary.Keys.Max(key => key.Length);  // ищем самый длинный ключ
-        var substringStart = 0;
-        var stringLength = tpl.Length;
-        while (substringStart < tpl.Length)
-        {
-            var varKey = string.Empty;
-            var varValue = string.Empty;
-            int substringLength = substringStart + bufferSize > tpl.Length ? tpl.Length - substringStart : bufferSize;
-            var currentSubstring = tpl.Substring(substringStart, substringLength);
-            foreach (var (key, value) in dictionary)
-            {
-                if (currentSubstring.Contains(key) && (String.CompareOrdinal(value, varValue) > 0))
-                {
-                    varKey = key;
-                    varValue = value;
-                }
-            }
+        List<ReplaceContainer> replaceContainers = new();
 
-            if (varKey == string.Empty)
-            {
-                stringBuilder.Append(tpl[substringStart]);
-                substringStart += 1;
-                continue;
-            }
-            // Нужно заменить в исходной подстроке  значение, и сдвинуть индекс РОВНО до конца индекса
-            int indexOfStartKey = currentSubstring.IndexOf(varKey, StringComparison.Ordinal);
-            var test = currentSubstring.Remove(indexOfStartKey, varKey.Length).Insert(indexOfStartKey, varValue);
-            stringBuilder.Append(test);
-            substringStart += indexOfStartKey + varKey.Length;
+        foreach (var keyValuePair in dictionary)
+        {
+            replaceContainers.AddRange(GetAllIndexesOf(tpl, keyValuePair));
         }
+
+        var curerntIndex = 0;
+        // Алгоритм - находим первое место которое можно заменить, ищем наиболее длинный вариант замены.
+        while (replaceContainers.Count != 0)
+        {
+            // Находим минимальный индекс, куда можно подставить значение
+            int minStartIndex = replaceContainers.Min(r => r.startIndex);
+            // Ищем список контейнеров которые начинаются с этого индекса
+            List<ReplaceContainer> selectedElements = replaceContainers.Where(r => r.startIndex == minStartIndex).ToList();
+            // Ищем максимальное значение, которое можно поместить
+            ReplaceContainer elementWithMaxLength = selectedElements.MaxBy(r => r.value.Length);
+
+            // добавляем элементы строки, которые не изменились
+            stringBuilder.Append(tpl.Substring(curerntIndex, minStartIndex - curerntIndex));
+            // подставляем значение из словаря
+            stringBuilder.Append(elementWithMaxLength.value);
+            
+            curerntIndex += minStartIndex - curerntIndex;
+            curerntIndex += elementWithMaxLength.key.Length;
+            
+            // удаляем использованные элементы из коллекции
+            replaceContainers.RemoveAll(e => e.startIndex < curerntIndex );
+        }
+
+        if (curerntIndex < tpl.Length)
+            stringBuilder.Append(tpl.Substring(curerntIndex, tpl.Length - curerntIndex));
+
         return stringBuilder.ToString();
+    }
+
+
+    private static List<ReplaceContainer> GetAllIndexesOf(string str, KeyValuePair<string, string> keyValuePair)
+    {
+        List<ReplaceContainer> replaceContainers = new();
+        for (int index = 0;; index += keyValuePair.Key.Length)
+        {
+            index = str.IndexOf(keyValuePair.Key, index);
+            if (index == -1)
+                return replaceContainers;
+            replaceContainers.Add(new ReplaceContainer(index, keyValuePair.Key, keyValuePair.Value));
+        }
     }
 
     private static Command ParseCommandLine(string[] args)
@@ -78,7 +108,7 @@ class Program
         {
             throw new ArgumentException("Not valid arguments count");
         }
-        
+
         if (args.Length % 2 != 0)
         {
             throw new ArgumentException("Not valid arguments count");
