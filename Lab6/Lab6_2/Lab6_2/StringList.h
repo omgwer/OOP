@@ -12,9 +12,9 @@ struct ListData
 		m_root->next = m_root;
 		m_root->prev = m_root;
 	}
-	ListData(ListData&& other)
+	ListData(ListData&& other) noexcept(false)
 	{
-		ListElement* newRootElement = new ListElement();		
+		const auto newRootElement = new ListElement();		
 		m_root = other.m_root;
 		m_length = other.m_length;
 		other.m_root = newRootElement;

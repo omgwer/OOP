@@ -1,7 +1,6 @@
 #include "headers/CMyString.h"
 #include <iostream>
 
-
 using Iterator = CMyStringIterator<char>;
 using ConstIterator = CMyStringIterator<const char>;
 using ReverseIterator = std::reverse_iterator<Iterator>;

@@ -9,7 +9,6 @@ public class HttpUrl
 {
     private static readonly string URL_REGEX = "^(?i:(http|https|ftp)?://)?([^/@: ]+)(?::([0-9]{1,5}))?([^ ]*)?";
     private static readonly string DOMAIN_REGEX = @"^([a-zA-Z0-9-]{1,63}.?)+[a-zA-Z]{2,63}$";
-    //private static readonly string DOCUMENT_REGEX = @"^/?([\w-]+\/)?[\w-]+\.\w+$";
     
     private static readonly ushort
         DEFAULT_HTTP_PORT = 80,
@@ -171,13 +170,7 @@ public class HttpUrl
             return document;
         if (document == string.Empty)
             return delimiter.ToString();
-        
-        // var match = Regex.Match(document, DOCUMENT_REGEX);
-        // if (!match.Success)
-        // {
-        //     throw new UrlParseError($"{document} - Is invalid document name");  // TODO: rename - сделано
-        // }
-       
+
         if (document.First() == delimiter)
             return document;
         return delimiter + document;

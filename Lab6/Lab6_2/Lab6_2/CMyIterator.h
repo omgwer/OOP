@@ -18,8 +18,7 @@ struct ListElement
 };
 
 template <typename T> class CMyIterator
-{
-	
+{	
 public:
 	using Iterator = CMyIterator<ListElement>;
 	using ConstIterator = CMyIterator<const ListElement>;
@@ -36,12 +35,9 @@ public:
 	{
 	}
 
-	~CMyIterator()  = default;
+	~CMyIterator();
 
-	/**
-	 *  Если T != Iterator, то тип перегружаемого оператора ConstIterator
-	 *  Сначала проверяем тип шаблона(is_same), если он совпадает с Iterator, то false
-	 */
+	
 	operator std::enable_if_t<!std::is_same<T, Iterator>::value, ConstIterator> ()
 	{
 		std::cout << "Iterator -> ConstIterator success" << std::endl;
@@ -58,15 +54,18 @@ public:
 
 	bool operator !=(CMyIterator const& other) const;
 	bool operator ==(CMyIterator const& other) const;
-	T& operator*() const;
-	CMyIterator& operator++(); // prefix
-	CMyIterator operator++(int); // postfix
+	T& operator*() const;	// TODO: возвращать строку, а не шаблонный тип
+	CMyIterator& operator++(); 
+	CMyIterator operator++(int); 
 	CMyIterator& operator--();
 	CMyIterator operator--(int);
+private:
 	T* m_data;
 	T* m_root;
 };
 
+
+template <typename T> CMyIterator<T>::~CMyIterator() = default;
 
 template <typename T> bool CMyIterator<T>::operator!=(CMyIterator const& other) const
 {

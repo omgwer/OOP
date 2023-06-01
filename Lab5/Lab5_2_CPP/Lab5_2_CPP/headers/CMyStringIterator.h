@@ -2,6 +2,7 @@
 #include <iterator>
 #include <cassert>
 #include <iostream>
+#include <list>
 
 
 template <typename T> class CMyStringIterator

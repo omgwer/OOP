@@ -1,5 +1,4 @@
 #include "StringList.h"
-
 #include <list>
 #include <stdexcept>
 
@@ -23,7 +22,7 @@ StringList::StringList(const StringList& stringList)
 	}
 }
 
-StringList::StringList(StringList&& stringList)
+StringList::StringList(StringList&& stringList) noexcept(false)
 	: ListData(std::move(stringList))
 {
 }
@@ -51,8 +50,8 @@ StringList& StringList::operator=(StringList&& move) noexcept
 
 void StringList::PushBack(const std::string& value)
 {
-	auto lastElement = new ListElement(value);
-	if (m_root == m_root->next) // значит элемент первый
+	const auto lastElement = new ListElement(value);
+	if (m_root == m_root->next) // TODO: можно ли упростить
 	{
 		m_root->next = lastElement;
 		m_root->prev = lastElement;
@@ -71,8 +70,8 @@ void StringList::PushBack(const std::string& value)
 
 void StringList::PushFront(const std::string& value)
 {
-	auto firstElement = new ListElement(value);
-	if (m_root->next == m_root) // значит элeмент первый
+	const auto firstElement = new ListElement(value);
+	if (m_root->next == m_root)
 	{
 		m_root->next = firstElement;
 		m_root->prev = firstElement;
@@ -128,7 +127,7 @@ StringList::Iterator StringList::Insert(const ConstIterator& it, const std::stri
 		PushBack(value);
 		return end();
 	}
-	const auto currentIterator = *it;
+	const auto& currentIterator = *it;
 	const auto newElement = new ListElement(value);
 	currentIterator.prev->next = newElement;
 	newElement->next = const_cast<ListElement*>(&*it);
@@ -149,8 +148,8 @@ StringList::Iterator StringList::Erase(const Iterator& it)
 		throw std::logic_error("Cant delete root element");
 	}
 
-	ListElement* toDelete = it.m_data;
-	Iterator newIterator(toDelete->next, m_root);
+	const ListElement* toDelete = it.m_data;
+	const Iterator newIterator(toDelete->next, m_root);
 	toDelete->next->prev = toDelete->prev;
 	toDelete->prev->next = toDelete->next;
 	delete toDelete;

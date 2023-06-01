@@ -23,14 +23,14 @@
     public static int EvaluateExpression(TextReader textReader)
     {
         Stack<Element> elementsStack = new();
-        Element? currentElement = null;
-        char lastElement;
-        while (textReader.Peek() is var currentChar)
+        Element? currentElement = null;//зачем вне цикла обьявлять
+        while (textReader.Peek() is var currentChar) // currentChar какой тип данных
         {
             switch (currentChar)
             {
-                case -1:
+                case -1://
                     var stackElement = elementsStack.Pop();
+                        // TODO: добавить обработку null для operation
                     var res = CalculateValue((Operation) stackElement!.operation!, stackElement!.numbers!);
                     return res;
                 case ' ':
@@ -42,7 +42,7 @@
                         elementsStack.Push(currentElement);
                     currentElement = new Element();
                     break;
-                case ')':
+                case ')'://use map
                     textReader.Read();
                     int result = 0;
                     if (currentElement == null)
@@ -62,7 +62,7 @@
                     elementsStack.Push(currentElement);
                     currentElement = null;
                     break;
-                case '*':
+                case '*':// * и + можно обьединить
                     textReader.Read();
                     if (currentElement!.operation != null)
                         throw new ArgumentException("Операция над текущим элементом уже была определена!");
@@ -85,7 +85,7 @@
     }
 
     private static int CalculateValue(Operation operation, List<int> numbers)
-    {
+    {// сделать цикл и лямбду в коорой будет либо умножение, либо деление. Которую получаем из метода
         var calculateResult = 0;
         if (operation == Operation.ADDICTION)
             foreach (var number in numbers)
