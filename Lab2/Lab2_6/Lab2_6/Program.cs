@@ -5,7 +5,7 @@ namespace Lab2_6;
 
 public class Program
 {
-    private const string FILE_NAME_REGEXP = @"^[A-Za-z]{1,8}\.[A-Za-z]{1,3}$";
+    private const string FILE_NAME_REGEXP = @"^[A-Za-z1-9]{1,50}\.[A-Za-z]{1,3}$";
 
     private struct Command
     {
@@ -27,45 +27,30 @@ public class Program
             this.value = value;
         }
     }
-
-
-    // string testTpl = "-AABBCCCCCABC+";
-    // Dictionary<string, string> dictionary = new();
-    // dictionary.Add("A", "[a]");
-    // dictionary.Add("AA", "[aa]");
-    // dictionary.Add("B", "[b]");
-    // dictionary.Add("BB", "[bb]");
-    // dictionary.Add("C", "[c]");
-    // dictionary.Add("CC", "[cc]");
+    
     public static int Main(string[] args)
     {
         var command = ParseCommandLine(args);
-        using var stringReader = new StringReader(command.inputFileName);
+        using var streamReader = new StreamReader(command.inputFileName);
         using var streamWriter = new StreamWriter(command.outputFileName);
         
-        if (File.Exists(command.inputFileName))
-        {
-            Console.WriteLine();
-            throw new Exception("Входной Файл  не существует.");
-        }
-        
-        if (File.Exists(command.outputFileName))
-        {
-            throw new Exception(("Выходной файл Файл не существует.");
-        }
-       
-        
         if (command.dictionary.Count == 0)
-            streamWriter.Write(stringReader.ReadToEnd());
+            streamWriter.Write(streamReader.ReadToEnd());
         else
-            ReplaceFileStringsWithADictionary(stringReader, streamWriter, command.dictionary);
+            ReplaceStreamWithADictionary(streamReader, streamWriter, command.dictionary);
         return 0;
     }
 
-    public static void ReplaceFileStringsWithADictionary(StringReader stringReader, StreamWriter streamWriter, Dictionary<string, string> dictionary)
+    public static void ReplaceStreamWithADictionary(StreamReader stringReader, StreamWriter streamWriter, Dictionary<string, string> dictionary)
     {
         while (stringReader.ReadLine() is { } currentString)
         {
+            if (currentString == string.Empty)
+            {
+                streamWriter.WriteLine();
+                continue;
+            }
+
             var replacedString = ExpandTemplate(currentString, dictionary);
             streamWriter.WriteLine(replacedString);
         }
