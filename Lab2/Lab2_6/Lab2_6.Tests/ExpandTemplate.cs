@@ -28,6 +28,13 @@ public class Tests
             using var sr = new StreamWriter("inEmptyFile.txt");
             sr.WriteLine();
         }
+
+        if (!File.Exists("inReadyToTest.txt"))
+        {
+            File.Create("inReadyToTest.txt");
+            using var sr = new StreamWriter("inReadyToTest.txt");
+            sr.WriteLine();
+        }
     }
     
     [Test]
@@ -121,4 +128,22 @@ public class Tests
         Assert.That(streamReaderOut.ReadLine(), Is.EqualTo(streamReaderIn.ReadLine()));
     }
     
+    [Test]
+    public void ReadyToTestValue()
+    {
+        string inputFileName = "inReadyToTest.txt";
+        string outputFileName = "outReadyToTest.txt";
+        List<string> testArr = new();
+        testArr.Add(inputFileName);
+        testArr.Add(outputFileName);
+        testArr.Add("%USER_NAME%");
+        testArr.Add("Super %USER_NAME% {WEEK_DAY}");
+        testArr.Add("{WEEK_DAY}");
+        testArr.Add("Friday. {WEEK_DAY}");
+
+        Program.Main(testArr.ToArray());
+        string expectedValue = "Hello, Super %USER_NAME% {WEEK_DAY}. Today is Friday. {WEEK_DAY}.";
+        using StreamReader streamReaderOut = new StreamReader(outputFileName);
+        Assert.That(streamReaderOut.ReadLine(), Is.EqualTo(expectedValue));
+    }
 }

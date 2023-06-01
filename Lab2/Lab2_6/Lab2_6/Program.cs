@@ -16,9 +16,9 @@ public class Program
 
     private struct ReplaceContainer
     {
-        public int startIndex = 0;
-        public string key = string.Empty;
-        public string value = string.Empty;
+        public int startIndex;
+        public string key;
+        public string value;
 
         public ReplaceContainer(int startIndex, string key, string value)
         {
@@ -37,11 +37,11 @@ public class Program
         if (command.dictionary.Count == 0)
             streamWriter.Write(streamReader.ReadToEnd());
         else
-            ReplaceStreamWithADictionary(streamReader, streamWriter, command.dictionary);
+            CopyFileAndReplaceWithATemplate(streamReader, streamWriter, command.dictionary);
         return 0;
     }
 
-    public static void ReplaceStreamWithADictionary(StreamReader stringReader, StreamWriter streamWriter, Dictionary<string, string> dictionary)
+    private static void CopyFileAndReplaceWithATemplate(StreamReader stringReader, StreamWriter streamWriter, Dictionary<string, string> dictionary)
     {
         while (stringReader.ReadLine() is { } currentString)
         {
@@ -56,7 +56,7 @@ public class Program
         }
     }
 
-    public static string ExpandTemplate(string tpl, Dictionary<string, string> dictionary)
+    private static string ExpandTemplate(string tpl, Dictionary<string, string> dictionary)
     {
         StringBuilder stringBuilder = new();
         List<ReplaceContainer> replaceContainers = new();
