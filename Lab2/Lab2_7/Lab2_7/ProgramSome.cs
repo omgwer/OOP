@@ -1,4 +1,4 @@
-﻿class Program
+﻿public class ProgramSome
 {
     enum Operation
     {
@@ -20,7 +20,7 @@
         return 0;
     }
 
-    private static int EvaluateExpression(TextReader textReader)
+    public static int EvaluateExpression(TextReader textReader)
     {
         Stack<Element> elementsStack = new();
         char lastIndexedCharWithoutSpace;
@@ -30,8 +30,8 @@
             switch (currentChar)
             {
                 case -1:
-                     var stackElement = elementsStack.Pop();
-                    var res = CalculateValue((Operation)stackElement!.operation!, stackElement!.numbers!);
+                    var stackElement = elementsStack.Pop();
+                    var res = CalculateValue((Operation) stackElement!.operation!, stackElement!.numbers!);
                     return res;
                 case ' ':
                     textReader.Read();
@@ -45,12 +45,28 @@
                 case ')':
                     textReader.Read();
                     // Высчитываем текущий элемент стека После, вытаскиваем еще один элемент и добавляем в список результат вычислений.
-                    var result = CalculateValue((Operation)currentElement!.operation!, currentElement!.numbers!);
+                    int result = 0;
+                    if (currentElement == null)
+                    {
+                        if (elementsStack.Count == 0)
+                        {   // ?? 
+                            return 0;
+                        }
+
+                        currentElement = elementsStack.Pop();
+                    }
+
+                    result = CalculateValue((Operation) currentElement!.operation!, currentElement!.numbers!);
+
                     if (elementsStack.Count == 0)
+                    {  
                         return result;
-                    var previewsElement = elementsStack.Pop();
-                    previewsElement.numbers!.Add(result);
-                    elementsStack.Push(previewsElement);
+                    }
+
+                    currentElement = elementsStack.Pop();
+
+                    currentElement.numbers!.Add(result);
+                    elementsStack.Push(currentElement);
                     currentElement = null;
                     break;
                 case '*':
@@ -86,7 +102,7 @@
             foreach (var number in numbers)
                 calculateResult *= number;
         }
-        
+
         return calculateResult;
     }
 
@@ -100,20 +116,20 @@
         {
             int nextChar = reader.Peek();
 
-            if ((char)nextChar == '-' && !hasDigit)
+            if ((char) nextChar == '-' && !hasDigit)
             {
                 reader.Read();
                 isNegative = true;
                 continue;
             }
 
-            if ((char)nextChar == ' ' && !hasDigit && !isNegative) // для кейса  "- 123"
+            if ((char) nextChar == ' ' && !hasDigit && !isNegative) // для кейса  "- 123"
             {
                 reader.Read();
                 continue;
             }
 
-            if (nextChar == -1 || !char.IsDigit((char)nextChar))
+            if (nextChar == -1 || !char.IsDigit((char) nextChar))
             {
                 if (hasDigit)
                 {
@@ -123,7 +139,7 @@
                 }
                 else
                 {
-                    throw new FormatException($"{(char)nextChar}Invalid input: expected a number");
+                    throw new FormatException($"{(char) nextChar}Invalid input: expected a number");
                 }
             }
 
