@@ -3,16 +3,25 @@ namespace Lab2_7.Tests;
 public class Tests
 {
     [TestCase("(+ 5)", 5)]
+    [TestCase("(* 5)", 5)]
+    [TestCase("(* 5 2)", 10)]
+    [TestCase("(* 0 2)", 0)]
+    [TestCase("(* -1 2)", -2)]
+    [TestCase("(+ -5 5)", 0)]
+    [TestCase("(+ -5 -5)", -10)]
+    [TestCase("(* -5 -5)", 25)]
+    [TestCase("(+ 2 3 4)", 9)]
+    [TestCase("(* 2 3 4)", 24)]
+    [TestCase("(+ 5 (* 2 3 2) (+ 5 (+ 2 5) (* 2 2) ))", 33)]
     public void Test1(string value, int expectedResult)
     {
         // Arrange
-        string expression = "5";
-        using TextReader textReader = new StringReader(expression);
+        using TextReader textReader = new StringReader(value);
 
         // Act
         int result = ProgramSome.EvaluateExpression(textReader);
 
         // Assert
-        //    Assert.That(result, Is.EqualTo(expectedResult));
+        Assert.That(result, Is.EqualTo(expectedResult));
     }
 }
