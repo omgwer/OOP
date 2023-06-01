@@ -3,18 +3,18 @@ using System.Text.RegularExpressions;
 
 namespace Lab2_6;
 
-class Program
+public class Program
 {
     private const string FILE_NAME_REGEXP = @"^[A-Za-z]{1,8}\.[A-Za-z]{1,3}$";
 
-    struct Command
+    private struct Command
     {
         public string inputFileName;
         public string outputFileName;
         public Dictionary<string, string> dictionary;
     }
 
-    public struct ReplaceContainer
+    private struct ReplaceContainer
     {
         public int startIndex = 0;
         public string key = string.Empty;
@@ -28,26 +28,47 @@ class Program
         }
     }
 
+
+    // string testTpl = "-AABBCCCCCABC+";
+    // Dictionary<string, string> dictionary = new();
+    // dictionary.Add("A", "[a]");
+    // dictionary.Add("AA", "[aa]");
+    // dictionary.Add("B", "[b]");
+    // dictionary.Add("BB", "[bb]");
+    // dictionary.Add("C", "[c]");
+    // dictionary.Add("CC", "[cc]");
     public static int Main(string[] args)
     {
-       // Command command = ParseCommandLine(args);
-         //  string testTpl = "Hello, %USER_NAME%. Today is {WEEK_DAY}.";
-         //  Dictionary<string, string> dictionary = new();
-         // dictionary.Add("%USER_NAME%", "Ivan Petrov");
-         // dictionary.Add("{WEEK_DAY}", "Friday");
-        string testTpl = "-AABBCCCCCABC+";
-        Dictionary<string, string> dictionary = new();
-        dictionary.Add("A", "[a]");
-        dictionary.Add("AA", "[aa]");
-        dictionary.Add("B", "[b]");
-        dictionary.Add("BB", "[bb]");
-        dictionary.Add("C", "[c]");
-        dictionary.Add("CC", "[cc]");
+        var command = ParseCommandLine(args);
+        using var stringReader = new StringReader(command.inputFileName);
+        using var streamWriter = new StreamWriter(command.outputFileName);
         
-        string expandedTemplate = ExpandTemplate(testTpl, dictionary);
-        Console.WriteLine(expandedTemplate);
-
+        if (File.Exists(command.inputFileName))
+        {
+            Console.WriteLine();
+            throw new Exception("Входной Файл  не существует.");
+        }
+        
+        if (File.Exists(command.outputFileName))
+        {
+            throw new Exception(("Выходной файл Файл не существует.");
+        }
+       
+        
+        if (command.dictionary.Count == 0)
+            streamWriter.Write(stringReader.ReadToEnd());
+        else
+            ReplaceFileStringsWithADictionary(stringReader, streamWriter, command.dictionary);
         return 0;
+    }
+
+    public static void ReplaceFileStringsWithADictionary(StringReader stringReader, StreamWriter streamWriter, Dictionary<string, string> dictionary)
+    {
+        while (stringReader.ReadLine() is { } currentString)
+        {
+            var replacedString = ExpandTemplate(currentString, dictionary);
+            streamWriter.WriteLine(replacedString);
+        }
     }
 
     public static string ExpandTemplate(string tpl, Dictionary<string, string> dictionary)
@@ -56,9 +77,7 @@ class Program
         List<ReplaceContainer> replaceContainers = new();
 
         foreach (var keyValuePair in dictionary)
-        {
             replaceContainers.AddRange(GetAllIndexesOf(tpl, keyValuePair));
-        }
 
         var curerntIndex = 0;
         // Алгоритм - находим первое место которое можно заменить, ищем наиболее длинный вариант замены.
@@ -67,7 +86,8 @@ class Program
             // Находим минимальный индекс, куда можно подставить значение
             int minStartIndex = replaceContainers.Min(r => r.startIndex);
             // Ищем список контейнеров которые начинаются с этого индекса
-            List<ReplaceContainer> selectedElements = replaceContainers.Where(r => r.startIndex == minStartIndex).ToList();
+            List<ReplaceContainer> selectedElements =
+                replaceContainers.Where(r => r.startIndex == minStartIndex).ToList();
             // Ищем максимальное значение, которое можно поместить
             ReplaceContainer elementWithMaxLength = selectedElements.MaxBy(r => r.value.Length);
 
@@ -75,12 +95,12 @@ class Program
             stringBuilder.Append(tpl.Substring(curerntIndex, minStartIndex - curerntIndex));
             // подставляем значение из словаря
             stringBuilder.Append(elementWithMaxLength.value);
-            
+
             curerntIndex += minStartIndex - curerntIndex;
             curerntIndex += elementWithMaxLength.key.Length;
-            
+
             // удаляем использованные элементы из коллекции
-            replaceContainers.RemoveAll(e => e.startIndex < curerntIndex );
+            replaceContainers.RemoveAll(e => e.startIndex < curerntIndex);
         }
 
         if (curerntIndex < tpl.Length)
@@ -88,7 +108,6 @@ class Program
 
         return stringBuilder.ToString();
     }
-
 
     private static List<ReplaceContainer> GetAllIndexesOf(string str, KeyValuePair<string, string> keyValuePair)
     {
