@@ -1,5 +1,7 @@
 #pragma once
 #include "CMyIterator.h"
+//  Можно создать тоже шаблонный класс и приватно дать его отнаследовать с CMyList
+
 
 template <typename T> class CMyList
 {
@@ -25,7 +27,6 @@ public:
 		alignas(T) char buffer[sizeof(T)];
 	};
 
-public:
 	using Iterator = CMyIterator<ListElement>;
 	using ConstIterator = CMyIterator<const ListElement>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
@@ -33,7 +34,7 @@ public:
 
 	CMyList();
 	CMyList(const CMyList& copy);
-	CMyList(CMyList&& move) noexcept;
+	CMyList(CMyList&& move);
 	~CMyList();
 
 	CMyList& operator=(const CMyList& copy);
@@ -87,7 +88,7 @@ template <typename T> CMyList<T>::CMyList(const CMyList& copy)
 	{
 		try
 		{
-			PushBack(currentNode->value);
+			PushBack(currentNode->Value());
 		}
 		catch (const std::bad_alloc& e)
 		{
@@ -98,7 +99,7 @@ template <typename T> CMyList<T>::CMyList(const CMyList& copy)
 	}
 }
 
-template <typename T> CMyList<T>::CMyList(CMyList&& other) noexcept
+template <typename T> CMyList<T>::CMyList(CMyList&& other)
 {
 	ListElement* newRootElement = new ListElement();
 	if (other.m_length == 0)

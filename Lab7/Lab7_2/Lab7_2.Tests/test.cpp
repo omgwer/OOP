@@ -23,7 +23,7 @@ TEST(CMyListTest, BeginEndIterators) {
 
 	auto itBegin = list.begin();
 	auto dereferenceBegin = *itBegin;
-	ASSERT_EQ("hello", dereferenceBegin.value);
+	ASSERT_EQ("hello", dereferenceBegin.Value());
 }
 
 TEST(CMyListTest, BeginIterator) {
@@ -34,20 +34,20 @@ TEST(CMyListTest, BeginIterator) {
 	list.PushBack("test");
 	
 	auto itBegin = list.begin();	
-	ASSERT_EQ("hello", (*itBegin).value);
+	ASSERT_EQ("hello", (*itBegin).Value());
 	++itBegin;
-	ASSERT_EQ("world", (*itBegin).value);
+	ASSERT_EQ("world", (*itBegin).Value());
 	--itBegin;
-	ASSERT_EQ("hello", (*itBegin).value);
+	ASSERT_EQ("hello", (*itBegin).Value());
 }
 
 // range-based for
 TEST(CMyListTest, RangeBasedForEmptyList) {
 	CMyList<std::string> list;
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("", ss.str());
 }
@@ -57,9 +57,9 @@ TEST(CMyListTest, NotEmpty) {
 	list.PushBack("hello");
 	list.PushFront("world");
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("worldhello", ss.str());
 }
@@ -74,9 +74,9 @@ TEST(CMyListTest, InsertTest) {
 	list.Insert(it, "some");
 	
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("somehelloworld", ss.str());
 }
@@ -89,9 +89,9 @@ TEST(CMyListTest, InsertTestEmptyList) {
 	list.Insert(it, "some");
 	
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("some", ss.str());
 }
@@ -105,15 +105,15 @@ TEST(CMyListTest, CopyEqualsOperator) {
 	CMyList<std::string> list2 = list;
 	
 	std::stringstream ss1;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss1 << listElement.value;
+		ss1 << listElement.Value();
 	}
 
 	std::stringstream ss2;
-	for (const auto& listElement : list2)
+	for (auto& listElement : list2)
 	{
-		ss2 << listElement.value;
+		ss2 << listElement.Value();
 	}
 	ASSERT_EQ(ss2.str(), ss1.str());
 }
@@ -127,15 +127,15 @@ TEST(CMyListTest, MoveEqualOperator) {
 	CMyList<std::string> list2 = std::move(list);
 	
 	std::stringstream ss1;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss1 << listElement.value;
+		ss1 << listElement.Value();
 	}
 
 	std::stringstream ss2;
-	for (const auto& listElement : list2)
+	for (auto& listElement : list2)
 	{
-		ss2 << listElement.value;
+		ss2 << listElement.Value();
 	}
 	ASSERT_EQ("", ss1.str());
 	ASSERT_EQ("someonekek", ss2.str());
@@ -149,9 +149,9 @@ TEST(CMyListTest, EraseFirstElement) {
 	list.Erase(list.begin());	
 	
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("", ss.str());
 	ASSERT_EQ(0, list.GetLength());
@@ -162,9 +162,9 @@ TEST(CMyListTest, EraseEmptyList) {
 
 	
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("", ss.str());
 	ASSERT_THROW(list.Erase(list.begin()), std::exception, "Exception dont throw!");
@@ -178,9 +178,9 @@ TEST(CMyListTest, TwoElements) {
 	list.Erase(list.begin());	
 	
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("one", ss.str());
 	ASSERT_EQ(1, list.GetLength());
@@ -194,9 +194,9 @@ TEST(CMyListTest, TwoElements_DeleteLast) {
 	list.Erase(++list.begin());	
 	
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("some", ss.str());
 	ASSERT_EQ(1, list.GetLength());
@@ -211,9 +211,9 @@ TEST(CMyListTest, ThreeElements_DeleteLast) {
 	list.Erase(++list.begin());	
 	
 	std::stringstream ss;
-	for (const auto& listElement : list)
+	for (auto& listElement : list)
 	{
-		ss << listElement.value;
+		ss << listElement.Value();
 	}
 	ASSERT_EQ("somecat", ss.str());
 	ASSERT_EQ(2, list.GetLength());
@@ -231,8 +231,11 @@ TEST(CMyListTest, ReverseIteratorTest) {
 	std::stringstream ss;
 	while (rbegin != rend)
 	{
-		ss << (*rbegin).value;
+		ss << (*rbegin).Value();
 		++rbegin;
 	}	
 	ASSERT_EQ("testefimvalue", ss.str());
+
+	//: TODO добавить проверку корректности вызова дестуктора у ListElement ( использовать +1 в констукртоа -1 в деструкторе, в конце должно быть 0)
+	//: TODO: добавить проверку констуктора по умолчанию ( запретить default constructor)
 }
