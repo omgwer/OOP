@@ -2,9 +2,15 @@
 #include <exception>
 #include <iterator>
 
+
+
 template <typename T> class CMyIterator
 {
 public:
+	using Iterator = CMyIterator<ListElement>;
+	using ConstIterator = CMyIterator<const ListElement>;
+	using ReverseIterator = std::reverse_iterator<Iterator>;
+	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 	using value_type = T;
 	using difference_type = std::ptrdiff_t;
 	using pointer = T*;
@@ -17,6 +23,24 @@ public:
 	}
 
 	~CMyIterator() = default;
+
+	/**
+	 *  Если T != Iterator, то тип перегружаемого оператора ConstIterator
+	 *  Сначала проверяем тип шаблона(is_same), если он совпадает с Iterator, то false
+	 */
+	operator std::enable_if_t<!std::is_same<T, Iterator>::value, ConstIterator> ()
+	{
+		std::cout << "Iterator -> ConstIterator success" << std::endl;
+		return ConstIterator(m_data, m_root);
+	}
+
+	operator std::enable_if_t<!std::is_same<T, ConstIterator>::value, Iterator> ()
+	{
+		std::cout << "ConstIterator -> Iterator success" << std::endl;
+		auto data = const_cast<ListElement *>(m_data);
+		auto root = const_cast<ListElement *>(m_root);		
+		return Iterator(data, root);
+	}
 
 	bool operator!=(CMyIterator const& other) const;
 	bool operator==(CMyIterator const& other) const;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "CMyIterator.h"
 
 template <typename T> class CMyList
@@ -6,21 +6,20 @@ template <typename T> class CMyList
 public:
 	struct ListElement
 	{
-		ListElement() = default;
-		
-		ListElement(const T& value, ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr) 
+		ListElement() : value(T()), prev(nullptr), next(nullptr)
 		{
-			new (buffer) T(value);
+		}
+		
+		ListElement(const T& other, ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr)
+		{
+			value = other;
 			prev = prevPtr;
 			next = nextPtr;
 		}
-		T& Value() noexcept { return *reinterpret_cast<T*>(&buffer); }
-		void Destroy() noexcept { Value().~T(); }
 
+		T value;
 		ListElement* prev = nullptr;
 		ListElement* next = nullptr;
-	private:
-		alignas(T) char buffer[sizeof(T)];
 	};
 
 	using Iterator = CMyIterator<ListElement>;
@@ -38,9 +37,9 @@ public:
 
 	void PushBack(const T& value);
 	void PushFront(const T& value);
-	size_t GetLength() const noexcept;
-	bool IsEmpty() const noexcept;
-	void Clear() noexcept;
+	size_t GetLength() const;
+	bool IsEmpty() const;
+	void Clear();
 	Iterator Insert(const ConstIterator&, const T& value);
 	Iterator Erase(Iterator&);
 
@@ -60,7 +59,6 @@ private:
 	 */
 	ListElement* m_root = nullptr;
 	size_t m_length = 0;
-	
 };
 
 template <typename T> CMyList<T>::CMyList()
@@ -70,7 +68,7 @@ template <typename T> CMyList<T>::CMyList()
 	m_root->prev = m_root;
 }
 
-template <typename T> CMyList<T>::CMyList(const CMyList& copy)
+template <typename T> CMyList<T>::CMyList(const CMyList& copy) // копируем данные, создаем новые указатели
 {
 	m_root = new ListElement();
 	m_root->next = m_root;
@@ -181,17 +179,17 @@ template <typename T> void CMyList<T>::PushFront(const T& value)
 	m_length++;
 }
 
-template <typename T> size_t CMyList<T>::GetLength() const noexcept
+template <typename T> size_t CMyList<T>::GetLength() const
 {
 	return m_length;
 }
 
-template <typename T> bool CMyList<T>::IsEmpty() const noexcept
+template <typename T> bool CMyList<T>::IsEmpty() const
 {
 	return m_length == 0;
 }
 
-template <typename T> void CMyList<T>::Clear() noexcept
+template <typename T> void CMyList<T>::Clear()
 {
 	if (m_root->next == m_root)
 		return;

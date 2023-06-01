@@ -6,29 +6,21 @@ namespace detail
 {
 struct ListData
 {
-	// TODO: добавить конструктор перемещения, деструктор, дефолтный конструктор
-	// Проверить операции присваивания при приватном наследовании
-	
 	ListData()
 	{
 		m_root = new ListElement();
 		m_root->next = m_root;
 		m_root->prev = m_root;
 	}
-	ListData(ListData&& move) noexcept
+	ListData(ListData&& other)
 	{
-		ListElement* newRootElement = new ListElement();
-		if (move.m_length == 0)
-		{
-			m_root->prev = m_root;
-			m_root->next = m_root;
-		}
-		m_root = move.m_root;
-		m_length = move.m_length;
-		move.m_root = newRootElement;
-		move.m_root->next = newRootElement;
-		move.m_root->prev = newRootElement;
-		move.m_length = 0;
+		ListElement* newRootElement = new ListElement();		
+		m_root = other.m_root;
+		m_length = other.m_length;
+		other.m_root = newRootElement;
+		other.m_root->next = newRootElement;
+		other.m_root->prev = newRootElement;
+		other.m_length = 0;
 	}
 	~ListData()
 	{
@@ -41,9 +33,6 @@ struct ListData
 			currentNode = currentNode->next;
 			delete elementToDelete;
 		}
-		m_root->next = m_root;
-		m_root->prev = m_root;
-		m_length = 0;
 		delete m_root;
 	}
 protected:
@@ -62,16 +51,15 @@ public:
 	StringList();
 	StringList(const StringList& stringList);
 	StringList(StringList&& stringList) noexcept(false);
-	~StringList();
 
 	StringList& operator=(const StringList& copy);
 	StringList& operator=(StringList&& move) noexcept;
 
 	void PushBack(const std::string& value);
 	void PushFront(const std::string& value);
-	size_t GetLength() const;
-	bool IsEmpty() const;
-	void Clear();
+	size_t GetLength() const noexcept;
+	bool IsEmpty() const noexcept;
+	void Clear() noexcept; 
 	Iterator Insert(const ConstIterator& it, const std::string& value);
 	Iterator Erase(const Iterator&);
 
@@ -83,8 +71,4 @@ public:
 	ReverseIterator rend();
 	ConstReverseIterator rсbegin() const;
 	ConstReverseIterator rсend() const;
-
-private:
-	// ListElement* m_root = nullptr;
-	// size_t m_length = 0;
 };

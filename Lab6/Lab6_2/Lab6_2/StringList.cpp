@@ -3,18 +3,14 @@
 #include <list>
 #include <stdexcept>
 
-StringList::StringList() : ListData()
+StringList::StringList()
+	: ListData()
 {
-	// m_root = new ListElement();
-	// m_root->next = m_root;
-	// m_root->prev = m_root;
-};
+}
 
-StringList::StringList(const StringList& stringList) : ListData()
+StringList::StringList(const StringList& stringList)
+	: ListData()
 {
-	// m_root = new ListElement();
-	// m_root->next = m_root;
-	// m_root->prev = m_root;
 	if (stringList.m_length == 0)
 	{
 		return;
@@ -22,42 +18,14 @@ StringList::StringList(const StringList& stringList) : ListData()
 	auto currentNode = stringList.m_root->next;
 	while (currentNode != stringList.m_root)
 	{
-		// try
-		// {
-			PushBack(currentNode->value);
-		// }
-		// catch (const std::bad_alloc& e)
-		// {
-		// 	Clear();
-		// 	delete m_root;
-		// 	throw;
-		// }
+		PushBack(currentNode->value);
 		currentNode = currentNode->next;
 	}
 }
 
-StringList::StringList(StringList&& stringList) : ListData()
+StringList::StringList(StringList&& stringList)
+	: ListData(std::move(stringList))
 {
-	ListElement* newRootElement = new ListElement();
-	if (stringList.m_length == 0)
-	{
-		m_root->next = m_root;
-		m_root->prev = m_root;
-		return;
-	}
-	m_root = stringList.m_root;
-	m_length = stringList.m_length;
-
-	stringList.m_root = newRootElement;
-	stringList.m_root->next = newRootElement;
-	stringList.m_root->prev = newRootElement;
-	stringList.m_length = 0;
-}
-
-StringList::~StringList()
-{
-	// Clear();
-	// delete m_root;
 }
 
 StringList& StringList::operator=(const StringList& copy)
@@ -112,7 +80,7 @@ void StringList::PushFront(const std::string& value)
 		firstElement->prev = m_root;
 	}
 	else
-	{		
+	{
 		firstElement->next = m_root->next;
 		firstElement->prev = m_root;
 		m_root->next->prev = firstElement;
@@ -121,21 +89,21 @@ void StringList::PushFront(const std::string& value)
 	m_length++;
 }
 
-size_t StringList::GetLength() const
+size_t StringList::GetLength() const noexcept
 {
 	return m_length;
 }
 
-bool StringList::IsEmpty() const
+bool StringList::IsEmpty() const noexcept
 {
 	return m_length == 0;
 }
 
-void StringList::Clear()
+void StringList::Clear() noexcept
 {
 	if (m_root->next == m_root)
 		return;
-	
+
 	auto currentNode = m_root->next;
 	while (currentNode != m_root)
 	{
@@ -166,7 +134,7 @@ StringList::Iterator StringList::Insert(const ConstIterator& it, const std::stri
 	newElement->next = const_cast<ListElement*>(&*it);
 	newElement->prev = currentIterator.prev;
 	++m_length;
-	return { newElement , m_root};
+	return { newElement, m_root };
 }
 
 
@@ -180,11 +148,11 @@ StringList::Iterator StringList::Erase(const Iterator& it)
 	{
 		throw std::logic_error("Cant delete root element");
 	}
-	
+
 	ListElement* toDelete = it.m_data;
 	Iterator newIterator(toDelete->next, m_root);
 	toDelete->next->prev = toDelete->prev;
-	toDelete->prev->next = toDelete->next;	
+	toDelete->prev->next = toDelete->next;
 	delete toDelete;
 	--m_length;
 	return newIterator;
