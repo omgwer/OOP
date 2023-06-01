@@ -24,4 +24,33 @@ public class Tests
         // Assert
         Assert.That(result, Is.EqualTo(expectedResult));
     }
+    
+    [TestCase("(+ + 5 2)")]
+    [TestCase("(+ 5 2))")]
+    public void NegativeTests(string value)
+    {
+        // Arrange
+        using TextReader textReader = new StringReader(value);
+
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() =>
+        {
+            ProgramSome.EvaluateExpression(textReader);
+        });
+    }
+    
+    [TestCase("(+ 5.2)")]
+    public void NegativeTests_ConvertNumberError(string value)
+    {
+        // Arrange
+        using TextReader textReader = new StringReader(value);
+
+
+        // Act & Assert
+        Assert.Throws<FormatException>(() =>
+        {
+            ProgramSome.EvaluateExpression(textReader);
+        });
+    }
 }

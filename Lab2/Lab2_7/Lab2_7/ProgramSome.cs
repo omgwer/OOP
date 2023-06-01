@@ -23,8 +23,8 @@
     public static int EvaluateExpression(TextReader textReader)
     {
         Stack<Element> elementsStack = new();
-        char lastIndexedCharWithoutSpace;
         Element? currentElement = null;
+        char lastElement;
         while (textReader.Peek() is var currentChar)
         {
             switch (currentChar)
@@ -44,50 +44,44 @@
                     break;
                 case ')':
                     textReader.Read();
-                    // Высчитываем текущий элемент стека После, вытаскиваем еще один элемент и добавляем в список результат вычислений.
                     int result = 0;
                     if (currentElement == null)
-                    {
-                        if (elementsStack.Count == 0)
-                        {   // ?? 
-                            return 0;
-                        }
-
                         currentElement = elementsStack.Pop();
-                    }
 
                     result = CalculateValue((Operation) currentElement!.operation!, currentElement!.numbers!);
 
                     if (elementsStack.Count == 0)
-                    {  
-                        return result;
+                    {
+                        if (textReader.Peek() == -1)
+                            return result;
+                        throw new ArgumentException("Исходная строка содержит ошибки!");
                     }
 
                     currentElement = elementsStack.Pop();
-
                     currentElement.numbers!.Add(result);
                     elementsStack.Push(currentElement);
                     currentElement = null;
                     break;
                 case '*':
                     textReader.Read();
-                    // Добавить валидацию на то что операция уже задана
+                    if (currentElement!.operation != null)
+                        throw new ArgumentException("Операция над текущим элементом уже была определена!");
                     currentElement!.operation = Operation.MULTIPLICATION;
                     break;
                 case '+':
                     textReader.Read();
-                    // Добавить валидацию на то что операция уже задана
+                    if (currentElement!.operation != null)
+                        throw new ArgumentException("Операция над текущим элементом уже была определена!");
                     currentElement!.operation = Operation.ADDICTION;
                     break;
                 default:
-                    // Пытаемся распарсить число, если не смогли, то все, писос.
                     int convertedNumber = ReadNumber(textReader);
                     currentElement!.numbers!.Add(convertedNumber);
                     break;
             }
         }
 
-        return 0;
+        throw new ArgumentException("Some error");
     }
 
     private static int CalculateValue(Operation operation, List<int> numbers)
@@ -137,10 +131,8 @@
                         number = -number;
                     return number;
                 }
-                else
-                {
-                    throw new FormatException($"{(char) nextChar}Invalid input: expected a number");
-                }
+
+                throw new FormatException($"{(char) nextChar}Invalid input: expected a number");
             }
 
             reader.Read();
