@@ -2,11 +2,29 @@
 #include <exception>
 #include <iterator>
 
-
-
 template <typename T> class CMyIterator
 {
 public:
+	struct ListElement
+	{
+		ListElement() = default;
+
+		ListElement(const T& value, ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr)
+		{
+			new(buffer) T(value);
+			prev = prevPtr;
+			next = nextPtr;
+		}
+
+		T& Value() noexcept { return *reinterpret_cast<T*>(&buffer); }
+		void Destroy() noexcept { Value().~T(); }
+
+		ListElement* prev = nullptr;
+		ListElement* next = nullptr;
+
+	private:
+		alignas(T) char buffer[sizeof(T)];
+	};
 	using Iterator = CMyIterator<ListElement>;
 	using ConstIterator = CMyIterator<const ListElement>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
