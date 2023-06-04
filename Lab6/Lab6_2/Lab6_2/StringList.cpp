@@ -51,40 +51,20 @@ StringList& StringList::operator=(StringList&& move) noexcept
 void StringList::PushBack(const std::string& value)
 {
 	const auto lastElement = new ListElement(value);
-	if (m_root == m_root->next) // TODO: можно ли упростить
-	{
-		m_root->next = lastElement;
-		m_root->prev = lastElement;
-		lastElement->next = m_root;
-		lastElement->prev = m_root;
-	}
-	else
-	{
-		m_root->prev->next = lastElement;
-		lastElement->prev = m_root->prev;
-		m_root->prev = lastElement;
-		lastElement->next = m_root;
-	}
+	m_root->prev->next = lastElement;
+	lastElement->prev = m_root->prev;
+	m_root->prev = lastElement;
+	lastElement->next = m_root;
 	m_length++;
 }
 
 void StringList::PushFront(const std::string& value)
 {
 	const auto firstElement = new ListElement(value);
-	if (m_root->next == m_root)
-	{
-		m_root->next = firstElement;
-		m_root->prev = firstElement;
-		firstElement->next = m_root;
-		firstElement->prev = m_root;
-	}
-	else
-	{
-		firstElement->next = m_root->next;
-		firstElement->prev = m_root;
-		m_root->next->prev = firstElement;
-		m_root->next = firstElement;
-	}
+	firstElement->next = m_root->next;
+	firstElement->prev = m_root;
+	m_root->next->prev = firstElement;
+	m_root->next = firstElement;
 	m_length++;
 }
 
@@ -139,22 +119,23 @@ StringList::Iterator StringList::Insert(const ConstIterator& it, const std::stri
 
 StringList::Iterator StringList::Erase(const Iterator& it)
 {
-	if (m_length == 0)
-	{
-		throw std::logic_error("List is empty!");
-	}
-	if (it == end())
-	{
-		throw std::logic_error("Cant delete root element");
-	}
-
-	const ListElement* toDelete = it.m_data;
-	const Iterator newIterator(toDelete->next, m_root);
-	toDelete->next->prev = toDelete->prev;
-	toDelete->prev->next = toDelete->next;
-	delete toDelete;
-	--m_length;
-	return newIterator;
+	// if (m_length == 0)
+	// {
+	// 	throw std::logic_error("List is empty!");
+	// }
+	// if (it == end())
+	// {
+	// 	throw std::logic_error("Cant delete root element");
+	// }
+	//
+	// const ListElement* toDelete = it.m_data;
+	// const Iterator newIterator(toDelete->next, m_root);
+	// toDelete->next->prev = toDelete->prev;
+	// toDelete->prev->next = toDelete->next;
+	// delete toDelete;
+	// --m_length;
+	// return newIterator;
+	return end();
 }
 
 StringList::Iterator StringList::begin()

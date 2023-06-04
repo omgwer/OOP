@@ -35,7 +35,7 @@ public:
 	{
 	}
 
-	~CMyIterator();
+	~CMyIterator() = default;
 
 	
 	operator std::enable_if_t<!std::is_same<T, Iterator>::value, ConstIterator> ()
@@ -63,9 +63,6 @@ private:
 	T* m_data;
 	T* m_root;
 };
-
-
-template <typename T> CMyIterator<T>::~CMyIterator() = default;
 
 template <typename T> bool CMyIterator<T>::operator!=(CMyIterator const& other) const
 {
