@@ -1,19 +1,36 @@
 ﻿
 namespace  Lab1_5;
 
-class Program
+public class Program
 {
+    private struct Command
+    {
+        public string inputFileName;
+        public string outputFileName;
+    }
+
     public static void Main(string[] args)
     {
-        TextReader test = new StringReader
-        (@"     #
-###
-### 0 ##
-#####
-      
-        ");
+        Command command = ParseArgs(args);
+        using TextReader inputStream = new StreamReader(command.inputFileName);
+        using TextWriter outputStream = new StreamWriter(command.outputFileName);
+        
+        var canvasInfo = Fill.ReadCanvasFromStream(inputStream);
+        var fillResult = Fill.FillCanvas(canvasInfo);
+        Fill.WriteToStream(outputStream, fillResult);
+    }
 
-        var t = new Fill().ReadCanvasFromStream(test);
-        Console.WriteLine("some");
+    private static Command ParseArgs(string[] args)
+    {
+        if (args.Length != 2)
+        {
+            throw new ArgumentException("Invalid arguments count!");
+        }
+
+        return new Command()
+        {
+            inputFileName = args.First(),
+            outputFileName = args.Last()
+        };
     }
 }
