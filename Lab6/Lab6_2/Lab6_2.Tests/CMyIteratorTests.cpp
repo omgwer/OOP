@@ -11,7 +11,7 @@ TEST(StringListTest, BeginEndIterators) {
 
 	CMyIterator<ListElement> itBegin = list.begin();
 	auto dereferenceBegin = *itBegin;
-	ASSERT_EQ("hello", dereferenceBegin.value);
+	ASSERT_EQ("hello", dereferenceBegin);
 }
 
 TEST(StringListTest, BeginIterator) {
@@ -22,11 +22,11 @@ TEST(StringListTest, BeginIterator) {
 	list.PushBack("test");
 	
 	CMyIterator<ListElement> itBegin = list.begin();	
-	ASSERT_EQ("hello", (*itBegin).value);
+	ASSERT_EQ("hello", (*itBegin));
 	++itBegin;
-	ASSERT_EQ("world", (*itBegin).value);
+	ASSERT_EQ("world", (*itBegin));
 	--itBegin;
-	ASSERT_EQ("hello", (*itBegin).value);
+	ASSERT_EQ("hello", (*itBegin));
 }
 
 // range-based for

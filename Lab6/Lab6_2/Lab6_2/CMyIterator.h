@@ -20,6 +20,7 @@ struct ListElement
 template <typename T> class CMyIterator
 {	
 public:
+	
 	using Iterator = CMyIterator<ListElement>;
 	using ConstIterator = CMyIterator<const ListElement>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
@@ -47,14 +48,14 @@ public:
 	operator std::enable_if_t<!std::is_same<T, ConstIterator>::value, Iterator> ()
 	{
 		std::cout << "ConstIterator -> Iterator success" << std::endl;
-		auto data = const_cast<ListElement *>(m_data);
-		auto root = const_cast<ListElement *>(m_root);		
+		const auto data = const_cast<ListElement *>(m_data);
+		const auto root = const_cast<ListElement *>(m_root);		
 		return Iterator(data, root);
 	}
 
 	bool operator !=(CMyIterator const& other) const;
 	bool operator ==(CMyIterator const& other) const;
-	T& operator*() const;	// TODO: возвращать строку, а не шаблонный тип
+	const std::string& operator*() const;	// TODO: возвращать строку, а не шаблонный тип
 	CMyIterator& operator++(); 
 	CMyIterator operator++(int); 
 	CMyIterator& operator--();
@@ -62,6 +63,7 @@ public:
 private:
 	T* m_data;
 	T* m_root;
+	friend class StringList;
 };
 
 template <typename T> bool CMyIterator<T>::operator!=(CMyIterator const& other) const
@@ -74,13 +76,13 @@ template <typename T> bool CMyIterator<T>::operator==(CMyIterator const& other) 
 	return m_data == other.m_data;
 }
 
-template <typename T> T& CMyIterator<T>::operator*() const
+template <typename T> const std::string& CMyIterator<T>::operator*() const
 {
 	if (m_data == m_root)
 	{
 		throw std::logic_error("Cant dereference end iterator!");
 	}
-	return *m_data;
+	return m_data->value;
 }
 
 template <typename T> CMyIterator<T>& CMyIterator<T>::operator++()

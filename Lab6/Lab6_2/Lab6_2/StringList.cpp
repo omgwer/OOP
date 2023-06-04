@@ -11,9 +11,8 @@ StringList::StringList(const StringList& stringList)
 	: ListData()
 {
 	if (stringList.m_length == 0)
-	{
 		return;
-	}
+	
 	auto currentNode = stringList.m_root->next;
 	while (currentNode != stringList.m_root)
 	{
@@ -107,35 +106,29 @@ StringList::Iterator StringList::Insert(const ConstIterator& it, const std::stri
 		PushBack(value);
 		return end();
 	}
-	const auto& currentIterator = *it;
-	const auto newElement = new ListElement(value);
-	currentIterator.prev->next = newElement;
-	newElement->next = const_cast<ListElement*>(&*it);
-	newElement->prev = currentIterator.prev;
+	auto* itPtr = const_cast<ListElement*>(it.m_data);	
+	const auto newElement = new ListElement(value);	
+	itPtr->prev->next = newElement;
+	newElement->prev = itPtr->prev;
+	newElement->next = itPtr;
+	itPtr->prev = newElement;	
 	++m_length;
 	return { newElement, m_root };
 }
 
-
 StringList::Iterator StringList::Erase(const Iterator& it)
 {
-	// if (m_length == 0)
-	// {
-	// 	throw std::logic_error("List is empty!");
-	// }
-	// if (it == end())
-	// {
-	// 	throw std::logic_error("Cant delete root element");
-	// }
-	//
-	// const ListElement* toDelete = it.m_data;
-	// const Iterator newIterator(toDelete->next, m_root);
-	// toDelete->next->prev = toDelete->prev;
-	// toDelete->prev->next = toDelete->next;
-	// delete toDelete;
-	// --m_length;
-	// return newIterator;
-	return end();
+	if (m_length == 0)
+		throw std::logic_error("List is empty!");
+	if (it == end())
+		throw std::logic_error("Cant delete root element");	
+	const ListElement* toDelete = it.m_data;
+	const Iterator newIterator(toDelete->next, m_root);
+	toDelete->next->prev = toDelete->prev;
+	toDelete->prev->next = toDelete->next;
+	delete toDelete;
+	--m_length;
+	return newIterator;
 }
 
 StringList::Iterator StringList::begin()
