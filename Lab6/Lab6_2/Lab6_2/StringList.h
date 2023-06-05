@@ -48,6 +48,11 @@ public:
 	using ConstIterator = CMyIterator<const ListElement>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
+	using ValueType = std::string;
+	using Reference = ValueType&;
+	using ConstReference = const ValueType&;
+	using NodePtr = ListElement*;
+	
 	StringList();
 	StringList(const StringList& stringList);
 	StringList(StringList&& stringList) noexcept(false);

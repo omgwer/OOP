@@ -20,30 +20,32 @@ int main(int argc, char* argv[])
 	test.PushFront("mouse");
 	test.PushFront("someone");
 
-	auto iterator = test.begin();
-	auto constIterator = test.cbegin();
+	//auto iterator = test.begin();
+//	auto constIterator = test.cbegin();
 
-	auto itToConst = static_cast<ConstIterator>(iterator);
-	auto itToIt = static_cast<Iterator>(iterator);
-	auto constToConst = static_cast<ConstIterator>(constIterator);
-	auto constToIt = static_cast<Iterator>(constIterator);
+	// auto itToConst = static_cast<ConstIterator>(iterator);
+	// auto itToIt = static_cast<Iterator>(iterator);
+	// auto constToConst = static_cast<ConstIterator>(constIterator);
+	// auto constToIt = static_cast<Iterator>(constIterator);
 
 	auto begin = test.cbegin();
 	auto end = test.cend();
 
-	std::list<std::string> sm{ "some", "one" };
-
-	sm.erase(sm.begin());
-	sm.insert(sm.begin(), "some");
-
-	auto tt = sm.cbegin();
+	// std::list<std::string> sm{ "some", "one" };
+	//
+	// sm.erase(sm.begin());
+	// sm.insert(sm.begin(), "some");
+	//
+	// auto tt = sm.cbegin();
 	
 	begin = test.cbegin();
 	end = test.cend();
+	auto kek = *begin;
 	
 	while (begin != end)
 	{
-		std::cout << *begin << std::endl;
+		std::string some = *begin;
+		std::cout << some << std::endl;
 		++begin;
 	}
 

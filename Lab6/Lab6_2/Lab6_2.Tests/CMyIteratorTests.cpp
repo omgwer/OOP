@@ -218,7 +218,7 @@ TEST(StringListTest, ReverseIteratorTest) {
 	std::stringstream ss;
 	while (rbegin != rend)
 	{
-		ss << (*rbegin).value;
+		ss << *rbegin;
 		++rbegin;
 	}	
 	ASSERT_EQ("testefimvalue", ss.str());

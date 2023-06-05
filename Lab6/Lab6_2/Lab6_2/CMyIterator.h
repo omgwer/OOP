@@ -25,10 +25,10 @@ public:
 	using ConstIterator = CMyIterator<const ListElement>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
-	using value_type = T;
+	using value_type = std::string;
 	using difference_type = std::ptrdiff_t;
-	using pointer = T*;
-	using reference = T&;
+	using pointer = std::string*;
+	using reference = std::string&;
 	using iterator_category = std::bidirectional_iterator_tag;   
 
 	CMyIterator(T* p, T* root)
@@ -55,7 +55,7 @@ public:
 
 	bool operator !=(CMyIterator const& other) const;
 	bool operator ==(CMyIterator const& other) const;
-	const std::string& operator*() const;	// TODO: возвращать строку, а не шаблонный тип
+	reference operator*() const;	// TODO: возвращать строку, а не шаблонный тип
 	CMyIterator& operator++(); 
 	CMyIterator operator++(int); 
 	CMyIterator& operator--();
@@ -76,13 +76,13 @@ template <typename T> bool CMyIterator<T>::operator==(CMyIterator const& other) 
 	return m_data == other.m_data;
 }
 
-template <typename T> const std::string& CMyIterator<T>::operator*() const
+template <typename T> typename CMyIterator<T>::reference CMyIterator<T>::operator*() const
 {
 	if (m_data == m_root)
 	{
 		throw std::logic_error("Cant dereference end iterator!");
 	}
-	return m_data->value;
+	return const_cast<std::string&>(m_data->value);
 }
 
 template <typename T> CMyIterator<T>& CMyIterator<T>::operator++()
