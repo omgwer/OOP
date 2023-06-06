@@ -2,7 +2,6 @@
 #include <exception>
 #include <iterator>
 
-
 template <typename T> struct ListElement
 {
 	ListElement() = default;

@@ -6,6 +6,7 @@ namespace detail
 {
 template <typename T> class ListData
 {
+public:
 	ListData()
 	{
 		m_root = new ListElement<T>();
@@ -36,19 +37,22 @@ template <typename T> class ListData
 		}
 		delete m_root;
 	}
-public:	
 	ListElement<T>* m_root = nullptr;
 	size_t m_length = 0;	
 };
 }
 
-template <typename T> class CMyList
+template <typename T> class CMyList 
 {
 public:
 	using Iterator = CMyIterator<ListElement<T>>;
 	using ConstIterator = CMyIterator<const ListElement<T>>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
+	using ValueType = T;
+	using Reference = ValueType&;
+	using ConstReference = const ValueType&;
+	using NodePtr = ListElement<T>*;
 
 	CMyList();
 	CMyList(const CMyList& copy);
@@ -74,11 +78,9 @@ public:
 	ReverseIterator rend();
 	ConstReverseIterator rсbegin() const;
 	ConstReverseIterator rсend() const;
-
 private:
 	ListElement<T>* m_root = nullptr;
-	size_t m_length = 0;
-
+	size_t m_length = 0;	
 };
 
 template <typename T> CMyList<T>::CMyList()
