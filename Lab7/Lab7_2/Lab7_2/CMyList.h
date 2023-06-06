@@ -2,33 +2,51 @@
 #include "CMyIterator.h"
 //  Можно создать тоже шаблонный класс и приватно дать его отнаследовать с CMyList
 
+namespace detail
+{
+template <typename T> class ListData
+{
+	ListData()
+	{
+		m_root = new ListElement<T>();
+		m_root->next = m_root;
+		m_root->prev = m_root;
+	}
+	
+	ListData(ListData&& other) noexcept(false)
+	{
+		const auto newRootElement = new ListElement<T>();		
+		m_root = other.m_root;
+		m_length = other.m_length;
+		other.m_root = newRootElement;
+		other.m_root->next = newRootElement;
+		other.m_root->prev = newRootElement;
+		other.m_length = 0;
+	}
+	~ListData()
+	{
+		if (m_root->next == m_root)
+			return;	
+		auto currentNode = m_root->next;
+		while (currentNode != m_root)
+		{
+			const ListElement<T>* elementToDelete = currentNode;
+			currentNode = currentNode->next;
+			delete elementToDelete;
+		}
+		delete m_root;
+	}
+public:	
+	ListElement<T>* m_root = nullptr;
+	size_t m_length = 0;	
+};
+}
 
 template <typename T> class CMyList
 {
 public:
-	struct ListElement
-	{
-		ListElement() = default;
-
-		ListElement(const T& value, ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr)
-		{
-			new(buffer) T(value);
-			prev = prevPtr;
-			next = nextPtr;
-		}
-
-		T& Value() noexcept { return *reinterpret_cast<T*>(&buffer); }
-		void Destroy() noexcept { Value().~T(); }
-
-		ListElement* prev = nullptr;
-		ListElement* next = nullptr;
-
-	private:
-		alignas(T) char buffer[sizeof(T)];
-	};
-
-	using Iterator = CMyIterator<ListElement>;
-	using ConstIterator = CMyIterator<const ListElement>;
+	using Iterator = CMyIterator<ListElement<T>>;
+	using ConstIterator = CMyIterator<const ListElement<T>>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 
@@ -58,25 +76,21 @@ public:
 	ConstReverseIterator rсend() const;
 
 private:
-	/**
-	 * @param next - (first element)
-	 * @param last - (last element) 
-	 */
-	ListElement* m_root = nullptr;
+	ListElement<T>* m_root = nullptr;
 	size_t m_length = 0;
 
 };
 
 template <typename T> CMyList<T>::CMyList()
 {
-	m_root = new ListElement();
+	m_root = new ListElement<T>();
 	m_root->next = m_root;
 	m_root->prev = m_root;
 }
 
 template <typename T> CMyList<T>::CMyList(const CMyList& copy)
 {
-	m_root = new ListElement();
+	m_root = new ListElement<T>();
 	m_root->next = m_root;
 	m_root->prev = m_root;
 	if (copy.m_length == 0)
@@ -101,7 +115,7 @@ template <typename T> CMyList<T>::CMyList(const CMyList& copy)
 
 template <typename T> CMyList<T>::CMyList(CMyList&& other)
 {
-	ListElement* newRootElement = new ListElement();
+	ListElement<T>* newRootElement = new ListElement<T>();
 	if (other.m_length == 0)
 	{
 		m_root->next = m_root;
@@ -146,7 +160,7 @@ template <typename T> CMyList<T>& CMyList<T>::operator=(CMyList&& move)
 
 template <typename T> void CMyList<T>::PushBack(const T& value)
 {
-	auto lastElement = new ListElement(value);
+	auto lastElement = new ListElement<T>(value);
 	if (m_root == m_root->next) // значит элемент первый
 	{
 		m_root->next = lastElement;
@@ -166,7 +180,7 @@ template <typename T> void CMyList<T>::PushBack(const T& value)
 
 template <typename T> void CMyList<T>::PushFront(const T& value)
 {
-	auto firstElement = new ListElement(value);
+	auto firstElement = new ListElement<T>(value);
 	if (m_root->next == m_root) // значит элeмент первый
 	{
 		m_root->next = firstElement;
@@ -202,7 +216,7 @@ template <typename T> void CMyList<T>::Clear() noexcept
 	auto currentNode = m_root->next;
 	while (currentNode != m_root)
 	{
-		const ListElement* elementToDelete = currentNode;
+		const ListElement<T>* elementToDelete = currentNode;
 		currentNode = currentNode->next;
 		delete elementToDelete;
 	}
@@ -224,9 +238,9 @@ template <typename T> typename CMyList<T>::Iterator CMyList<T>::Insert(const Con
 		return end();
 	}
 	const auto currentIterator = *it;
-	const auto newElement = new ListElement(value);
+	const auto newElement = new ListElement<T>(value);
 	currentIterator.prev->next = newElement;
-	newElement->next = const_cast<ListElement*>(&*it);
+	newElement->next = const_cast<ListElement<T>*>(&*it);
 	newElement->prev = currentIterator.prev;
 	++m_length;
 	return { newElement, m_root };
@@ -243,7 +257,7 @@ template <typename T> typename CMyList<T>::Iterator CMyList<T>::Erase(Iterator& 
 		throw std::exception("Cant delete root element");
 	}
 
-	ListElement* toDelete = it.m_data;
+	ListElement<T>* toDelete = it.m_data;
 	Iterator newIterator(toDelete->next, m_root);
 	toDelete->next->prev = toDelete->prev;
 	toDelete->prev->next = toDelete->next;

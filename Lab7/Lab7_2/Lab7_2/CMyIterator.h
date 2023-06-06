@@ -2,38 +2,41 @@
 #include <exception>
 #include <iterator>
 
+
+template <typename T> struct ListElement
+{
+	ListElement() = default;
+
+	ListElement(const T& value, ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr)
+	{
+		new(buffer) T(value);
+		prev = prevPtr;
+		next = nextPtr;
+	}
+
+	T& Value() noexcept { return *reinterpret_cast<T*>(&buffer); }
+	void Destroy() noexcept { Value().~T(); }
+
+	ListElement* prev = nullptr;
+	ListElement* next = nullptr;
+
+private:
+	alignas(T) char buffer[sizeof(T)];
+};
+
+
 template <typename T> class CMyIterator
 {
-public:
-	struct ListElement
-	{
-		ListElement() = default;
-
-		ListElement(const T& value, ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr)
-		{
-			new(buffer) T(value);
-			prev = prevPtr;
-			next = nextPtr;
-		}
-
-		T& Value() noexcept { return *reinterpret_cast<T*>(&buffer); }
-		void Destroy() noexcept { Value().~T(); }
-
-		ListElement* prev = nullptr;
-		ListElement* next = nullptr;
-
-	private:
-		alignas(T) char buffer[sizeof(T)];
-	};
-	using Iterator = CMyIterator<ListElement>;
-	using ConstIterator = CMyIterator<const ListElement>;
+public:	
+	using Iterator = CMyIterator<ListElement<T>>;
+	using ConstIterator = CMyIterator<const ListElement<T>>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 	using value_type = T;
 	using difference_type = std::ptrdiff_t;
 	using pointer = T*;
 	using reference = T&;
-	using iterator_category = std::bidirectional_iterator_tag;
+	using iterator_category = std::random_access_iterator_tag;
 
 	CMyIterator(T* p, T* root)
 		: m_data(p), m_root(root)
@@ -55,8 +58,8 @@ public:
 	operator std::enable_if_t<!std::is_same<T, ConstIterator>::value, Iterator> ()
 	{
 		std::cout << "ConstIterator -> Iterator success" << std::endl;
-		auto data = const_cast<ListElement *>(m_data);
-		auto root = const_cast<ListElement *>(m_root);		
+		auto data = const_cast<ListElement<T> *>(m_data);
+		auto root = const_cast<ListElement<T> *>(m_root);		
 		return Iterator(data, root);
 	}
 
