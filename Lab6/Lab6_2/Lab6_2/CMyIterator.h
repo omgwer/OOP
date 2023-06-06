@@ -11,7 +11,6 @@ struct ListElement
 		prev = prevPtr;
 		next = nextPtr;
 	}
-
 	std::string value;
 	ListElement* prev;
 	ListElement* next;
@@ -19,17 +18,16 @@ struct ListElement
 
 template <typename T> class CMyIterator
 {	
-public:
-	
+public:	
 	using Iterator = CMyIterator<ListElement>;
 	using ConstIterator = CMyIterator<const ListElement>;
 	using ReverseIterator = std::reverse_iterator<Iterator>;
 	using ConstReverseIterator = std::reverse_iterator<ConstIterator>;
 	using value_type = std::string;
 	using difference_type = std::ptrdiff_t;
-	using pointer = std::string*;
-	using reference = std::string&;
-	using iterator_category = std::bidirectional_iterator_tag;   
+	using pointer = value_type*;
+	using reference = value_type&;
+	using iterator_category = std::random_access_iterator_tag;   
 
 	CMyIterator(T* p, T* root)
 		: m_data(p), m_root(root)
@@ -37,7 +35,6 @@ public:
 	}
 
 	~CMyIterator() = default;
-
 	
 	operator std::enable_if_t<!std::is_same<T, Iterator>::value, ConstIterator> ()
 	{
@@ -55,7 +52,7 @@ public:
 
 	bool operator !=(CMyIterator const& other) const;
 	bool operator ==(CMyIterator const& other) const;
-	reference operator*() const;	// TODO: возвращать строку, а не шаблонный тип
+	reference operator*() const;
 	CMyIterator& operator++(); 
 	CMyIterator operator++(int); 
 	CMyIterator& operator--();
@@ -82,7 +79,7 @@ template <typename T> typename CMyIterator<T>::reference CMyIterator<T>::operato
 	{
 		throw std::logic_error("Cant dereference end iterator!");
 	}
-	return const_cast<std::string&>(m_data->value);
+	return const_cast<reference>(m_data->value);
 }
 
 template <typename T> CMyIterator<T>& CMyIterator<T>::operator++()

@@ -2,6 +2,10 @@
 #include "CMyIterator.h"
 #include <string>
 
+
+static int m_listDataConstructor = 0;
+static int m_listDataDestructor = 0;
+
 namespace detail
 {
 struct ListData
@@ -11,7 +15,9 @@ struct ListData
 		m_root = new ListElement();
 		m_root->next = m_root;
 		m_root->prev = m_root;
+		++m_listDataConstructor;
 	}
+	
 	ListData(ListData&& other) noexcept(false)
 	{
 		const auto newRootElement = new ListElement();		
@@ -21,6 +27,7 @@ struct ListData
 		other.m_root->next = newRootElement;
 		other.m_root->prev = newRootElement;
 		other.m_length = 0;
+		++m_listDataConstructor;
 	}
 	~ListData()
 	{
@@ -34,10 +41,11 @@ struct ListData
 			delete elementToDelete;
 		}
 		delete m_root;
+		++m_listDataDestructor;
 	}
-protected:
+protected:	
 	ListElement* m_root = nullptr;
-	size_t m_length = 0;
+	size_t m_length = 0;	
 };
 }
 

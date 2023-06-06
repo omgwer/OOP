@@ -224,9 +224,38 @@ TEST(StringListTest, ReverseIteratorTest) {
 	ASSERT_EQ("testefimvalue", ss.str());
 }
 
+TEST(StringListTest, ConstructorDesctructorTests) {
+	m_listDataDestructor = 0;
+	m_listDataConstructor = 0;
+	StringList* test = new StringList();	
+	ASSERT_EQ(m_listDataConstructor, 1);
+	ASSERT_EQ(m_listDataDestructor, 0);	
+	test->PushBack("value");
+	test->PushBack("efim");
+	test->PushBack("test");
+	test->~StringList();
+	ASSERT_EQ(m_listDataDestructor, m_listDataConstructor);	
+}
 
+TEST(StringListTest, ConstructorDesctructorTests1) {
+	m_listDataDestructor = 0;
+	m_listDataConstructor = 0;
+	StringList* test = new StringList();	
+	ASSERT_EQ(m_listDataConstructor, 1);
+	ASSERT_EQ(m_listDataDestructor, 0);	
+	test->PushBack("value");
+	test->PushBack("efim");
+	test->PushBack("test");
 
+	StringList* test1 = new StringList(*test);
+	ASSERT_EQ(m_listDataConstructor, 2);
+	test->PushBack("efim");
+	test->PushBack("test");	
+	test->~StringList();	
+	ASSERT_EQ(m_listDataDestructor, 1);
 
+	test1->~StringList();
+	ASSERT_EQ(m_listDataDestructor, 2);
+	ASSERT_EQ(m_listDataConstructor, 2);
+}
 
-
-	
