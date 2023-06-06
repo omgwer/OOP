@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 #include "../Lab7_2/CMyList.h"
 
+//: TODO добавить проверку корректности вызова дестуктора у ListElement ( использовать +1 в констукртоа -1 в деструкторе, в конце должно быть 0)
+//: TODO: добавить проверку констуктора по умолчанию ( запретить default constructor)
+
 
 class MyChar
 {
@@ -219,7 +222,8 @@ TEST(CMyListTest, ThreeElements_DeleteLast) {
 	ASSERT_EQ(2, list.GetLength());
 }
 
-TEST(CMyListTest, ReverseIteratorTest) {
+TEST(CMyListTest, ReverseIteratorTest)
+{
 	CMyList<std::string> test;
 	test.PushBack("value");
 	test.PushBack("efim");
@@ -235,7 +239,64 @@ TEST(CMyListTest, ReverseIteratorTest) {
 		++rbegin;
 	}	
 	ASSERT_EQ("testefimvalue", ss.str());
+}
 
-	//: TODO добавить проверку корректности вызова дестуктора у ListElement ( использовать +1 в констукртоа -1 в деструкторе, в конце должно быть 0)
-	//: TODO: добавить проверку констуктора по умолчанию ( запретить default constructor)
+
+TEST(StringListTest, PushBackTest) {
+	CMyList<std::string> list;
+	list.PushBack("hello");
+	list.PushBack("world");
+	ASSERT_EQ(list.GetLength(), 2);
+}
+
+TEST(StringListTest, DefaultConstructor) {
+	CMyList<std::string> list;
+	ASSERT_EQ(list.GetLength(), 0);
+}
+
+TEST(StringListTest, PushFrontTest) {
+	CMyList<std::string> list;
+	list.PushFront("world");
+	list.PushFront("hello");
+	ASSERT_EQ(list.GetLength(), 2);
+}
+
+TEST(StringListTest, IsEmptyTest) {
+	CMyList<std::string> list;
+	ASSERT_TRUE(list.IsEmpty());
+	list.PushBack("hello");
+	ASSERT_FALSE(list.IsEmpty());
+}
+
+TEST(StringListTest, ClearTest) {
+	CMyList<std::string> list;
+	list.PushBack("hello");
+	list.PushBack("world");
+	list.Clear();
+	ASSERT_EQ(list.GetLength(), 0);
+	ASSERT_TRUE(list.IsEmpty());
+}
+
+TEST(StringListTest, CopyConstructor) {
+	CMyList<std::string> list;
+	list.PushBack("hello");
+	list.PushBack("world");
+
+	CMyList<std::string> newList(list);
+
+
+	ASSERT_EQ(list.GetLength(), 2);
+	ASSERT_EQ(newList.GetLength(), 2);
+}
+
+TEST(StringListTest, MoveConstructor) {
+	CMyList<std::string> list;
+	list.PushBack("hello");
+	list.PushBack("world");
+
+	CMyList<std::string> newList(std::move(list));
+
+
+	ASSERT_EQ(list.GetLength(), 0);
+	ASSERT_EQ(newList.GetLength(), 2);	
 }
