@@ -1,5 +1,7 @@
 #pragma once
 #include "CMyIterator.h"
+#include <exception>
+#include <iterator>
 
 static int m_listDataConstructor = 0;
 static int m_listDataDestructor = 0;
@@ -189,11 +191,13 @@ template <typename T> typename CMyList<T>::Iterator CMyList<T>::Insert(const Con
 		PushBack(value);
 		return end();
 	}
-	const auto currentIterator = *it;
-	const auto newElement = new ListElement<T>(value);
-	currentIterator.prev->next = newElement;
-	newElement->next = const_cast<ListElement<T>*>(&*it);
-	newElement->prev = currentIterator.prev;
+	
+	auto* itPtr = const_cast<ListElement<T>*>(it.m_data);	
+	const auto newElement = new ListElement<T>(value);	
+	itPtr->prev->next = newElement;
+	newElement->prev = itPtr->prev;
+	newElement->next = itPtr;
+	itPtr->prev = newElement;	
 	++this->m_length;
 	return { newElement, this->m_root };
 }
@@ -209,8 +213,8 @@ template <typename T> typename CMyList<T>::Iterator CMyList<T>::Erase(Iterator& 
 		throw std::exception("Cant delete root element");
 	}
 
-	ListElement<T>* toDelete = it.m_data;
-	Iterator newIterator(toDelete->next, this->m_root);
+	const ListElement<T>* toDelete = it.m_data;
+	const Iterator newIterator(toDelete->next, this->m_root);
 	toDelete->next->prev = toDelete->prev;
 	toDelete->prev->next = toDelete->next;
 	delete toDelete;

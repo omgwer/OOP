@@ -2,6 +2,8 @@
 #include <exception>
 #include <iterator>
 
+template <typename T> class CMyList;
+
 template <typename T> struct ListElement
 {
 	ListElement() = default;
@@ -68,12 +70,13 @@ public:
 
 	bool operator!=(CMyIterator const& other) const;
 	bool operator==(CMyIterator const& other) const;
-	T& operator*() const;
-	CMyIterator& operator++(); // prefix
-	CMyIterator operator++(int); // postfix
+	reference operator*() const;
+	CMyIterator& operator++(); 
+	CMyIterator operator++(int);
 	CMyIterator& operator--();
 	CMyIterator operator--(int);
-	
+public:
+	friend class CMyList<T>;
 	T* m_data;
 	T* m_root;
 };
@@ -88,7 +91,7 @@ template <typename T> bool CMyIterator<T>::operator==(CMyIterator const& other) 
 	return m_data == other.m_data;
 }
 
-template <typename T> T& CMyIterator<T>::operator*() const
+template <typename T> typename CMyIterator<T>::reference CMyIterator<T>::operator*() const
 {
 	if (m_data == m_root)
 	{
