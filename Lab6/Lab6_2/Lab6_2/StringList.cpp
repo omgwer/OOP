@@ -2,8 +2,7 @@
 #include <list>
 #include <stdexcept>
 
-StringList::StringList()
-	: ListData()
+StringList::StringList() : ListData()
 {
 }
 
@@ -37,12 +36,12 @@ StringList& StringList::operator=(const StringList& copy)
 	return *this;
 }
 
-StringList& StringList::operator=(StringList&& move) noexcept
+StringList& StringList::operator=(StringList&& other) noexcept
 {
-	if (this != &move)
+	if (this != &other)
 	{
-		std::swap(m_root, move.m_root);
-		std::swap(m_length, move.m_length);
+		std::swap(m_root, other.m_root);
+		std::swap(m_length, other.m_length);
 	}
 	return *this;
 }

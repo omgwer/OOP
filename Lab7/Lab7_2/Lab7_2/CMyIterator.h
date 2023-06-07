@@ -13,6 +13,11 @@ template <typename T> struct ListElement
 		next = nextPtr;
 	}
 
+	~ListElement()
+	{
+		this->Destroy();
+	}
+
 	T& Value() noexcept { return *reinterpret_cast<T*>(&buffer); }
 	void Destroy() noexcept { Value().~T(); }
 
@@ -22,7 +27,6 @@ template <typename T> struct ListElement
 private:
 	alignas(T) char buffer[sizeof(T)];
 };
-
 
 template <typename T> class CMyIterator
 {

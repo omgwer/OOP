@@ -66,7 +66,7 @@ public:
 	StringList(StringList&& stringList) noexcept(false);
 
 	StringList& operator=(const StringList& copy);
-	StringList& operator=(StringList&& move) noexcept;
+	StringList& operator=(StringList&& other) noexcept;
 
 	void PushBack(const std::string& value);
 	void PushFront(const std::string& value);
