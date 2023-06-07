@@ -1,6 +1,9 @@
 #pragma once
 #include "CMyIterator.h"
 
+static int m_listDataConstructor = 0;
+static int m_listDataDestructor = 0;
+
 namespace detail
 {
 template <typename T> class ListData
@@ -12,10 +15,10 @@ public:
 		m_root->next = m_root;
 		m_root->prev = m_root;
 	}
-	
+
 	ListData(ListData&& other) noexcept(false)
 	{
-		const auto newRootElement = new ListElement<T>();		
+		const auto newRootElement = new ListElement<T>();
 		m_root = other.m_root;
 		m_length = other.m_length;
 		other.m_root = newRootElement;
@@ -23,10 +26,11 @@ public:
 		other.m_root->prev = newRootElement;
 		other.m_length = 0;
 	}
+
 	~ListData()
 	{
 		if (m_root->next == m_root)
-			return;	
+			return;
 		auto currentNode = m_root->next;
 		while (currentNode != m_root)
 		{
@@ -36,9 +40,10 @@ public:
 		}
 		delete m_root;
 	}
+
 protected:
 	ListElement<T>* m_root = nullptr;
-	size_t m_length = 0;	
+	size_t m_length = 0;
 };
 }
 
@@ -57,7 +62,6 @@ public:
 	CMyList();
 	CMyList(const CMyList& other);
 	CMyList(CMyList&& other) noexcept(false);
-//	~CMyList();
 
 	CMyList& operator=(const CMyList& copy);
 	CMyList& operator=(CMyList&& move);
@@ -80,18 +84,14 @@ public:
 	ConstReverseIterator rсend() const;
 };
 
-template <typename T> CMyList<T>::CMyList() : detail::ListData<T>()
+template <typename T> CMyList<T>::CMyList()
+	: detail::ListData<T>()
 {
-	// this->m_root = new ListElement<T>();
-	// this->m_root->next = this->m_root;
-	// this->m_root->prev = this->m_root;
 }
 
-template <typename T> CMyList<T>::CMyList(const CMyList& other) : detail::ListData<T>()
+template <typename T> CMyList<T>::CMyList(const CMyList& other)
+	: detail::ListData<T>()
 {
-	// this->m_root = new ListElement<T>();
-	// this->m_root->next = this->m_root;
-	// this->m_root->prev = this->m_root;
 	if (other.m_length == 0)
 	{
 		return;
@@ -100,42 +100,14 @@ template <typename T> CMyList<T>::CMyList(const CMyList& other) : detail::ListDa
 	while (currentNode != other.m_root)
 	{
 		PushBack(currentNode->Value());
-		// try
-		// {
-		// 	PushBack(currentNode->Value());
-		// }
-		// catch (const std::bad_alloc& e)
-		// {
-		// 	delete this->m_root;
-		// 	return;
-		// }
 		currentNode = currentNode->next;
 	}
 }
 
-template <typename T> CMyList<T>::CMyList(CMyList&& other) noexcept(false) : detail::ListData<T>(std::move(other))
+template <typename T> CMyList<T>::CMyList(CMyList&& other) noexcept(false)
+	: detail::ListData<T>(std::move(other))
 {
-	// ListElement<T>* newRootElement = new ListElement<T>();
-	// if (other.m_length == 0)
-	// {
-	// 	this->m_root->next = this->m_root;
-	// 	this->m_root->prev = this->m_root;
-	// 	return;
-	// }
-	// this->m_root = other.m_root;
-	// this->m_length = other.m_length;
-	//
-	// other.m_root = newRootElement;
-	// other.m_root->next = newRootElement;
-	// other.m_root->prev = newRootElement;
-	// other.m_length = 0;
 }
-
-// template <typename T> CMyList<T>::~CMyList()
-// {
-// 	Clear();
-// 	delete this->m_root;
-// }
 
 template <typename T> CMyList<T>& CMyList<T>::operator=(const CMyList& copy)
 {
@@ -161,41 +133,21 @@ template <typename T> CMyList<T>& CMyList<T>::operator=(CMyList&& move)
 template <typename T> void CMyList<T>::PushBack(const T& value)
 {
 	auto lastElement = new ListElement<T>(value);
-	// if (this->m_root == this->m_root->next) // значит элемент первый
-	// {
-	// 	this->m_root->next = lastElement;
-	// 	this->m_root->prev = lastElement;
-	// 	lastElement->next = this->m_root;
-	// 	lastElement->prev = this->m_root;
-	// }
-	// else
-	// {
-		this->m_root->prev->next = lastElement;
-		lastElement->prev = this->m_root->prev;
-		this->m_root->prev = lastElement;
-		lastElement->next = this->m_root;
-	//}
-	this->m_length++;
+	this->m_root->prev->next = lastElement;
+	lastElement->prev = this->m_root->prev;
+	this->m_root->prev = lastElement;
+	lastElement->next = this->m_root;
+	++this->m_length;
 }
 
 template <typename T> void CMyList<T>::PushFront(const T& value)
 {
 	auto firstElement = new ListElement<T>(value);
-	// if (this->m_root->next == this->m_root) // значит элeмент первый
-	// {
-	// 	this->m_root->next = firstElement;
-	// 	this->m_root->prev = firstElement;
-	// 	firstElement->next = this->m_root;
-	// 	firstElement->prev = this->m_root;
-	// }
-	// else
-	// {
-		firstElement->next = this->m_root->next;
-		firstElement->prev = this->m_root;
-		this->m_root->next->prev = firstElement;
-		this->m_root->next = firstElement;
-//	}
-	this->m_length++;
+	firstElement->next = this->m_root->next;
+	firstElement->prev = this->m_root;
+	this->m_root->next->prev = firstElement;
+	this->m_root->next = firstElement;
+	++this->m_length;
 }
 
 template <typename T> size_t CMyList<T>::GetLength() const noexcept

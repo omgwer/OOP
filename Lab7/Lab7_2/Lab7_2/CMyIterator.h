@@ -73,6 +73,7 @@ public:
 	CMyIterator operator++(int); // postfix
 	CMyIterator& operator--();
 	CMyIterator operator--(int);
+	
 	T* m_data;
 	T* m_root;
 };
