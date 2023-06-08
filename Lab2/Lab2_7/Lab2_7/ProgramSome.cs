@@ -23,7 +23,7 @@
     public static int EvaluateExpression(TextReader textReader)
     {
         Stack<Element> elementsStack = new();
-        Element? currentElement = null;//зачем вне цикла обьявлять
+        Element? currentElement = null;    //зачем вне цикла обьявлять
         while (textReader.Peek() is var currentChar) // currentChar какой тип данных
         {
             switch (currentChar)

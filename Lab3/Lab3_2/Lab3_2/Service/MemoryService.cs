@@ -130,7 +130,6 @@ public class MemoryService
         throw new Exception("Someone error");
     }
 
-    // private double? GetFunctionResultRecursive(string identifier)
     private double? GetFunctionResultRecursive(string identifier)
     {
         double? result = null;
@@ -153,10 +152,9 @@ public class MemoryService
                     varFirstValue = _variables[variableIdentifier];
                 else
                     varSecondValue = _variables[variableIdentifier];
-                // TODO: выглядит будто тут хорошо бы вытащить элемент из стека
                 continue;
             }
-    
+
             var functionArgument = _functions[variableIdentifier]; // переменная точно функция
             if (functionArgument.cacheResult != null)
             {
@@ -167,13 +165,13 @@ public class MemoryService
                 continue;
             }
         }
-    
+
         if (stack.Count == 0)
             return result;
-    
+
         throw new Exception("Stack is empty! Logic error");
     }
-    
+
     private void AssertIdentifierIsBusy(string identifier)
     {
         if (HasIdentifierInMemory(identifier))
