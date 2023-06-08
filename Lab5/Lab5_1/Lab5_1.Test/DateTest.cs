@@ -55,6 +55,7 @@ public class Tests
     [TestCase(31U, Month.DECEMBER, 1969U)]
     [TestCase(29U, Month.FEBRUARY, 1970U)]
     [TestCase(30U, Month.FEBRUARY, 1972U)]
+    [TestCase(32U, Month.FEBRUARY, 1972U)]
     public void Negative_CreateANewDateObjectByDate_NotLeapYear(uint day, Month month, uint year)
     {
         Assert.Throws<ArgumentException>(() =>

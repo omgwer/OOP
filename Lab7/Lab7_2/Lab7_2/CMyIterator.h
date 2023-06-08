@@ -4,24 +4,35 @@
 
 template <typename T> class CMyList;
 
+static int m_listDataConstructor = 0;
+static int m_listDataDestructor = 0;
+
 template <typename T> struct ListElement
 {
-	ListElement() = default;
+	ListElement()
+	{
+		++m_listDataConstructor;
+	}
 
 	ListElement(const T& value, ListElement* prevPtr = nullptr, ListElement* nextPtr = nullptr)
 	{
 		new(buffer) T(value);
 		prev = prevPtr;
 		next = nextPtr;
+		++m_listDataConstructor;
 	}
 
-	~ListElement()
-	{
-		this->Destroy();
-	}
+	// ~ListElement()   // -- recursive cycle ? 
+	// {
+	// 	this->Destroy();		
+	// }
 
 	T& Value() noexcept { return *reinterpret_cast<T*>(&buffer); }
-	void Destroy() noexcept { Value().~T(); }
+	void Destroy() noexcept
+	{
+		Value().~T();
+		++m_listDataDestructor;
+	}
 
 	ListElement* prev = nullptr;
 	ListElement* next = nullptr;

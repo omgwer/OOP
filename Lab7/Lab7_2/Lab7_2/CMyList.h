@@ -3,9 +3,6 @@
 #include <exception>
 #include <iterator>
 
-static int m_listDataConstructor = 0;
-static int m_listDataDestructor = 0;
-
 namespace detail
 {
 template <typename T> class ListData
@@ -170,9 +167,10 @@ template <typename T> void CMyList<T>::Clear() noexcept
 	auto currentNode = this->m_root->next;
 	while (currentNode != this->m_root)
 	{
-		const ListElement<T>* elementToDelete = currentNode;
+		const ListElement<T>* prtToDelete = currentNode;
 		currentNode = currentNode->next;
-		delete elementToDelete;
+		auto toDelete  = *prtToDelete;
+		toDelete.Destroy();
 	}
 	this->m_root->next = this->m_root;
 	this->m_root->prev = this->m_root;
@@ -213,11 +211,12 @@ template <typename T> typename CMyList<T>::Iterator CMyList<T>::Erase(Iterator& 
 		throw std::exception("Cant delete root element");
 	}
 
-	const ListElement<T>* toDelete = it.m_data;
-	const Iterator newIterator(toDelete->next, this->m_root);
-	toDelete->next->prev = toDelete->prev;
-	toDelete->prev->next = toDelete->next;
-	delete toDelete;
+	const ListElement<T>* ptrToDelete = it.m_data;
+	const Iterator newIterator(ptrToDelete->next, this->m_root);
+	ptrToDelete->next->prev = ptrToDelete->prev;
+	ptrToDelete->prev->next = ptrToDelete->next;
+	auto toDelete  = *ptrToDelete;
+	toDelete.Destroy();
 	--this->m_length;
 	return newIterator;
 }

@@ -4,7 +4,6 @@
 //: TODO добавить проверку корректности вызова дестуктора у ListElement ( использовать +1 в констукртоа -1 в деструкторе, в конце должно быть 0)
 //: TODO: добавить проверку констуктора по умолчанию ( запретить default constructor)
 
-
 class MyChar
 {
 public:
@@ -14,10 +13,12 @@ public:
 	{
 		classChar = ch;
 	}
+
 	char classChar;
 };
 
-TEST(CMyListTest, BeginEndIterators) {
+TEST(CMyListTest, BeginEndIterators)
+{
 	CMyList<std::string> list;
 	list.PushBack("hello");
 	list.PushBack("world");
@@ -25,18 +26,18 @@ TEST(CMyListTest, BeginEndIterators) {
 	list.PushBack("test");
 
 	auto itBegin = list.begin();
-	auto dereferenceBegin = *itBegin;
-	ASSERT_EQ("hello", dereferenceBegin.Value());
+	ASSERT_EQ("hello", (*itBegin).Value());
 }
 
-TEST(CMyListTest, BeginIterator) {
+TEST(CMyListTest, BeginIterator)
+{
 	CMyList<std::string> list;
 	list.PushBack("hello");
 	list.PushBack("world");
 	list.PushBack("efim");
 	list.PushBack("test");
-	
-	auto itBegin = list.begin();	
+
+	auto itBegin = list.begin();
 	ASSERT_EQ("hello", (*itBegin).Value());
 	++itBegin;
 	ASSERT_EQ("world", (*itBegin).Value());
@@ -45,7 +46,8 @@ TEST(CMyListTest, BeginIterator) {
 }
 
 // range-based for
-TEST(CMyListTest, RangeBasedForEmptyList) {
+TEST(CMyListTest, RangeBasedForEmptyList)
+{
 	CMyList<std::string> list;
 	std::stringstream ss;
 	for (auto& listElement : list)
@@ -55,7 +57,8 @@ TEST(CMyListTest, RangeBasedForEmptyList) {
 	ASSERT_EQ("", ss.str());
 }
 
-TEST(CMyListTest, NotEmpty) {
+TEST(CMyListTest, NotEmpty)
+{
 	CMyList<std::string> list;
 	list.PushBack("hello");
 	list.PushFront("world");
@@ -67,7 +70,8 @@ TEST(CMyListTest, NotEmpty) {
 	ASSERT_EQ("worldhello", ss.str());
 }
 
-TEST(CMyListTest, InsertTest) {
+TEST(CMyListTest, InsertTest)
+{
 	CMyList<std::string> list;
 	list.PushFront("world");
 	list.PushFront("hello");
@@ -75,7 +79,7 @@ TEST(CMyListTest, InsertTest) {
 	auto it = list.cbegin();
 
 	list.Insert(it, "some");
-	
+
 	std::stringstream ss;
 	for (auto& listElement : list)
 	{
@@ -84,13 +88,14 @@ TEST(CMyListTest, InsertTest) {
 	ASSERT_EQ("somehelloworld", ss.str());
 }
 
-TEST(CMyListTest, InsertTestEmptyList) {
+TEST(CMyListTest, InsertTestEmptyList)
+{
 	CMyList<std::string> list;
-	
+
 	auto it = list.cbegin();
 
 	list.Insert(it, "some");
-	
+
 	std::stringstream ss;
 	for (auto& listElement : list)
 	{
@@ -99,14 +104,15 @@ TEST(CMyListTest, InsertTestEmptyList) {
 	ASSERT_EQ("some", ss.str());
 }
 
-TEST(CMyListTest, CopyEqualsOperator) {
+TEST(CMyListTest, CopyEqualsOperator)
+{
 	CMyList<std::string> list;
 	list.PushBack("some");
 	list.PushBack("one");
 	list.PushBack("kek");
 
 	CMyList<std::string> list2 = list;
-	
+
 	std::stringstream ss1;
 	for (auto& listElement : list)
 	{
@@ -121,14 +127,15 @@ TEST(CMyListTest, CopyEqualsOperator) {
 	ASSERT_EQ(ss2.str(), ss1.str());
 }
 
-TEST(CMyListTest, MoveEqualOperator) {
+TEST(CMyListTest, MoveEqualOperator)
+{
 	CMyList<std::string> list;
 	list.PushBack("some");
 	list.PushBack("one");
 	list.PushBack("kek");
 
 	CMyList<std::string> list2 = std::move(list);
-	
+
 	std::stringstream ss1;
 	for (auto& listElement : list)
 	{
@@ -145,12 +152,13 @@ TEST(CMyListTest, MoveEqualOperator) {
 }
 
 
-TEST(CMyListTest, EraseFirstElement) {
+TEST(CMyListTest, EraseFirstElement)
+{
 	CMyList<std::string> list;
-	list.PushBack("some");	
+	list.PushBack("some");
 
-	list.Erase(list.begin());	
-	
+	list.Erase(list.begin());
+
 	std::stringstream ss;
 	for (auto& listElement : list)
 	{
@@ -160,10 +168,10 @@ TEST(CMyListTest, EraseFirstElement) {
 	ASSERT_EQ(0, list.GetLength());
 }
 
-TEST(CMyListTest, EraseEmptyList) {
+TEST(CMyListTest, EraseEmptyList)
+{
 	CMyList<std::string> list;
 
-	
 	std::stringstream ss;
 	for (auto& listElement : list)
 	{
@@ -173,13 +181,14 @@ TEST(CMyListTest, EraseEmptyList) {
 	ASSERT_THROW(list.Erase(list.begin()), std::exception, "Exception dont throw!");
 }
 
-TEST(CMyListTest, TwoElements) {
+TEST(CMyListTest, TwoElements)
+{
 	CMyList<std::string> list;
-	list.PushBack("some");	
-	list.PushBack("one");	
+	list.PushBack("some");
+	list.PushBack("one");
 
-	list.Erase(list.begin());	
-	
+	list.Erase(list.begin());
+
 	std::stringstream ss;
 	for (auto& listElement : list)
 	{
@@ -189,13 +198,14 @@ TEST(CMyListTest, TwoElements) {
 	ASSERT_EQ(1, list.GetLength());
 }
 
-TEST(CMyListTest, TwoElements_DeleteLast) {
+TEST(CMyListTest, TwoElements_DeleteLast)
+{
 	CMyList<std::string> list;
-	list.PushBack("some");	
-	list.PushBack("one");	
+	list.PushBack("some");
+	list.PushBack("one");
 
-	list.Erase(++list.begin());	
-	
+	list.Erase(++list.begin());
+
 	std::stringstream ss;
 	for (auto& listElement : list)
 	{
@@ -205,14 +215,15 @@ TEST(CMyListTest, TwoElements_DeleteLast) {
 	ASSERT_EQ(1, list.GetLength());
 }
 
-TEST(CMyListTest, ThreeElements_DeleteLast) {
+TEST(CMyListTest, ThreeElements_DeleteLast)
+{
 	CMyList<std::string> list;
-	list.PushBack("some");	
-	list.PushBack("one");	
-	list.PushBack("cat");	
+	list.PushBack("some");
+	list.PushBack("one");
+	list.PushBack("cat");
 
-	list.Erase(++list.begin());	
-	
+	list.Erase(++list.begin());
+
 	std::stringstream ss;
 	for (auto& listElement : list)
 	{
@@ -228,47 +239,52 @@ TEST(CMyListTest, ReverseIteratorTest)
 	test.PushBack("value");
 	test.PushBack("efim");
 	test.PushBack("test");
-	
+
 	auto rbegin = test.rbegin();
 	auto rend = test.rend();
-	
+
 	std::stringstream ss;
 	while (rbegin != rend)
 	{
 		ss << (*rbegin).Value();
 		++rbegin;
-	}	
+	}
 	ASSERT_EQ("testefimvalue", ss.str());
 }
 
 
-TEST(StringListTest, PushBackTest) {
+TEST(StringListTest, PushBackTest)
+{
 	CMyList<std::string> list;
 	list.PushBack("hello");
 	list.PushBack("world");
 	ASSERT_EQ(list.GetLength(), 2);
 }
 
-TEST(StringListTest, DefaultConstructor) {
+TEST(StringListTest, DefaultConstructor)
+{
 	CMyList<std::string> list;
 	ASSERT_EQ(list.GetLength(), 0);
 }
 
-TEST(StringListTest, PushFrontTest) {
+TEST(StringListTest, PushFrontTest)
+{
 	CMyList<std::string> list;
 	list.PushFront("world");
 	list.PushFront("hello");
 	ASSERT_EQ(list.GetLength(), 2);
 }
 
-TEST(StringListTest, IsEmptyTest) {
+TEST(StringListTest, IsEmptyTest)
+{
 	CMyList<std::string> list;
 	ASSERT_TRUE(list.IsEmpty());
 	list.PushBack("hello");
 	ASSERT_FALSE(list.IsEmpty());
 }
 
-TEST(StringListTest, ClearTest) {
+TEST(StringListTest, ClearTest)
+{
 	CMyList<std::string> list;
 	list.PushBack("hello");
 	list.PushBack("world");
@@ -277,26 +293,55 @@ TEST(StringListTest, ClearTest) {
 	ASSERT_TRUE(list.IsEmpty());
 }
 
-TEST(StringListTest, CopyConstructor) {
+TEST(StringListTest, CopyConstructor)
+{
 	CMyList<std::string> list;
 	list.PushBack("hello");
 	list.PushBack("world");
 
 	CMyList<std::string> newList(list);
 
-
 	ASSERT_EQ(list.GetLength(), 2);
 	ASSERT_EQ(newList.GetLength(), 2);
 }
 
-TEST(StringListTest, MoveConstructor) {
+TEST(StringListTest, MoveConstructor)
+{
 	CMyList<std::string> list;
 	list.PushBack("hello");
 	list.PushBack("world");
 
 	CMyList<std::string> newList(std::move(list));
 
-
 	ASSERT_EQ(list.GetLength(), 0);
-	ASSERT_EQ(newList.GetLength(), 2);	
+	ASSERT_EQ(newList.GetLength(), 2);
+}
+
+TEST(StringListTest, TestListElementConstructor)
+{
+	m_listDataConstructor = 0;
+	m_listDataDestructor = 0;
+	CMyList<std::string> list;
+	 ASSERT_EQ(m_listDataConstructor, 1);
+	 ASSERT_EQ(m_listDataDestructor, 0);
+	 list.PushBack("hello");
+	 ASSERT_EQ(m_listDataConstructor, 2);
+	 ASSERT_EQ(m_listDataDestructor, 0);
+	 list.PushBack("world");
+	 ASSERT_EQ(m_listDataConstructor, 3);
+	 ASSERT_EQ(m_listDataDestructor, 0);
+	 list.Erase(list.begin());
+	 ASSERT_EQ(m_listDataConstructor, 3);
+	 ASSERT_EQ(m_listDataDestructor, 1);
+	 list.Clear();
+	 ASSERT_EQ(m_listDataConstructor, 3);
+	 ASSERT_EQ(m_listDataDestructor, 2);	
+}
+
+TEST(StringListTest, WithoutDefaultConstructor)
+{
+	m_listDataConstructor = 0;
+	m_listDataDestructor = 0;
+	CMyList<MyChar> list;
+	list.PushBack(MyChar('c'));
 }
