@@ -19,7 +19,7 @@ public class Tests
         using TextReader textReader = new StringReader(value);
 
         // Act
-        int result = ProgramSome.EvaluateExpression(textReader);
+        int result = Program.EvaluateExpression(textReader);
 
         // Assert
         Assert.That(result, Is.EqualTo(expectedResult));
@@ -36,7 +36,7 @@ public class Tests
         // Act & Assert
         Assert.Throws<ArgumentException>(() =>
         {
-            ProgramSome.EvaluateExpression(textReader);
+            Program.EvaluateExpression(textReader);
         });
     }
     
@@ -50,7 +50,7 @@ public class Tests
         // Act & Assert
         Assert.Throws<FormatException>(() =>
         {
-            ProgramSome.EvaluateExpression(textReader);
+            Program.EvaluateExpression(textReader);
         });
     }
 }

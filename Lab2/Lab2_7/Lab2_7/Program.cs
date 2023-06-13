@@ -1,15 +1,17 @@
-﻿public class ProgramSome
+﻿namespace Lab2_7;
+
+public static class Program
 {
-    enum Operation
+    private enum Operation
     {
-        ADDICTION, // +
-        MULTIPLICATION // *
+        ADDICTION,
+        MULTIPLICATION
     };
 
-    class Element
+    private class Element
     {
-        public Operation? operation = null;
-        public List<int>? numbers = new();
+        public Operation? Operation;
+        public readonly List<int>? Numbers = new();
     }
 
     public static int Main(string[] args)
@@ -23,16 +25,19 @@
     public static int EvaluateExpression(TextReader textReader)
     {
         Stack<Element> elementsStack = new();
-        Element? currentElement = null;    //зачем вне цикла обьявлять
+        Element? currentElement = null;
         while (textReader.Peek() is var currentChar) // currentChar какой тип данных
         {
-            switch (currentChar)
+            if (currentChar == -1)
             {
-                case -1://
-                    var stackElement = elementsStack.Pop();
-                        // TODO: добавить обработку null для operation
-                    var res = CalculateValue((Operation) stackElement!.operation!, stackElement!.numbers!);
-                    return res;
+                var stackElement = elementsStack.Pop();
+                // TODO: добавить обработку null для operation
+                var res = CalculateValue((Operation)stackElement!.Operation!, stackElement!.Numbers!);
+                return res;
+            }
+            
+            switch ((char)currentChar)
+            {
                 case ' ':
                     textReader.Read();
                     break;
@@ -42,50 +47,65 @@
                         elementsStack.Push(currentElement);
                     currentElement = new Element();
                     break;
-                case ')'://use map
+                case ')': //use map
                     textReader.Read();
                     int result = 0;
                     if (currentElement == null)
                         currentElement = elementsStack.Pop();
 
-                    result = CalculateValue((Operation) currentElement!.operation!, currentElement!.numbers!);
+                    result = CalculateValue((Operation)currentElement!.Operation!, currentElement!.Numbers!);
 
                     if (elementsStack.Count == 0)
                     {
-                        if (textReader.Peek() == -1)
+                        var nextChar = textReader.Peek();
+                        if (nextChar == -1 || (char)nextChar == '\r')
                             return result;
                         throw new ArgumentException("Исходная строка содержит ошибки!");
                     }
 
                     currentElement = elementsStack.Pop();
-                    currentElement.numbers!.Add(result);
+                    currentElement.Numbers!.Add(result);
                     elementsStack.Push(currentElement);
                     currentElement = null;
                     break;
-                case '*':// * и + можно обьединить
-                    textReader.Read();
-                    if (currentElement!.operation != null)
-                        throw new ArgumentException("Операция над текущим элементом уже была определена!");
-                    currentElement!.operation = Operation.MULTIPLICATION;
-                    break;
+                case '*':
                 case '+':
                     textReader.Read();
-                    if (currentElement!.operation != null)
+                    if (currentElement!.Operation != null)
                         throw new ArgumentException("Операция над текущим элементом уже была определена!");
-                    currentElement!.operation = Operation.ADDICTION;
+                    currentElement.Operation = currentChar == '*' ? Operation.MULTIPLICATION : Operation.ADDICTION;
                     break;
                 default:
                     int convertedNumber = ReadNumber(textReader);
-                    currentElement!.numbers!.Add(convertedNumber);
+                    currentElement!.Numbers!.Add(convertedNumber);
                     break;
             }
         }
 
         throw new ArgumentException("Some error");
     }
+    
+    //
+    // private static byte[] ConvertBytesWithCondition(byte[] buffer, int length, byte key, CryptType cryptType)
+    // {
+    //     Func<byte, byte, byte> cryptFunc = cryptType switch
+    //     {
+    //         CryptType.ENCRYPT => EncryptByte,
+    //         CryptType.DECRYPT => DecryptByte,
+    //         _ => throw new InvalidEnumArgumentException("CryptType not found!")
+    //     };
+    //     var bytes = new byte[length];
+    //
+    //     for (var i = 0; i < length; i++)
+    //         bytes[i] = cryptFunc(buffer[i], key);
+    //
+    //     return bytes;
+    // }
 
+    
     private static int CalculateValue(Operation operation, List<int> numbers)
-    {// сделать цикл и лямбду в коорой будет либо умножение, либо деление. Которую получаем из метода
+    {
+        // сделать цикл и лямбду в коорой будет либо умножение, либо деление. Которую получаем из метода
         var calculateResult = 0;
         if (operation == Operation.ADDICTION)
             foreach (var number in numbers)
@@ -100,7 +120,7 @@
         return calculateResult;
     }
 
-    public static int ReadNumber(TextReader reader)
+    private static int ReadNumber(TextReader reader)
     {
         var number = 0;
         var isNegative = false;
@@ -110,20 +130,20 @@
         {
             int nextChar = reader.Peek();
 
-            if ((char) nextChar == '-' && !hasDigit)
+            if ((char)nextChar == '-' && !hasDigit)
             {
                 reader.Read();
                 isNegative = true;
                 continue;
             }
 
-            if ((char) nextChar == ' ' && !hasDigit && !isNegative) // для кейса  "- 123"
+            if ((char)nextChar == ' ' && !hasDigit && !isNegative) // для кейса  "- 123"
             {
                 reader.Read();
                 continue;
             }
 
-            if (nextChar == -1 || !char.IsDigit((char) nextChar))
+            if (nextChar == -1 || !char.IsDigit((char)nextChar))
             {
                 if (hasDigit)
                 {
@@ -132,7 +152,7 @@
                     return number;
                 }
 
-                throw new FormatException($"{(char) nextChar}Invalid input: expected a number");
+                throw new FormatException($"{(char)nextChar}Invalid input: expected a number");
             }
 
             reader.Read();
