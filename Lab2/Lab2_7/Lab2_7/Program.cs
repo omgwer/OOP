@@ -29,7 +29,7 @@ public static class Program
  
         while (textReader.Peek() is var currentChar)
         {
-            if (currentChar == -1)
+            if (currentChar == -1 || (char)currentChar == '\r')
             {
                 var stackElement = elementsStack.Pop();  // TODO: добавить обработку null для operation
                 if (stackElement.Operation == null)
@@ -62,7 +62,13 @@ public static class Program
                     {
                         var nextChar = textReader.Peek();
                         if (nextChar == -1 || (char)nextChar == '\r')
-                            return result;
+                        {
+                            currentElement.Operation = Operation.ADDICTION;
+                            currentElement.Numbers.Clear();
+                            currentElement.Numbers.Add(result);
+                            elementsStack.Push(currentElement);
+                            continue;
+                        }
                         throw new ArgumentException("Исходная строка содержит ошибки!");
                     }
 
@@ -72,15 +78,15 @@ public static class Program
                     currentElement = null;
                     break;
                 case '*':
+                    AssignOperation(textReader, ref currentElement, Operation.MULTIPLICATION);
+                    break;
                 case '+':
-                    textReader.Read();
-                    if (currentElement!.Operation != null)
-                        throw new ArgumentException("Операция над текущим элементом уже была определена!");
-                    currentElement.Operation = currentChar == '*' ? Operation.MULTIPLICATION : Operation.ADDICTION;
+                    AssignOperation(textReader, ref currentElement, Operation.ADDICTION);
                     break;
                 default:
-                    int convertedNumber = ReadNumber(textReader);
-                    currentElement!.Numbers!.Add(convertedNumber);
+                    ParseNumber(textReader, currentElement);
+                    // int convertedNumber = ReadNumber(textReader);
+                    // currentElement!.Numbers!.Add(convertedNumber);
                     break;
             }
         }
@@ -94,6 +100,28 @@ public static class Program
         if (currentElement != null)
             elementsStack.Push(currentElement);
         currentElement = new Element();
+    }
+    
+    private static void AssignOperation(TextReader textReader,ref Element? currentElement, Operation operation)
+    {
+        textReader.Read();
+        if (currentElement!.Operation != null)
+            throw new ArgumentException("Операция над текущим элементом уже была определена!");
+        currentElement.Operation = operation;
+    }
+
+    private static void ParseNumber(TextReader textReader, Element? currentElement)
+    {
+        int convertedNumber = ReadNumber(textReader);
+        if (currentElement != null)
+        {
+            currentElement.Numbers.Add(convertedNumber);
+        }
+        else
+        {
+            throw new ArgumentException("Someone fail");
+        }
+
     }
 
     // private static void HandleClosingParenthesis(TextReader textReader, ref Element? currentElement, Stack<Element> elementsStack)
