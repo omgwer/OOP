@@ -26,83 +26,51 @@ public static class Program
     {
         Stack<Element> elementsStack = new();
         Element? currentElement = null;
- 
+        int? result;
+
+        var operations = new Dictionary<char, Action>
+        {
+            { ' ', () => textReader.Read() },
+            { '(', () => HandleOpeningParenthesis(textReader, ref currentElement, elementsStack) },
+            { ')', () => HandleClosingParenthesis(textReader, ref currentElement, elementsStack) },
+            { '*', () => AssignOperation(textReader, ref currentElement, Operation.MULTIPLICATION) },
+            { '+', () => AssignOperation(textReader, ref currentElement, Operation.ADDICTION) },
+        };
+
         while (textReader.Peek() is var currentChar)
         {
             if (currentChar == -1 || (char)currentChar == '\r')
             {
-                var stackElement = elementsStack.Pop();  // TODO: добавить обработку null для operation
+                var stackElement = elementsStack.Pop();
                 if (stackElement.Operation == null)
                     throw new ArgumentException("Исходная строка содержит ошибки!");
-                var res = CalculateValue((Operation)stackElement.Operation, stackElement.Numbers);
-                return res;
+                result = CalculateValue((Operation)stackElement.Operation, stackElement.Numbers);
+                break;
             }
+            
+            char charValue = (char)currentChar;
 
-            switch ((char)currentChar)
-            {
-                case ' ':
-                    textReader.Read();
-                    break;
-                case '(':
-                    HandleOpeningParenthesis(textReader, ref currentElement, elementsStack);
-                //     textReader.Read();
-                //     if (currentElement != null)
-                //         elementsStack.Push(currentElement);
-                //     currentElement = new Element();
-                     break;
-                case ')':
-                    textReader.Read();
-                    int result = 0;
-                    if (currentElement == null)
-                        currentElement = elementsStack.Pop();
-
-                    result = CalculateValue((Operation)currentElement!.Operation!, currentElement!.Numbers!);
-
-                    if (elementsStack.Count == 0)
-                    {
-                        var nextChar = textReader.Peek();
-                        if (nextChar == -1 || (char)nextChar == '\r')
-                        {
-                            currentElement.Operation = Operation.ADDICTION;
-                            currentElement.Numbers.Clear();
-                            currentElement.Numbers.Add(result);
-                            elementsStack.Push(currentElement);
-                            continue;
-                        }
-                        throw new ArgumentException("Исходная строка содержит ошибки!");
-                    }
-
-                    currentElement = elementsStack.Pop();
-                    currentElement.Numbers!.Add(result);
-                    elementsStack.Push(currentElement);
-                    currentElement = null;
-                    break;
-                case '*':
-                    AssignOperation(textReader, ref currentElement, Operation.MULTIPLICATION);
-                    break;
-                case '+':
-                    AssignOperation(textReader, ref currentElement, Operation.ADDICTION);
-                    break;
-                default:
-                    ParseNumber(textReader, currentElement);
-                    // int convertedNumber = ReadNumber(textReader);
-                    // currentElement!.Numbers!.Add(convertedNumber);
-                    break;
-            }
+            if (operations.ContainsKey(charValue))
+                operations[charValue]();
+            else
+                ParseNumber(textReader, currentElement);
         }
 
-        throw new ArgumentException("Some error");
+        if (result == null)
+            throw new ArgumentException("Выражение не высчитано!");
+        return (int)result;
     }
-    
-    private static void HandleOpeningParenthesis(TextReader textReader,ref Element? currentElement, Stack<Element> elementsStack)
+
+    private static void HandleOpeningParenthesis(TextReader textReader, ref Element? currentElement,
+        Stack<Element> elementsStack)
     {
         textReader.Read();
         if (currentElement != null)
             elementsStack.Push(currentElement);
         currentElement = new Element();
     }
-    
-    private static void AssignOperation(TextReader textReader,ref Element? currentElement, Operation operation)
+
+    private static void AssignOperation(TextReader textReader, ref Element? currentElement, Operation operation)
     {
         textReader.Read();
         if (currentElement!.Operation != null)
@@ -112,42 +80,31 @@ public static class Program
 
     private static void ParseNumber(TextReader textReader, Element? currentElement)
     {
-        int convertedNumber = ReadNumber(textReader);
-        if (currentElement != null)
-        {
-            currentElement.Numbers.Add(convertedNumber);
-        }
-        else
-        {
+        if (currentElement == null)
             throw new ArgumentException("Someone fail");
-        }
-
+        int convertedNumber = ReadNumber(textReader);
+        currentElement.Numbers.Add(convertedNumber);
     }
 
-    // private static void HandleClosingParenthesis(TextReader textReader, ref Element? currentElement, Stack<Element> elementsStack)
-    // {
-    //     textReader.Read();
-    //     int result = 0;
-    //     if (currentElement == null)
-    //         currentElement = elementsStack.Pop();
-    //     result = CalculateValue((Operation)currentElement!.Operation!, currentElement!.Numbers!);
-    //
-    //     if (elementsStack.Count == 0)
-    //     {
-    //         var nextChar = textReader.Peek();
-    //         if (nextChar == -1 || (char)nextChar == '\r')
-    //             return result;
-    //         throw new ArgumentException("Исходная строка содержит ошибки!");
-    //     }
-    //
-    //     currentElement = elementsStack.Pop();
-    //     currentElement.Numbers!.Add(result);
-    //     elementsStack.Push(currentElement);
-    //     currentElement = null;
-    // }
+    private static void HandleClosingParenthesis(TextReader textReader, ref Element? currentElement,
+        Stack<Element> elementsStack)
+    {
+        textReader.Read();
+        currentElement ??= elementsStack.Pop();   // if currentElement == null забираем из стека
+        
+        var result = CalculateValue((Operation)currentElement!.Operation!, currentElement.Numbers);
 
+        if (elementsStack.Count == 0 && !(textReader.Peek() == -1 || textReader.Peek() == '\r'))
+            throw new ArgumentException("Исходная строка содержит ошибки!");
 
-
+        if (elementsStack.Count != 0)
+            currentElement = elementsStack.Pop();
+        else
+            currentElement.Numbers.Clear();
+        currentElement.Numbers.Add(result);
+        elementsStack.Push(currentElement);
+        currentElement = null;
+    }
 
 
     private static int CalculateValue(Operation operation, List<int> numbers)
