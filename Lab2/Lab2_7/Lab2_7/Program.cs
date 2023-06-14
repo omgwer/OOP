@@ -11,7 +11,7 @@ public static class Program
     private class Element
     {
         public Operation? Operation;
-        public readonly List<int>? Numbers = new();
+        public readonly List<int> Numbers = new();
     }
 
     public static int Main(string[] args)
@@ -26,13 +26,15 @@ public static class Program
     {
         Stack<Element> elementsStack = new();
         Element? currentElement = null;
-        while (textReader.Peek() is var currentChar) // currentChar какой тип данных
+ 
+        while (textReader.Peek() is var currentChar)
         {
             if (currentChar == -1)
             {
-                var stackElement = elementsStack.Pop();
-                // TODO: добавить обработку null для operation
-                var res = CalculateValue((Operation)stackElement!.Operation!, stackElement!.Numbers!);
+                var stackElement = elementsStack.Pop();  // TODO: добавить обработку null для operation
+                if (stackElement.Operation == null)
+                    throw new ArgumentException("Исходная строка содержит ошибки!");
+                var res = CalculateValue((Operation)stackElement.Operation, stackElement.Numbers);
                 return res;
             }
 
@@ -42,11 +44,12 @@ public static class Program
                     textReader.Read();
                     break;
                 case '(':
-                    textReader.Read();
-                    if (currentElement != null)
-                        elementsStack.Push(currentElement);
-                    currentElement = new Element();
-                    break;
+                    HandleOpeningParenthesis(textReader, ref currentElement, elementsStack);
+                //     textReader.Read();
+                //     if (currentElement != null)
+                //         elementsStack.Push(currentElement);
+                //     currentElement = new Element();
+                     break;
                 case ')':
                     textReader.Read();
                     int result = 0;
@@ -84,6 +87,40 @@ public static class Program
 
         throw new ArgumentException("Some error");
     }
+    
+    private static void HandleOpeningParenthesis(TextReader textReader,ref Element? currentElement, Stack<Element> elementsStack)
+    {
+        textReader.Read();
+        if (currentElement != null)
+            elementsStack.Push(currentElement);
+        currentElement = new Element();
+    }
+
+    // private static void HandleClosingParenthesis(TextReader textReader, ref Element? currentElement, Stack<Element> elementsStack)
+    // {
+    //     textReader.Read();
+    //     int result = 0;
+    //     if (currentElement == null)
+    //         currentElement = elementsStack.Pop();
+    //     result = CalculateValue((Operation)currentElement!.Operation!, currentElement!.Numbers!);
+    //
+    //     if (elementsStack.Count == 0)
+    //     {
+    //         var nextChar = textReader.Peek();
+    //         if (nextChar == -1 || (char)nextChar == '\r')
+    //             return result;
+    //         throw new ArgumentException("Исходная строка содержит ошибки!");
+    //     }
+    //
+    //     currentElement = elementsStack.Pop();
+    //     currentElement.Numbers!.Add(result);
+    //     elementsStack.Push(currentElement);
+    //     currentElement = null;
+    // }
+
+
+
+
 
     private static int CalculateValue(Operation operation, List<int> numbers)
     {
@@ -123,7 +160,7 @@ public static class Program
                     return number;
                 }
 
-                throw new FormatException($"{(char)nextChar}Invalid input: expected a number");
+                throw new FormatException($"{(char)nextChar} - невалидный символ для преобразования в число");
             }
 
             reader.Read();
