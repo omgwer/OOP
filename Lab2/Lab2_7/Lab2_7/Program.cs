@@ -92,7 +92,7 @@ public static class Program
         textReader.Read();
         currentElement ??= elementsStack.Pop();   // if currentElement == null забираем из стека
         
-        var result = CalculateValue((Operation)currentElement!.Operation!, currentElement.Numbers);
+        var result = CalculateValue((Operation)currentElement.Operation!, currentElement.Numbers);
 
         if (elementsStack.Count == 0 && !(textReader.Peek() == -1 || textReader.Peek() == '\r'))
             throw new ArgumentException("Исходная строка содержит ошибки!");
