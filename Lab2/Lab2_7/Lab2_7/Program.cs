@@ -35,7 +35,7 @@ public static class Program
                 var res = CalculateValue((Operation)stackElement!.Operation!, stackElement!.Numbers!);
                 return res;
             }
-            
+
             switch ((char)currentChar)
             {
                 case ' ':
@@ -47,7 +47,7 @@ public static class Program
                         elementsStack.Push(currentElement);
                     currentElement = new Element();
                     break;
-                case ')': //use map
+                case ')':
                     textReader.Read();
                     int result = 0;
                     if (currentElement == null)
@@ -84,40 +84,12 @@ public static class Program
 
         throw new ArgumentException("Some error");
     }
-    
-    //
-    // private static byte[] ConvertBytesWithCondition(byte[] buffer, int length, byte key, CryptType cryptType)
-    // {
-    //     Func<byte, byte, byte> cryptFunc = cryptType switch
-    //     {
-    //         CryptType.ENCRYPT => EncryptByte,
-    //         CryptType.DECRYPT => DecryptByte,
-    //         _ => throw new InvalidEnumArgumentException("CryptType not found!")
-    //     };
-    //     var bytes = new byte[length];
-    //
-    //     for (var i = 0; i < length; i++)
-    //         bytes[i] = cryptFunc(buffer[i], key);
-    //
-    //     return bytes;
-    // }
 
-    
     private static int CalculateValue(Operation operation, List<int> numbers)
     {
-        // сделать цикл и лямбду в коорой будет либо умножение, либо деление. Которую получаем из метода
-        var calculateResult = 0;
-        if (operation == Operation.ADDICTION)
-            foreach (var number in numbers)
-                calculateResult += number;
-        else
-        {
-            calculateResult = 1;
-            foreach (var number in numbers)
-                calculateResult *= number;
-        }
-
-        return calculateResult;
+        return operation == Operation.ADDICTION
+            ? numbers.Sum()
+            : numbers.Aggregate(1, (result, number) => result * number);
     }
 
     private static int ReadNumber(TextReader reader)
@@ -129,7 +101,6 @@ public static class Program
         while (true)
         {
             int nextChar = reader.Peek();
-
             if ((char)nextChar == '-' && !hasDigit)
             {
                 reader.Read();
