@@ -33,9 +33,10 @@ public:
 		auto currentNode = m_root->next;
 		while (currentNode != m_root)
 		{
-			const ListElement<T>* elementToDelete = currentNode;
+			ListElement<T>* elementToDelete = currentNode;
 			currentNode = currentNode->next;
-			delete elementToDelete;
+			elementToDelete->Destroy();
+			// TODO: add Destroy()
 		}
 		delete m_root;
 	}
@@ -75,10 +76,14 @@ public:
 
 	Iterator begin();
 	Iterator end();
+	ConstIterator begin() const;
+	ConstIterator end() const;
 	ConstIterator cbegin() const;
 	ConstIterator cend() const;
 	ReverseIterator rbegin();
 	ReverseIterator rend();
+	ConstReverseIterator rbegin() const;
+	ConstReverseIterator rend() const;
 	ConstReverseIterator rсbegin() const;
 	ConstReverseIterator rсend() const;
 };
@@ -136,7 +141,7 @@ template <typename T> void CMyList<T>::PushBack(const T& value)
 	lastElement->prev = this->m_root->prev;
 	this->m_root->prev = lastElement;
 	lastElement->next = this->m_root;
-	++this->m_length;
+	++(this->m_length);
 }
 
 template <typename T> void CMyList<T>::PushFront(const T& value)
@@ -211,17 +216,21 @@ template <typename T> typename CMyList<T>::Iterator CMyList<T>::Erase(Iterator& 
 		throw std::exception("Cant delete root element");
 	}
 
-	const ListElement<T>* ptrToDelete = it.m_data;
+	ListElement<T>* ptrToDelete = it.m_data;
 	const Iterator newIterator(ptrToDelete->next, this->m_root);
 	ptrToDelete->next->prev = ptrToDelete->prev;
 	ptrToDelete->prev->next = ptrToDelete->next;
-	auto toDelete  = *ptrToDelete;
-	toDelete.Destroy();
+	(*ptrToDelete).Destroy();
 	--this->m_length;
 	return newIterator;
 }
 
 template <typename T> typename CMyList<T>::Iterator CMyList<T>::begin()
+{
+	return { this->m_root->next, this->m_root };
+}
+// TODO: добавиить конст версии  можжно реализовать cbegin через const begin
+template <typename T> typename CMyList<T>::ConstIterator CMyList<T>::begin() const   
 {
 	return { this->m_root->next, this->m_root };
 }
@@ -231,14 +240,19 @@ template <typename T> typename CMyList<T>::Iterator CMyList<T>::end()
 	return { this->m_root, this->m_root };
 }
 
+template <typename T> typename CMyList<T>::ConstIterator CMyList<T>::end() const
+{
+	return { this->m_root, this->m_root };
+}
+
 template <typename T> typename CMyList<T>::ConstIterator CMyList<T>::cbegin() const
 {
-	return { this->m_root->next, this->m_root };
+	return begin();
 }
 
 template <typename T> typename CMyList<T>::ConstIterator CMyList<T>::cend() const
 {
-	return { this->m_root, this->m_root };
+	return end();
 }
 
 template <typename T> typename CMyList<T>::ReverseIterator CMyList<T>::rbegin()
@@ -251,12 +265,22 @@ template <typename T> typename CMyList<T>::ReverseIterator CMyList<T>::rend()
 	return std::make_reverse_iterator(this->begin());
 }
 
+template <typename T> typename CMyList<T>::ConstReverseIterator CMyList<T>::rbegin() const
+{
+	return std::make_reverse_iterator(this->end());
+}
+
+template <typename T> typename CMyList<T>::ConstReverseIterator CMyList<T>::rend() const
+{
+	return std::make_reverse_iterator(this->begin());
+}
+
 template <typename T> typename CMyList<T>::ConstReverseIterator CMyList<T>::rсbegin() const
 {
-	return std::make_reverse_iterator(this->cend());
+	return rbegin();
 }
 
 template <typename T> typename CMyList<T>::ConstReverseIterator CMyList<T>::rсend() const
 {
-	return std::make_reverse_iterator(this->cbegin());
+	return rend();
 }

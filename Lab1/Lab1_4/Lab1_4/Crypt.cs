@@ -21,18 +21,11 @@ public static class Crypt
     public static void ConvertFileWithCondition(Stream inputStream, Stream outputStream, byte key,
         CryptType cryptType)
     {
-        Func<byte[], int, byte, byte[]> cryptFunc = cryptType switch
-        {
-            CryptType.ENCRYPT => CryptService.Encrypt,
-            CryptType.DECRYPT => CryptService.Decrypt,
-            _ => throw new InvalidEnumArgumentException("CryptType not found!")
-        };
-
         var buffer = new byte[4096];
         int bytesRead;
         while ((bytesRead = inputStream.Read(buffer, 0, buffer.Length)) > 0)
         {
-            var decryptedByte = cryptFunc(buffer, bytesRead, key);
+            var decryptedByte = CryptService.ConvertBytesWithCondition(buffer, bytesRead, key, cryptType);
             outputStream.Write(decryptedByte);
         }
     }

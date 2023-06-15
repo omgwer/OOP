@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-// добавить less компаратор 
+// TODO: добавить less компаратор 
 template <typename T, typename Comp>
 bool FindMaxEx(std::vector<T> const& array, T& maxValue, const Comp& comp)
 {

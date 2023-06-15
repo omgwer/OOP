@@ -6,7 +6,7 @@ public static class Program
     {
         ADDICTION,
         MULTIPLICATION
-    };
+    }
 
     private class Element
     {
@@ -41,13 +41,14 @@ public static class Program
         {
             if (currentChar == -1 || (char)currentChar == '\r')
             {
+                if (elementsStack.Count == 0)
+                    throw new ArgumentException("Исходная строка содержит ошибки");
                 var stackElement = elementsStack.Pop();
                 if (stackElement.Operation == null)
                     throw new ArgumentException("Исходная строка содержит ошибки!");
                 result = CalculateValue((Operation)stackElement.Operation, stackElement.Numbers);
                 break;
             }
-            
             char charValue = (char)currentChar;
 
             if (operations.ContainsKey(charValue))
@@ -72,8 +73,11 @@ public static class Program
 
     private static void AssignOperation(TextReader textReader, ref Element? currentElement, Operation operation)
     {
+        if (currentElement == null)
+            throw new Exception("Исходная строка содержит ошибки");
+
         textReader.Read();
-        if (currentElement!.Operation != null)
+        if (currentElement.Operation != null)
             throw new ArgumentException("Операция над текущим элементом уже была определена!");
         currentElement.Operation = operation;
     }
@@ -105,7 +109,6 @@ public static class Program
         elementsStack.Push(currentElement);
         currentElement = null;
     }
-
 
     private static int CalculateValue(Operation operation, List<int> numbers)
     {

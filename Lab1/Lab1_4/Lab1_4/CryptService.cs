@@ -4,17 +4,7 @@ namespace Lab1_4;
 
 public static class CryptService
 {
-    public static byte[] Encrypt(byte[] buffer, int length, byte key)
-    {
-        return ConvertBytesWithCondition(buffer, length, key, CryptType.ENCRYPT);
-    }
-
-    public static byte[] Decrypt(byte[] buffer, int length, byte key)
-    {
-        return ConvertBytesWithCondition(buffer, length, key, CryptType.DECRYPT);
-    }
-
-    private static byte[] ConvertBytesWithCondition(byte[] buffer, int length, byte key, CryptType cryptType)
+    public static byte[] ConvertBytesWithCondition(byte[] buffer, int length, byte key, CryptType cryptType)
     {
         Func<byte, byte, byte> cryptFunc = cryptType switch
         {

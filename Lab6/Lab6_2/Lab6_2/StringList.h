@@ -2,7 +2,6 @@
 #include "CMyIterator.h"
 #include <string>
 
-
 static int m_listDataConstructor = 0;
 static int m_listDataDestructor = 0;
 
