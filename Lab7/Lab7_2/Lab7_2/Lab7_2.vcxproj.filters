@@ -18,18 +18,18 @@
     <ClCompile Include="Lab7_2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CMyList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CMyIterator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMyList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CMyIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="_CMyListOld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="_remove.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
