@@ -62,8 +62,8 @@ void testFloat() {
 
 int main()
 {
-	double test = 10.5;
-	double test2 = 10.5 % 2;
+	std::string emptyString;
+	std::cout << "Size of emptyString: " << sizeof(emptyString) << " bytes" << std::endl;
 
 
 	return 1;	
