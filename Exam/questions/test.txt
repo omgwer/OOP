@@ -52,3 +52,9 @@ int main() {
 Они обычно доступны только для чтения, и попытка изменить содержимое строкового литерала может привести к 
 неопределенному поведению программы.
 const char* str = "Hello, world!";
+
+## Синонимы типов
+using MyInt = int;
+using Iterator = CMyIterator<ListElement<T>>;
+
+typedef int* IntPtr;

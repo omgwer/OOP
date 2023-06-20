@@ -51,6 +51,14 @@ bool compareFloats(const float& a, const float& b)
 	return true; // Все байты совпадают
 }
 
+namespace test {
+namespace kek
+{
+int t = 0;
+}
+
+}
+
 void testFloat() {
 	float firstValue = 0b00111110001000000000000000000000;
 	float secondValue = 0b00111110001000000000000000100000;
@@ -62,8 +70,11 @@ void testFloat() {
 
 int main()
 {
-	std::string emptyString;
-	std::cout << "Size of emptyString: " << sizeof(emptyString) << " bytes" << std::endl;
+	auto kek = test::kek::t;
+
+	auto emptyString = L"someasdsadone";
+	wchar_t test = 'ke';
+	std::cout << "Size of emptyString: " << sizeof(test) << " bytes" << std::endl;
 
 
 	return 1;	
