@@ -58,3 +58,10 @@ using MyInt = int;
 using Iterator = CMyIterator<ListElement<T>>;
 
 typedef int* IntPtr;
+
+## Правило пяти
+1. Copy Constructor
+2. Оператор присваивания копированием (Copy Assignment Operator)
+3. Конструктор перемещения (Move Constructor)
+4. Оператор присваивания перемещением (Move Assignment Operator)
+5. Деструктор (Destructor)
